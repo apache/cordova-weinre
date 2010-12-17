@@ -1,0 +1,75 @@
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+.toolbar-item.remote .toolbar-icon {
+    background-image: url(../../images/weinre-icon-32x32.png);
+}
+
+.weinre-connector-item {
+    font-size: 140%;
+}
+ 
+.weinre-connector-item.target {
+    text-decoration: underline; 
+    color: blue;
+}
+ 
+.weinre-connector-item.target.connected {
+    color: #0D0;
+}
+ 
+.weinre-connector-item.closed {
+    color: #B00;
+}
+
+.weinre-connector-item.current {
+    font-weight: bold;
+}
+
+.weinre-connector-item.connected {
+    color: #0D0;
+}
+
+.weinre-connector-item.error {
+    color: #A00;
+    font-weight: bold;
+    font-size: 200%
+}
+
+.weinreConsole {
+    margin-left: 2em;
+}
+
+.weinreServerProperties {
+    margin-left: 2em;
+}
+
+.console_stdout {
+    color: #000;
+}
+
+.console_stderr {
+    color: #F00;
+}
+
+.weinre-normal-text-size {
+    font-size: 140%;
+}
+
+body.platform-weinre .monospace, body.platform-weinre .source-code {
+     font-size:   12px;
+     font-family: Monaco, Consolas, Lucida Console, dejavu sans mono, monospace;
+}
+
+.fadeable {
+  opacity: 1;
+  -webkit-transition: opacity 5s linear;
+}
+
+.fade {
+  opacity: 0;
+}

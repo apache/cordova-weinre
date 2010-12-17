@@ -1,0 +1,20 @@
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+module weinre {
+    interface WeinreClientCommands {
+    
+        void registerClient(out string clientId);
+
+        void getTargets(out Object[] targets);
+        void getClients(out Object[] clients);
+        
+        void connectTarget(in string clientId, in string targetId);
+        void disconnectTarget(in string clientId);
+    };
+}
+

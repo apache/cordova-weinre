@@ -1,0 +1,163 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ../common/Weinre
+require ../common/IDLTools
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class InspectorFrontendHostImpl
+        
+    this._getPlatformAndPort()
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method loaded
+    WebInspector.Settings.initialize()
+    
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method closeWindow
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method disconnectFromBackend
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method bringToFront
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method inspectedURLChanged(newURL)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method requestAttachWindow
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method requestDetachWindow
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method setAttachedWindowHeight(height)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method moveWindowBy(x, y)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method setExtensionAPI(script)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method localizedStringsURL
+    return "nls/English.lproj/localizedStrings.js";
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method hiddenPanels
+//  return "audits,profiles,resources,scripts,timeline"
+    return ""
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method copyText(text)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method platform
+    return "weinre"
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method port
+    return "weinre"
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method showContextMenu(event, items)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method sendMessageToBackend(message)
+    var object = JSON.parse(message)
+    if (object[0] == "setInjectedScriptSource") {
+        object[1] = "<long script elided>"
+    }
+    console.log(arguments.callee.signature + "(" + JSON.stringify(object,null,4) + ")")
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method _getPlatformAndPort
+    this._platform       = "weinre"
+    this._platformFlavor = "weinre"
+    this._port           = "weinre"
+        
+    if (true) return
+    
+    // get values from user agent
+    var uas = navigator.userAgent
+    if      (uas.match(/mac os x/i))  this._platform = "mac"
+    else if (uas.match(/macintosh/i)) this._platform = "mac"
+    else if (uas.match(/linux/i))     this._platform = "linux"
+    else if (uas.match(/windows/i))   this._platform = "windows"
+        
+    // get values from hash value
+    var url = window.location.href
+    
+    var splits = url.split("#",2)
+    if (splits.length > 1) {
+        var properties = splits[1]
+        properties = properties.split("&")
+        
+        properties.forEach(function(property) {
+            var pieces = property.split("=")
+            if (pieces.length > 1) {
+                var key = pieces[0]
+                var val = pieces[1]
+                
+                if      (key == "platform")       this._platform       = val
+                else if (key == "platformFlavor") this._platformFlavor = val
+                else if (key == "port")           this._port           = val
+            }
+        })
+        
+    }

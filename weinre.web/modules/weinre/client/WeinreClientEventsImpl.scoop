@@ -1,0 +1,101 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ../common/Callback
+require ../common/Weinre
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class WeinreClientEventsImpl(client)
+    this.client = client
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method clientRegistered(clientDescription)
+    if (this.client.uiAvailable()) {
+        WebInspector.panels.remote.addClient(clientDescription)
+    }
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method targetRegistered(targetDescription)
+    if (this.client.uiAvailable()) {
+        WebInspector.panels.remote.addTarget(targetDescription)
+    }
+    
+    if (!this.client.autoConnect()) return
+    
+    Weinre.WeinreClientCommands.connectTarget(Weinre.clientId, targetDescription.id)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method clientUnregistered(/*int*/ clientId)
+    if (this.client.uiAvailable()) {
+        WebInspector.panels.remote.removeClient(clientId)
+    }
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method targetUnregistered(/*int*/ targetId)
+    if (this.client.uiAvailable()) {
+        WebInspector.panels.remote.removeTarget(targetId)
+    }
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method connectionCreated(/*int*/ clientId, /*int*/ targetId)
+    if (this.client.uiAvailable()) {
+        WebInspector.panels.remote.setClientState(clientId, "connected") 
+        WebInspector.panels.remote.setTargetState(targetId, "connected")
+    }
+    
+    if (clientId != Weinre.clientId) return
+
+    Weinre.targetId = targetId
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method connectionDestroyed(/*int*/ clientId, /*int*/ targetId)
+    if (this.client.uiAvailable()) {
+        WebInspector.panels.remote.setClientState(clientId, "not-connected") 
+        WebInspector.panels.remote.setTargetState(targetId, "not-connected")
+    }
+    
+    if (clientId != Weinre.clientId) return
+    
+    Weinre.targetId = null
+    
+    if (!this.client.autoConnect()) return
+    if (!this.client.uiAvailable()) return
+    
+    var nextTargetId = WebInspector.panels.remote.getNewestTargetId(targetId)
+    if (!nextTargetId) return
+    
+    Weinre.WeinreClientCommands.connectTarget(Weinre.clientId, nextTargetId)
+    console.log("autoconnecting to " + nextTargetId)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method sendCallback(/*int*/ callbackId, /*any*/ result)
+    Callback.invoke(callbackId, result)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method serverProperties(/*any*/ properties)
+    if (this.client.uiAvailable()) {
+        WebInspector.panels.remote.setServerProperties(properties)
+    }

@@ -1,0 +1,56 @@
+<!doctype html>
+
+<!--
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+-->
+ 
+<html>
+
+    <head>
+        <title>weinre interfaces</title>
+        <link rel="stylesheet" href="interfaces.css">
+        <script src="/modjewel-require.js"></script>
+        <script type="text/javascript">require("modjewel").warnOnRecursiveRequire(true)</script>
+        <script src="/scooj.transportd.js"></script>
+        <script src="/weinre/common/Weinre.transportd.js"></script>
+        <script src="/weinre/common/IDLTools.transportd.js"></script>
+        <script src="/weinre/common/Callback.transportd.js"></script>
+        
+        <script src="all-json-idls.js"></script>
+        
+        <script src="interfaces.js"></script>
+    </head>
+
+    <body>
+        <h1>weinre interfaces</h1>
+
+        <div class="noprint">
+            show:
+            <label><input id="show-Idl"        type="checkbox" checked="on"> IDL</label> / 
+            <label><input id="show-JavaScript" type="checkbox" checked="on"> JavaScript</label> /
+            <label><input id="show-Java"       type="checkbox" checked="on"> Java</label>
+        </div>
+
+        <div id="browser">
+            <div id="interface-picker" class="noprint">
+                <h2>Interfaces</h2>
+                <ul id="interface-list">
+                    <li>interface 1
+                    <li>interface 2
+                    <li>interface 3
+                </ul>
+            </div>
+
+            <div id="interface-content">
+                <h2 id="interface-name">[ nothing selected ]</h2>
+                <div id="interface-body">
+                    [ nothing selected ]
+                </div>
+            </div>
+        </div> 
+    </body>
+
+</html>

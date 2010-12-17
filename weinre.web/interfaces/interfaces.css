@@ -1,0 +1,79 @@
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+#browser {
+    margin-top:  1em;
+}
+ 
+#interface-picker {
+    float:         left;
+    margin-right:  1.0em;
+    padding-right: 1.0em;
+    border-right:  thin solid;
+}
+
+#interface-picker h2, #interface-content h2 {
+    margin-top:    0.0em;
+    border-bottom: thin solid;
+}
+ 
+#interface-content {
+    overflow:     hidden;
+    padding-left: 1.0em;
+}
+
+#interface-list li {
+    list-style-type: none;
+}
+
+#interface-body pre {
+    margin-left: 2.0em;
+    white-space: pre;
+    overflow:    auto;
+}
+
+.tdIndent {
+    margin-left: 1.0em;
+}
+
+.indent {
+    white-space: pre;
+}
+ 
+.attributeName, .methodName {
+    font-weight: bold;
+}
+
+.type {
+    z-font-style: italic;
+}
+
+.parameterName {
+    color:      #0A0;
+}
+
+h3 {
+    border:                thin solid;
+    -moz-border-radius:    0.5em;
+    -webkit-border-radius: 0.5em;
+    background-color:      #EEE;
+    padding-left:          1.0em;
+}
+
+a, a:hover, a:visited, .type {
+    color:      #00A;
+}
+
+@media print {
+    .noprint {
+        display: none;
+    }
+    
+    body {
+        font-size: 60%;
+    }
+}

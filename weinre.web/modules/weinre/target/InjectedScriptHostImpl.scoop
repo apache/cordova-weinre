@@ -1,0 +1,90 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ../common/Weinre
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class InjectedScriptHostImpl
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method clearConsoleMessages(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method copyText(/*string*/ text, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method nodeForId(/*int*/ nodeId, callback)
+    return Weinre.nodeStore.getNode(nodeId)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method pushNodePathToFrontend(/*any*/ node, /*boolean*/ withChildren, /*boolean*/ selectInUI, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method inspectedNode(/*int*/ num, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method currentCallFrame(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method selectDatabase(/*any*/ database, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method selectDOMStorage(/*any*/ storage, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method didCreateWorker(/*int*/ id, /*string*/ url, /*boolean*/ isFakeWorker, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method didDestroyWorker(/*int*/ id, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method nextWorkerId(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)

@@ -1,0 +1,29 @@
+<!--
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+-->
+
+<project name="get-vendor" default="get-vendor" basedir=".">
+    
+    <property file="personal.properties"/>
+    <property file="build.properties"/>
+    
+    <!-- ============================================================ -->
+
+    <target name="get-vendor">
+            
+        <delete dir="${VENDOR}"/>
+        <mkdir  dir="${VENDOR}"/>
+
+        <delete dir="${TMP}"/>
+        <mkdir  dir="${TMP}"/>
+
+        <get src="${VENDOR_URL}" dest="${TMP}/vendor.zip" verbose="true"/>
+        <unzip src="${TMP}/vendor.zip" dest="."/>
+        
+        <delete dir="${TMP}"/>
+    </target>
+    
+</project>

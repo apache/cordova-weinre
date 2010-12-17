@@ -1,0 +1,79 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+class Callback
+    throw new Error("this class is not intended to be instantiated")
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static 
+    var CallbackTable = {}
+    var CallbackIndex = 1
+    var ConnectorId   = "???"
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static method setConnectorId(connectorId)
+    ConnectorId = connectorId
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static method register(callback)
+    if (typeof callback == "function") callback = [null, callback]
+    if (typeof callback.slice != "function") throw new Error("callback must be an array or function")
+    
+    var receiver = callback[0]
+    var func     = callback[1]
+    var data     = callback.slice(2)
+    
+    if (typeof func == "string") func = receiver.func
+    if (typeof func != "function") throw new Error("callback function was null or not found")
+
+    var index = ConnectorId + "::" + CallbackIndex
+    
+    CallbackIndex++
+    if (CallbackIndex >= 65536 * 65536) CallbackIndex = 1
+    
+    CallbackTable[index] = [receiver, func, data]
+    
+    return index
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static method deregister(index)
+    delete CallbackTable[index]
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static method invoke(index, args)
+    var callback = CallbackTable[index]
+    if (!callback) throw new Error("callback " + index + " not registered or already invoked")
+    
+    var receiver = callback[0]
+    var func     = callback[1]
+    var args     = callback[2].concat(args)
+    
+    try {
+        func.apply(receiver,args)
+    }
+    catch (e) {
+        var funcName = func.name
+        if (!funcName) funcName = "<unnamed>"
+        console.log(arguments.callee.signature + " exception invoking callback: " + funcName + "(" + args.join(",") + "): " + e)
+    }
+    finally {
+        Callback.deregister(index)
+    }

@@ -1,0 +1,20 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+class Binding(receiver, method)
+
+    if (receiver == null) throw new Error("receiver argument for Binding constructor was null")
+    if (typeof(method) == "string") method = receiver[method]
+    if (typeof(method) != "function") throw new Error("method argument didn't specify a function")
+
+    return function() {
+        return method.apply(receiver, [].slice.call(arguments))
+    }

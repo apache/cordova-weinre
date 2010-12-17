@@ -1,0 +1,232 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ../common/Weinre
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class WebInspectorControllerHandlerImpl
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method populateScriptObjects(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getSettings(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getInspectorState(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method storeLastActivePanel(/*string*/ panelName, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method saveApplicationSettings(/*string*/ settings, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method saveSessionSettings(/*string*/ settings, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setSearchingForNode(/*boolean*/ enabled, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setMonitoringXHREnabled(/*boolean*/ enable, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setResourceTrackingEnabled(/*boolean*/ enabled, /*boolean*/ always, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getResourceContent(/*int*/ identifier, /*boolean*/ encode, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method reloadPage(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method startTimelineProfiler(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method stopTimelineProfiler(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method disableDebugger(/*boolean*/ always, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setNativeBreakpoint(/*any*/ breakpoint, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeNativeBreakpoint(/*string*/ breakpointId, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method enableProfiler(/*boolean*/ always, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method disableProfiler(/*boolean*/ always, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method addScriptToEvaluateOnLoad(/*string*/ scriptSource, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeAllScriptsToEvaluateOnLoad(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setConsoleMessagesEnabled(/*boolean*/ enabled, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method clearConsoleMessages(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method highlightDOMNode(/*int*/ nodeId, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method hideDOMNodeHighlight(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method openInInspectedWindow(/*string*/ url, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getCookies(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method deleteCookie(/*string*/ cookieName, /*string*/ domain, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method didEvaluateForTestInFrontend(/*int*/ testCallId, /*string*/ jsonResult, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getDOMStorageEntries(/*int*/ storageId, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setDOMStorageItem(/*int*/ storageId, /*string*/ key, /*string*/ value, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeDOMStorageItem(/*int*/ storageId, /*string*/ key, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+

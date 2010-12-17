@@ -1,0 +1,125 @@
+
+<!--
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+-->
+
+<p><span class="weinre">weinre</span> is <b>We</b>b <b>In</b>spector <b>Re</b>mote.
+Pronounced like the word "winery".
+
+<p>It's a debugger for web pages, like 
+FireBug (for FireFox)
+and 
+Web Inspector (for WebKit-based browsers), except it's designed
+to work <b>remotely</b>, and in particular, to <b>allow you debug web pages
+on a mobile device such as a phone</b>.
+
+<p>If you aren't familiar with FireBug or Web Inspector, 
+<span class="weinre">weinre</span> isn't going to make too much sense to you.
+<span class="weinre">weinre</span> reuses the user interface code from the
+<a href="http://trac.webkit.org/wiki/WebInspector">Web Inspector project at WebKit</a>,
+so if you've used Safari's Web Inspector or Chrome's Developer Tools,  
+<span class="weinre">weinre</span> will be very familiar. 
+
+<div class="note">
+<p>NOTE: Please note that <span class="weinre">weinre</span> is still under development and 
+is not fully operational.  
+The current version only supports the following functionality:
+
+<ul class="spaced">
+<li>basic console interaction, to capture <tt>console.log()</tt> messages, and 
+interactively execute JavaScript in the web page
+<li>displaying the DOM in the elements panel
+</ul>
+
+</div>
+
+<p>Here's what you can do with it:
+
+<p><img src="images/gmail-green-target-client.jpg">
+
+<p>Two screen captures are shown above.  
+
+<p>The screen capture on the left is from an 
+iPod Touch, running the Mobile Safari app, visiting a browser-based email web site
+you may be familiar with.
+
+<p>The screen capture on the right is the from a laptop computer, running the
+<span class="weinre">weinre</span> debug client, debugging the web page on the left.  The DOM being displayed
+in the elements panel is from the HTML being displayed in the web browser on the iPod Touch.
+
+<p>You might think that green background in the email client is a bit horrifying.
+It's not normally green.  I made it green by executing the following JavaScript code
+in the <span class="weinre">weinre</span> console area (as you can see above):
+
+<pre>
+document.body.style.background = "green"
+</pre>
+
+<p>If you are familiar with WebKit's Web Inspector,
+a partial list of differences between it and <span class="weinre">weinre</span>
+are listed below:
+
+<ul class="spaced">
+
+<li><span class="weinre">weinre</span> does not make use of any 'native' code, 
+it's all JavaScript (and currently Java code for the 'server').
+
+<li>Because <span class="weinre">weinre</span> doesn't use 'native' code, 
+it's functionality is limited.  For instance, source level debug of JavaScript
+is not possible.
+  
+<li>Because <span class="weinre">weinre</span> doesn't use 'native' code, 
+the debug target code will run on browsers
+without specialized debug support.  For instance, a browser running on your phone.
+  
+<li><span class="weinre">weinre</span> supports 'remote' interaction, 
+so you can run the debugger user interface on one 
+machine and can debug a web page running
+on another machine.  For instance, debug a web page displayed on your phone from your
+laptop.
+  
+<li>Because <span class="weinre">weinre</span> supports 'remote' interaction, 
+multiple debug clients can be debugging the same debug target at the same time.
+
+<li>One thing <b>not</b> different from Web Inspector is that the debug client
+user interface only runs on WebKit-based browsers.  Sorry folks.
+
+</ul>
+
+<p>Find out more by clicking one of the links at the top or bottom of the page 
+- to see a walkthrough of
+how to use it, visit the <a href="TestDrive.html">Test Drive</a>.
+
+<!-- ======================================================== -->
+<h2>Supported Platforms</h2>
+
+<h3>Debug client - the browser where the debugger user interface runs</h3>
+
+<ul>
+<li>weinre Mac application - Mac OS X 10.6 64-bit
+<li>Google Chrome 8.x beta
+<li>Apple Safari 5.x 
+<li>others? please set us know
+</ul>
+
+<h3>Debug target - the browser with the page you are debugging</h3>
+
+<ul>
+<li>Android 2.3 Browser application
+<li>Android 2.3 w/PhoneGap 0.9.2
+<li>Android 2.2 Browser application
+<li>Android 2.2 w/PhoneGap 0.9.2
+<li>iOS 4.2.x Mobile Safari application
+<li>BlackBerry v6.x simulator
+<li>others? please set us know
+</ul>
+
+<h3>Platforms that do not work</h3>
+
+<ul>
+<li>others? please set us know
+</ul>
+

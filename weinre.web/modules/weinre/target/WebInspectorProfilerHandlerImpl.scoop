@@ -1,0 +1,64 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ../common/Weinre
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class WebInspectorProfilerHandlerImpl
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method startProfiling(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method stopProfiling(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getProfileHeaders(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getProfile(/*string*/ type, /*int*/ uid, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeProfile(/*string*/ type, /*int*/ uid, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method clearProfiles(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method takeHeapSnapshot(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+

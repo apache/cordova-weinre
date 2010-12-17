@@ -1,0 +1,157 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class CSSStore
+    this.__styleMap    = {}
+    this.__nextId      = 0
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+static
+    var Properties = []
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static method addCSSProperties(properties)
+    Properties = properties
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getStyle(styleId)
+    return this.__styleMap[styleId]
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getStyleId(style)
+    if (style.__weinre_id) { 
+        return style.__weinre_id
+    }
+    
+    style.__weinre_id = this._nextId()
+    this.__styleMap[style.__weinre_id] = style
+    
+    return style.__weinre_id
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getInlineStyle(node)
+    return this.buildObjectForStyle(node.style, true)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getComputedStyle(node)
+    if (!node) return {}
+    if (node.nodeType != Node.ELEMENT_NODE) return {}
+    
+    return this.buildObjectForStyle(window.getComputedStyle(node), false)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getMatchedCSSRules(node)
+    var result = []
+    
+    return result
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getStyleAttributes(node)
+    var result = {}
+    
+    return result
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getPseudoElements(node)
+    var result = []
+    
+    return result
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method buildObjectForStyle(style, bind)
+    var result = {
+        width:      null,
+        height:     null,
+        properties: []
+    }
+    
+    if (!style) return result
+    
+    if (bind) {
+        var styleId = this.getStyleId(style)
+        result.id = styleId
+
+        /*
+        CSSStyleSheet* parentStyleSheet = InspectorCSSStore::getParentStyleSheet(style);
+        if (parentStyleSheet)
+            result->setNumber("parentStyleSheetId", cssStore()->bindStyleSheet(parentStyleSheet));
+
+        DisabledStyleDeclaration* disabledStyle = cssStore()->disabledStyleForId(styleId, false);
+        if (disabledStyle)
+            result->setArray("disabled", buildArrayForDisabledStyleProperties(disabledStyle));
+        */
+    }
+    
+    result.width  = style.getPropertyValue("width")
+    result.height = style.getPropertyValue("height")
+
+    this.populateObjectWithStyleProperties(style, result)
+    
+    return result
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method populateObjectWithStyleProperties(style, result)
+    var properties = []
+    var shorthandValues = {}
+
+    if (style) {
+        var foundShorthands = {}
+        for (var i=0; i < style.length; i++) {
+            var property = {}
+            var name = style.item(i)
+
+            property.name = name
+            property.priority = style.getPropertyPriority(name)
+            property.implicit = false // style.isPropertyImplicit(name)
+            // String shorthand = style->getPropertyShorthand(name);
+            property.shorthand = ""
+                /*
+        if (!shorthand.isEmpty() && !foundShorthands.contains(shorthand)) {
+            foundShorthands.add(shorthand);
+            shorthandValues->setString(shorthand, shorthandValue(style, shorthand));
+        }
+                 */
+                property.value = style.getPropertyValue(name)
+
+                properties.push(property);
+        }
+    }
+    
+    result.properties      = properties
+    result.shorthandValues = shorthandValues
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method _nextId
+    return "" + (++this.__nextId)

@@ -1,0 +1,60 @@
+<!--
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+-->
+
+<html>
+<head>
+<title>testing</title>
+<script src="/client/InjectedScript.js"                                            ></script>
+<script src="/modjewel-require.js"                                                 ></script>
+<script type="text/javascript">require("modjewel").warnOnRecursiveRequire(true)</script>
+<script src="/scooj.transportd.js"                                                 ></script>
+<script src="/weinre/common/Weinre.transportd.js"                                  ></script>
+<script src="/weinre/common/IDLTools.transportd.js"                                ></script>
+<script src="/weinre/common/Socket.transportd.js"                                  ></script>
+<script src="/weinre/common/WebSocketXhr.transportd.js"                            ></script>
+<script src="/weinre/common/Binding.transportd.js"                                 ></script>
+<script src="/weinre/common/Callback.transportd.js"                                ></script>
+<script src="/weinre/common/EventListeners.transportd.js"                          ></script>
+<script src="/weinre/target/Console.transportd.js"                                 ></script>
+<script src="/weinre/target/WebInspectorApplicationCacheHandlerImpl.transportd.js" ></script>
+<script src="/weinre/target/WebInspectorBackendHandlerImpl.transportd.js"          ></script>
+<script src="/weinre/target/WebInspectorControllerHandlerImpl.transportd.js"       ></script>
+<script src="/weinre/target/WebInspectorDOMHandlerImpl.transportd.js"              ></script>
+<script src="/weinre/target/WebInspectorDebugHandlerImpl.transportd.js"            ></script>
+<script src="/weinre/target/WebInspectorProfilerHandlerImpl.transportd.js"         ></script>
+<script src="/weinre/target/WebInspectorResourceHandlerImpl.transportd.js"         ></script>
+<script src="/weinre/target/WeinreTargetEventsImpl.transportd.js"                  ></script>
+<script src="/weinre/target/NodeStore.transportd.js"                               ></script>
+<script src="/weinre/target/CSSStore.transportd.js"                                ></script>
+<script src="/weinre/target/InjectedScriptHostImpl.transportd.js"                  ></script>
+<script src="/weinre/target/Target.transportd.js"                                  ></script>
+<script src="/interfaces/all-json-idls.js"                                         ></script>
+
+<script type="text/javascript">
+    require("weinre/target/Target").main()
+</script>
+
+<style>
+h1 {
+    color: green;
+}
+
+.blue {
+    color: blue;
+}
+
+</style>
+</head>
+
+<body>
+<h1>this is a green h1 element</h1>
+<h1 class="blue">this is a blue h1 element</h1>
+<h1 style="color:red">this is a red h1 element</h1>
+<p>Some text, <i>some italic text</i>, and <b>some bold text</b>.
+</body>
+
+</html>

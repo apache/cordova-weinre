@@ -1,0 +1,48 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ../common/Weinre
+require ../common/Callback
+
+require ./Console
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class WeinreTargetEventsImpl
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method connectionCreated(/*string*/ clientId, /*string*/ targetId)
+    console.log("weinre: connected to " + clientId)
+    var oldValue = Console.useRemote(true)
+    
+    if (!oldValue) {
+        console.log("weinre: connected to " + clientId)
+    }
+    
+    Weinre.target.setDocument()
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method connectionDestroyed(/*string*/ clientId, /*string*/ targetId)
+    console.log("weinre: disconnected from " + clientId)
+    var oldValue = Weinre.Console.useRemote(false)
+    
+    if (oldValue) {
+        console.log("weinre: disconnected from " + clientId)
+    }
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method sendCallback(/*int*/ callbackId, /*any*/ result)
+    Callback.invoke(callbackId, result)
+

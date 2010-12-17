@@ -1,0 +1,146 @@
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+body {
+   padding:                0em 2em;
+   font-size:              120%
+}
+
+/*-----------------------------------------------------------------*/
+.weinre {
+   color:                  #088;
+   font-style:             italic;
+   font-weight:            bold;
+   font-family:            Menlo, Monaco, Consolas, Lucida Console, dejavu sans mono, monospace;
+}
+
+/*-----------------------------------------------------------------*/
+.width-transition {
+   -webkit-transition:     width 0.3s linear;
+}
+
+/*-----------------------------------------------------------------*/
+.no-bullet {
+   list-style-type:        none;
+}
+
+/*-----------------------------------------------------------------*/
+.indent {
+   margin-left:            3.0em;
+}
+
+/*-----------------------------------------------------------------*/
+.no-bullet li {
+   margin-top:             0.50em;
+   margin-bottom:          0.50em;
+}
+
+/*-----------------------------------------------------------------*/
+.spaced li {
+   margin-top:             0.50em;
+   margin-bottom:          0.50em;
+}
+
+/*-----------------------------------------------------------------*/
+.spaced dt {
+   margin-top:             0.50em;
+}
+
+/*-----------------------------------------------------------------*/
+.spaced dd {
+   margin-bottom:          0.50em;
+}
+
+/*-----------------------------------------------------------------*/
+dt {
+   font-weight:            bold;
+}
+
+tt {
+   white-space:            pre;
+}
+
+/*-----------------------------------------------------------------*/
+.toc {
+    font-style:            italic;
+    text-align:            center;
+}
+
+/*-----------------------------------------------------------------*/
+.toc a {
+    padding:               0.2em 0.5em;
+}
+
+/*-----------------------------------------------------------------*/
+.page-title {
+    text-align:            center;
+}
+
+/*-----------------------------------------------------------------*/
+.todo {
+    background-color:      #FAA;
+}
+
+/*-----------------------------------------------------------------*/
+.help {
+    background-color:      #FDD;
+    font-weight:           bold;
+    font-size:             120%;
+}
+
+/*-----------------------------------------------------------------*/
+.note {
+    background-color:      #FFA;
+    font-weight:           bold;
+    font-size:             120%;
+    margin:                0.25em 1.0em;
+    padding:               0.00em 0.5em;
+    border-width:          1;
+    border-style:          solid;
+    border-radius:         0.5em; 
+    -moz-border-radius:    0.5em; 
+    -webkit-border-radius: 0.5em;   
+}
+
+/*-----------------------------------------------------------------*/
+pre, xmp {
+    border-width:          1;
+    border-style:          solid;
+    overflow:              auto;
+    padding-top:           0.4em;
+    padding-bottom:        0.4em;
+    padding-left:          1.4em;
+    padding-right:         1.4em;
+    margin-left:           1.4em;
+    margin-right:          1.4em;
+	background:            #FFFFDF;
+	border-radius:         0.5em; 
+    -moz-border-radius:    0.5em; 
+    -webkit-border-radius: 0.5em;	
+	box-shadow:            0.3em 0.3em 0.3em 0em #DDD; 
+	-moz-box-shadow:       0.3em 0.3em 0.3em 0em #DDD; 
+	-webkit-box-shadow:    0.3em 0.3em 0.3em 0em #DDD; 
+}
+
+/*-----------------------------------------------------------------*/
+h2 {
+    padding:               0.25em 0.50em;
+    background-color:      #DDD;
+    border-radius:         0.5em; 
+    -moz-border-radius:    0.5em; 
+    -webkit-border-radius: 0.5em;   
+}
+
+/*-----------------------------------------------------------------*/
+kewl {
+	box-shadow:            0.3em 0.3em 0.3em 0em #DDD; 
+	-moz-box-shadow:       0.3em 0.3em 0.3em 0em #DDD; 
+	-webkit-box-shadow:    0.3em 0.3em 0.3em 0em #DDD; 
+	border-radius:         0.5em; 
+    -moz-border-radius:    0.5em; 
+    -webkit-border-radius: 0.5em;	
+}

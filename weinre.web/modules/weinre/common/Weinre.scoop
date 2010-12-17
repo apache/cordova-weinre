@@ -1,0 +1,36 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ./IDLTools
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+class Weinre
+    throw new Error("this class is not intended to be instantiated")
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static method addIDLs(idls)
+    IDLTools.addIDLs(idls)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static 
+    var _notImplemented = {}
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static method notImplemented(thing)
+    if (_notImplemented[thing]) return
+    
+    _notImplemented[thing] = true
+    console.log(thing + " not implemented")

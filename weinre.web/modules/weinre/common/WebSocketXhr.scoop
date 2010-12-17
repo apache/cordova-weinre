@@ -1,0 +1,239 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ./Weinre
+require ./EventListeners
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+class WebSocketXhr(url)
+    this.initialize(url)
+    
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static
+    WebSocketXhr.CONNECTING = 0
+    WebSocketXhr.OPEN       = 1
+    WebSocketXhr.CLOSING    = 2
+    WebSocketXhr.CLOSED     = 3
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method initialize(url)
+    this.readyState      = WebSocketXhr.CONNECTING 
+    this._url            = url
+    this._urlChannel     = null
+    this._queuedSends    = []
+    this._sendInProgress = true
+    
+    this._listeners = {
+        open:    new EventListeners(),
+        message: new EventListeners(),
+        error:   new EventListeners(),
+        close:   new EventListeners()
+    }
+    
+    this._getChannel()
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method _getChannel
+    this._xhr(this._url, "POST", "", this._handleXhrResponseGetChannel)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method _handleXhrResponseGetChannel(xhr)
+    if (xhr.status != 200) return this._handleXhrResponseError(xhr)
+
+    try {
+        var object = JSON.parse(xhr.responseText)
+    }
+    catch (e) {
+        this._fireEventListeners("error", {message: "non-JSON response from channel open request"})
+        this.close()
+        return
+    }
+    
+    if (!object.channel) {
+        this._fireEventListeners("error", {message: "channel open request did not include a channel"})
+        this.close()
+        return
+    }
+    
+    Weinre.connectorId = object.channel
+    
+    this._urlChannel = this._url + "/" + object.channel
+    this.readyState = WebSocketXhr.OPEN
+
+    this._fireEventListeners("open", { message: "open" })
+    
+    this._sendInProgress = false
+    this._sendQueued()
+    
+    this._readLoop()
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method _readLoop
+    if (this.readyState == WebSocketXhr.CLOSED) return
+    if (this.readyState == WebSocketXhr.CLOSING) return
+    
+    this._xhr(this._urlChannel, "GET", "", this._handleXhrResponseGet)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method _handleXhrResponseGet(xhr)
+    var self = this
+    
+    if (xhr.status != 200) return this._handleXhrResponseError(xhr)
+
+    try {
+        var datum = JSON.parse(xhr.responseText)
+    }
+    catch (e) {
+        this.readyState = WebSocketXhr.CLOSED
+        
+        this._fireEventListeners("error", {
+            message: "non-JSON response from read request"
+        })
+        return
+    }
+    
+    window.setTimeout(function() {self._readLoop()}, 0)
+
+    datum.forEach(function(data) {
+        self._fireEventListeners("message", {data: data})
+    })
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method send(data)
+    if (typeof data != "string") throw new Error(this.constructor.name + "." + this.caller)
+
+    this._queuedSends.push(data)
+    
+    if (this._sendInProgress) return
+    this._sendQueued();
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method _sendQueued
+    if (this._queuedSends.length == 0) return
+    if (this.readyState == WebSocketXhr.CLOSED) return
+    if (this.readyState == WebSocketXhr.CLOSING) return
+    
+    datum = JSON.stringify(this._queuedSends)
+    this._queuedSends = []
+    
+    this._sendInProgress = true
+    
+    this._xhr(this._urlChannel, "POST", datum, this._handleXhrResponseSend)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method _handleXhrResponseSend(xhr)
+    var httpSocket = this
+    
+    if (xhr.status != 200) return this._handleXhrResponseError(xhr)
+    
+    this._sendInProgress = false
+    window.setTimeout(function() {httpSocket._sendQueued()}, 0)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method close
+    this._sendInProgress = true
+    this.readyState = WebSocketXhr.CLOSING
+    this._fireEventListeners("close", {
+        message: "closing",
+        wasClean: true
+    })
+    this.readyState = WebSocketXhr.CLOSED
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method addEventListener(type, listener, useCapture)
+    this._getListeners(type).add(listener, useCapture)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeEventListener(type, listener, useCapture)
+    this._getListeners(type).remove(listener, useCapture)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method _fireEventListeners(type, event)
+    if (this.readyState == WebSocketXhr.CLOSED) return
+    
+    event.target = this
+    this._getListeners(type).fire(event)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method _getListeners(type)
+    var listeners = this._listeners[type]
+    if (null == listeners) throw new Error("invalid event listener type: '" + type + "'")
+    
+    return listeners
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method _handleXhrResponseError(xhr)
+    if (xhr.status == 404) {
+        this.close()
+        return
+    }
+    
+    this._fireEventListeners("error", {
+        target: this,
+        status: xhr.status,
+        message: "error from XHR invocation: " + xhr.statusText
+    })
+    
+    console.log("error from XHR invocation: " + xhr.status + ": " + xhr.statusText)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method _xhr(url, method, data, handler)
+    if (null == handler) throw new Error("handler must not be null")
+    
+    var xhr = new XMLHttpRequest()
+    
+    xhr.httpSocket         = this
+    xhr.httpSocketHandler  = handler
+    xhr.onreadystatechange = _xhrEventHandler
+    
+    xhr.open(method, url, true)
+    xhr.setRequestHeader("Content-Type", "text/plain")
+    xhr.send(data)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+function _xhrEventHandler(event)
+    var xhr = event.target
+    if (xhr.readyState != 4) return
+    
+    xhr.httpSocketHandler.call(xhr.httpSocket, xhr) 

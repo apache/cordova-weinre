@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+
+<!--
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+-->
+
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+        <string>launcher</string>
+    <key>CFBundleGetInfoString</key>
+        <string>weinre @VERSION@</string>
+    <key>CFBundleIconFile</key>
+        <string>weinre.icns</string>
+    <key>CFBundleIdentifier</key>
+        <string>com.phonegap.weinre.application</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+        <string>6.0</string>
+    <key>CFBundleName</key>
+        <string>weinre</string>
+    <key>CFBundlePackageType</key>
+        <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+        <string>weinre-@VERSION@</string>
+    <key>CFBundleSignature</key>
+        <string>????</string>
+    <key>CFBundleVersion</key>
+        <string>@VERSION@</string>
+    <key>NSPrincipalClass</key>
+        <string>NSApplication</string>
+</dict>
+</plist>

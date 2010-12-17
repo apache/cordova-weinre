@@ -1,0 +1,177 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ./DOMTemplates as dt
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+class ConnectorList(title)
+    this.connectors   = {}
+    this.noneItem     = dt.LI("none")
+    this.ulConnectors = dt.UL(this.noneItem)
+    this.div          = dt.DIV(dt.H1(title), this.ulConnectors)
+    
+    this.noneItem.addStyleClass("weinre-connector-item")
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getElement
+    return this.div
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method add(connector)
+    if (this.connectors[connector.id]) return
+    
+    this.connectors[connector.id] = connector
+    
+    var li = this.getListItem(connector)
+
+    if (this.noneItem.style.display != "none") {
+        this.noneItem.style.display = "none"
+    }
+    
+    li.addStyleClass("fadeable")
+    
+    var insertionPoint = this.getConnectorInsertionPoint(connector)
+    if (!insertionPoint) {
+        this.ulConnectors.appendChild(li)
+    }
+    else {
+        this.ulConnectors.insertBefore(li, insertionPoint)
+    }
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getNewestConnectorId(ignoring)
+    var newest = 0
+    
+    for (var connectorId in this.connectors) {
+        if (connectorId == ignoring) continue
+        if (connectorId > newest) newest = connectorId
+    }
+    
+    if (newest == 0) return null
+    return newest
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getConnectorInsertionPoint(connector)
+    for (var i=0; i<this.ulConnectors.childNodes.length; i++) {
+        var childNode = this.ulConnectors.childNodes[i]
+        if (null == childNode.connectorId) continue
+        if (childNode.connectorId < connector.id) {
+            return childNode
+        }
+    }
+    
+    return null
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method remove(id, fast)
+    var self = this
+    var element = this.getConnectorElement(id)
+    if (!element) return
+
+    var connector = this.connectors[id]
+    if (connector) {
+        connector.closed = true
+    }
+    
+    delete this.connectors[id]
+    
+    if (fast) {
+        this._remove(element)
+    }
+
+    else {
+        this.setState(element, "closed")
+        element.addStyleClass("fade")
+
+        window.setTimeout(function() {
+            self._remove(element)
+        }, 5000)
+    }
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method _remove(element)
+    this.ulConnectors.removeChild(element)
+    if (this.getConnectors().length == 0) {
+        this.noneItem.style.display = "list-item"
+    }
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeAll()
+    this.getConnectors().forEach(function(connector) {
+        this.remove(connector.id, true)
+    }, this)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getConnectors()
+    var result = []
+    for (var id in this.connectors) {
+        if (!this.connectors.hasOwnProperty(id)) continue
+        
+        result.push(this.connectors[id])
+    }
+    
+    return result
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getConnectorElement(id)
+    var connector = this.connectors[id]
+    if (!connector) return null
+    
+    return connector.element
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setCurrent(id)
+    this.getConnectors().forEach(function(connector) {
+        connector.element.removeStyleClass("current")
+    })
+    
+    var element = this.getConnectorElement(id)
+    if (null == element) return
+    
+    element.addStyleClass("current")
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setState(id, state)
+    if (typeof id == "string") {
+        var element = this.getConnectorElement(id)
+    }
+    else {
+        element = id
+    }
+    
+    if (!element) return
+    
+    element.removeStyleClass("error")
+    element.removeStyleClass("closed")
+    element.removeStyleClass("connected")
+    element.removeStyleClass("not-connected")
+    element.addStyleClass(state)

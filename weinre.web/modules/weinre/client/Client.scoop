@@ -1,0 +1,179 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ../common/IDLTools
+require ../common/Callback
+require ../common/Weinre
+require ../common/Socket
+require ../common/Binding
+
+require ./InspectorBackendImpl
+require ./InspectorFrontendHostImpl
+require ./WeinreClientEventsImpl
+require ./RemotePanel
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class Client
+    this.initialize()
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static
+    var AutoConnect = true
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static method autoConnect(value)
+    if (arguments.length >= 1) {
+        AutoConnect = !!value
+        
+        if (Client.uiAvailable) {
+            WebInspector.panels.remote.autoConnect(AutoConnect)
+        }
+    }
+
+    return AutoConnect
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method autoConnect(value)
+    if (arguments.length >= 1) {
+        return Client.autoConnect(value)
+    }
+    else {
+        return Client.autoConnect()
+    }
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method initialize
+
+    // validate InspectorFrontendHost against IDL
+    IDLTools.validateAgainstIDL(InspectorFrontendHostImpl, 'InspectorFrontendHost')
+
+    // add a load handler for the window
+    window.addEventListener("load", Binding(this, "onLoaded"), false)
+
+    // create the socket
+    var webSocket = new Socket("../ws/client")
+    Weinre.webSocket = webSocket
+
+    // finish setting up InspectorBackend
+    InspectorBackendImpl.setupProxies()
+
+    // create the client commands proxy
+    Weinre.WeinreClientCommands = webSocket.createProxy("WeinreClientCommands")
+
+    // register WebInspector interface
+    webSocket.registerInterface("WebInspector", WebInspector, false)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method uiAvailable
+    return WebInspector.panels && WebInspector.panels.remote
+    
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method _installRemotePanelEventually
+    var self = this
+    
+    setTimeout(function() {
+        var wait = false
+        if (!WebInspector.applicationSettings) wait = true
+        
+        if (wait) {
+            self._installRemotePanelEventually()
+            return
+        }
+        
+        self._installRemotePanel()
+    }, 10)
+
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method _installRemotePanel
+
+    WebInspector.panels.remote = new RemotePanel();
+    
+    var panel   = WebInspector.panels.remote;
+    panel.autoConnect(Client.autoConnect())
+    
+    var toolbar = document.getElementById("toolbar")
+    WebInspector.addPanelToolbarIcon(toolbar, panel, toolbar.childNodes[1])
+    
+    WebInspector.currentPanel = panel
+    
+    var panelsToClose = ["resources", "scripts", "timeline", "profiles", "storage", "audits"]
+    panelsToClose.forEach(function(panelToClose){
+        WebInspector.panels[panelToClose].toolbarItem.style.display = "none"
+    })
+    
+    var button = document.getElementById("dock-status-bar-item")
+    if (button) button.style.display = "none"
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method onLoaded
+
+    // install Remote panel
+    this._installRemotePanelEventually()
+
+    var webSocket = Weinre.webSocket
+    
+//  Weinre.Socket.verbose(true)
+    
+    webSocket.open()
+
+    webSocket.registerInterface("WeinreClientEvents",    new WeinreClientEventsImpl(this), true)
+    webSocket.registerInterface("InspectorFrontendHost", InspectorFrontendHost, true)
+
+    Weinre.WeinreClientCommands.registerClient(Binding(this, this.cb_registerClient))
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method cb_registerClient(clientId)
+    Weinre.clientId = clientId
+    Weinre.connectorId = clientId
+    Callback.setConnectorId(clientId)
+    
+    if (this.uiAvailable()) {
+        WebInspector.panels.remote.setCurrentClient(clientId)
+        WebInspector.panels.remote.afterInitialConnection()
+    }
+    
+    Weinre.webSocket.getWebSocket().addEventListener("close", Binding(this, this.cb_webSocketClosed))
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method cb_webSocketClosed
+    
+    // use a delay, otherwise reloading will cause this stuff to flash
+    // before page is actually reloaded
+    setTimeout(function() {
+        WebInspector.panels.remote.connectionClosed()
+        WebInspector.currentPanel = WebInspector.panels.remote 
+    }, 1000)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static method main
+    Weinre.client = new Client()

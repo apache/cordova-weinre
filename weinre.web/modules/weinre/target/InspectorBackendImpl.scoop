@@ -1,0 +1,694 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ../common/Weinre
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class InspectorBackendImpl
+    this.inspectedNodes = []
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method populateScriptObjects(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getSettings(callback)
+    // callback: function(/*any*/ settings)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getInspectorState(callback)
+    // callback: function(/*any*/ state)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method storeLastActivePanel(/*string*/ panelName, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method saveApplicationSettings(/*string*/ settings, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method saveSessionSettings(/*string*/ settings, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setSearchingForNode(/*boolean*/ enabled, callback)
+    // callback: function(/*boolean*/ newState)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setMonitoringXHREnabled(/*boolean*/ enable, callback)
+    // callback: function(/*boolean*/ newState)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setResourceTrackingEnabled(/*boolean*/ enabled, /*boolean*/ always, callback)
+    // callback: function(/*boolean*/ newState)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getResourceContent(/*int*/ identifier, /*boolean*/ encode, callback)
+    // callback: function(/*string*/ content)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method reloadPage(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method startTimelineProfiler(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method stopTimelineProfiler(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method cachedResources(callback)
+    // callback: function(/*any[]*/ resources)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method resourceContent(/*int*/ frameID, /*string*/ url, callback)
+    // callback: function(/*string*/ content)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method enableDebugger(/*boolean*/ always, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method disableDebugger(/*boolean*/ always, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setBreakpoint(/*string*/ sourceID, /*int*/ lineNumber, /*boolean*/ enabled, /*string*/ condition, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeBreakpoint(/*string*/ sourceID, /*int*/ lineNumber, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method activateBreakpoints(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method deactivateBreakpoints(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method pause(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method resume(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method stepOverStatement(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method stepIntoStatement(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method stepOutOfFunction(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setPauseOnExceptionsState(/*int*/ pauseOnExceptionsState, callback)
+    // callback: function(/*int*/ newState)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method editScriptSource(/*string*/ sourceID, /*string*/ newContent, callback)
+    // callback: function(/*boolean*/ success, /*any*/ newCallFrames)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getScriptSource(/*string*/ sourceID, callback)
+    // callback: function(/*string*/ scriptSource)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setNativeBreakpoint(/*any*/ breakpoint, callback)
+    // callback: function(/*string*/ breakpointId)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeNativeBreakpoint(/*string*/ breakpointId, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method enableProfiler(/*boolean*/ always, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method disableProfiler(/*boolean*/ always, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method startProfiling(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method stopProfiling(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getProfileHeaders(callback)
+    // callback: function(/*any[]*/ headers)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getProfile(/*string*/ type, /*int*/ uid, callback)
+    // callback: function(/*any*/ profile)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeProfile(/*string*/ type, /*int*/ uid, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method clearProfiles(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method takeHeapSnapshot(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setInjectedScriptSource(/*string*/ scriptSource, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method dispatchOnInjectedScript(/*int*/ injectedScriptId, /*string*/ methodName, /*string*/ arguments, callback)
+    var func = Weinre.injectedScript[methodName]
+    if (null == func) {
+          Weinre.notImplemented("Weinre.injectedScript. " + methodName + "()")
+    }
+
+    var isException = false
+    try {
+        var result = func.apply(Weinre.injectedScript, JSON.parse(arguments))
+    }
+    catch(e) {
+        result = e
+        isException = true
+    }
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result, isException])
+    }
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method addScriptToEvaluateOnLoad(/*string*/ scriptSource, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeAllScriptsToEvaluateOnLoad(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getChildNodes(/*int*/ nodeId, callback)
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        return
+    }
+    
+    var children = Weinre.nodeStore.serializeNodeChildren(node, 1)
+    WebInspector.setChildNodes(nodeId, children)
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setAttribute(/*int*/ elementId, /*string*/ name, /*string*/ value, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeAttribute(/*int*/ elementId, /*string*/ name, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setTextNodeValue(/*int*/ nodeId, /*string*/ value, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getEventListenersForNode(/*int*/ nodeId, callback)
+    // callback: function(/*int*/ outNodeId)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method copyNode(/*int*/ nodeId, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeNode(/*int*/ nodeId, callback)
+    // callback: function(/*int*/ outNodeId)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method changeTagName(/*int*/ nodeId, /*string*/ newTagName, callback)
+    // callback: function(/*int*/ outNodeId)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getOuterHTML(/*int*/ nodeId, callback)
+    // callback: function(/*string*/ outerHTML)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setOuterHTML(/*int*/ nodeId, /*string*/ outerHTML, callback)
+    // callback: function(/*int*/ outNodeId)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method addInspectedNode(/*int*/ nodeId, callback)
+    this.inspectedNodes.unshift(nodeId)
+    if (this.inspectedNodes.length > 5) {
+        this.inspectedNodes = this.inspectedNodes.slice(0,5)
+    }
+        
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method performSearch(/*string*/ query, /*boolean*/ runSynchronously, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method searchCanceled(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method pushNodeByPathToFrontend(/*string*/ path, callback)
+    // callback: function(/*int*/ nodeId)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setConsoleMessagesEnabled(/*boolean*/ enabled, callback)
+    // callback: function(/*boolean*/ newState)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method clearConsoleMessages(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method highlightDOMNode(/*int*/ nodeId, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method hideDOMNodeHighlight(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method openInInspectedWindow(/*string*/ url, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getStyles(/*int*/ nodeId, /*boolean*/ authOnly, callback)
+    
+    var styles = {
+        "inlineStyle": {},
+        "computedStyle": {},
+        "matchedCSSRules": [],
+        "styleAttributes": {},
+        "pseudoElements": []
+//      "parent": {}
+    }
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [styles])
+    }
+
+    /*
+    Element* element = static_cast<Element*>(node);
+    RefPtr<CSSComputedStyleDeclaration> computedStyleInfo = computedStyle(node, true); // Support the viewing of :visited information in computed style.
+
+    RefPtr<InspectorObject> result = InspectorObject::create();
+    if (element->style())
+        result->setObject("inlineStyle", buildObjectForStyle(element->style(), true));
+    result->setObject("computedStyle", buildObjectForStyle(computedStyleInfo.get(), false));
+
+    CSSStyleSelector* selector = element->ownerDocument()->styleSelector();
+    RefPtr<CSSRuleList> matchedRules = selector->styleRulesForElement(element, authorOnly, true);
+    result->setArray("matchedCSSRules", buildArrayForCSSRules(node->ownerDocument(), matchedRules.get()));
+
+    result->setObject("styleAttributes", buildObjectForAttributeStyles(element));
+    result->setArray("pseudoElements", buildArrayForPseudoElements(element, authorOnly));
+
+    RefPtr<InspectorObject> currentStyle = result;
+    Element* parentElement = element->parentElement();
+    while (parentElement) {
+        RefPtr<InspectorObject> parentStyle = InspectorObject::create();
+        currentStyle->setObject("parent", parentStyle);
+        if (parentElement->style() && parentElement->style()->length())
+            parentStyle->setObject("inlineStyle", buildObjectForStyle(parentElement->style(), true));
+
+        CSSStyleSelector* parentSelector = parentElement->ownerDocument()->styleSelector();
+        RefPtr<CSSRuleList> parentMatchedRules = parentSelector->styleRulesForElement(parentElement, authorOnly, true);
+        parentStyle->setArray("matchedCSSRules", buildArrayForCSSRules(parentElement->ownerDocument(), parentMatchedRules.get()));
+
+        parentElement = parentElement->parentElement();
+        currentStyle = parentStyle;
+    }
+    *styles = result.release();
+    */
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getAllStyles(callback)
+    // callback: function(/*any[]*/ styles)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getInlineStyle(/*int*/ nodeId, callback)
+    // callback: function(/*any*/ style)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getComputedStyle(/*int*/ nodeId, callback)
+    // callback: function(/*any*/ style)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getStyleSheet(/*int*/ styleSheetId, callback)
+    // callback: function(/*any*/ styleSheet)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getStyleSourceData(/*int*/ styleSheetId, callback)
+    // callback: function(/*any*/ styleSourceData)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method applyStyleText(/*int*/ styleId, /*string*/ styleText, /*string*/ propertyName, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setStyleText(/*int*/ styleId, /*string*/ styleText, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setStyleProperty(/*int*/ styleId, /*string*/ name, /*string*/ value, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method toggleStyleEnabled(/*int*/ styleId, /*string*/ propertyName, /*boolean*/ disabled, callback)
+    // callback: function(/*any*/ style)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setRuleSelector(/*int*/ ruleId, /*string*/ selector, /*int*/ selectedNodeId, callback)
+    // callback: function(/*any*/ rule)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method addRule(/*string*/ selector, /*int*/ selectedNodeId, callback)
+    // callback: function(/*any*/ rule)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getSupportedCSSProperties(callback)
+    // callback: function(/*any[]*/ cssProperties)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getCookies(callback)
+    // callback: function(/*any[]*/ cookies)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method deleteCookie(/*string*/ cookieName, /*string*/ domain, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getApplicationCaches(callback)
+    // callback: function(/*any*/ applicationCaches)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method releaseWrapperObjectGroup(/*int*/ injectedScriptId, /*string*/ objectGroup, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method didEvaluateForTestInFrontend(/*int*/ testCallId, /*string*/ jsonResult, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getDatabaseTableNames(/*int*/ databaseId, callback)
+    // callback: function(/*any[]*/ tableNames)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method executeSQL(/*int*/ databaseId, /*string*/ query, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getDOMStorageEntries(/*int*/ storageId, callback)
+    // callback: function(/*any[]*/ entries)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setDOMStorageItem(/*int*/ storageId, /*string*/ key, /*string*/ value, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method removeDOMStorageItem(/*int*/ storageId, /*string*/ key, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+

@@ -1,0 +1,39 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ../common/IDLTools
+require ../common/Weinre
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class InspectorBackendImpl
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+static method setupProxies
+    var webInspectorHandlerIntfs = IDLTools.getIDLsMatching(/^WebInspector\w+Handler$/)
+
+    webInspectorHandlerIntfs.forEach(function(intf) {
+        var proxy = Weinre.webSocket.createProxy(intf.name)
+        
+        intf.methods.forEach(function(method) {
+            var proxyMethod = InspectorBackendImpl.getProxyMethod(proxy, method)
+            InspectorBackendImpl.prototype[method.name] = proxyMethod
+        })
+    })
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+static method getProxyMethod(proxy, method)
+    return function() {
+        return proxy[method.name].apply(proxy, arguments)
+    }
+

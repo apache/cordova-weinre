@@ -1,0 +1,174 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class NodeStore
+    this.__nodeMap     = {}
+    this.__nodeDataMap = {}
+    this.__nextId      = 0
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getNode(nodeId)
+    return this.__nodeMap[nodeId]
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getNodeId(node)
+    if (node.__weinre_id) { 
+        return node.__weinre_id
+    }
+    
+    node.__weinre_id = this.nextNodeId()
+    this.__nodeMap[node.__weinre_id]     = node
+    
+    return node.__weinre_id
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getNodeData(nodeId, depth)
+    return this.serializeNode(this.getNode(nodeId), depth)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method nextNodeId()
+    return "" + (++this.__nextId)
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method serializeNode(node, depth)
+    var nodeName  = null
+    var nodeValue = null
+    var localName = null
+    var id = this.getNodeId(node) 
+    
+    switch(node.nodeType) {
+        case Node.TEXT_NODE:    
+        case Node.COMMENT_NODE:
+        case Node.CDATA_SECTION_NODE:
+            nodeValue = node.nodeValue
+            break
+        case Node.ATTRIBUTE_NODE:
+            localName = node.localName
+            break
+        case Node.DOCUMENT_FRAGMENT_NODE:
+            break
+        case Node.DOCUMENT_NODE:
+        case Node.ELEMENT_NODE:
+        default:
+            nodeName  = node.nodeName
+            localName = node.localName
+            break
+    }
+    
+    var nodeData = {
+        id:        id,
+        nodeType:  node.nodeType,
+        nodeName:  nodeName,
+        localName: localName,
+        nodeValue: nodeValue
+    }
+    
+    if (node.nodeType == Node.ELEMENT_NODE || node.nodeType == Node.DOCUMENT_NODE || node.nodeType == Node.DOCUMENT_FRAGMENT_NODE) {
+        nodeData.childNodeCount = this.childNodeCount(node)
+        var children = this.serializeNodeChildren(node, depth)
+        if (children.length) {
+            nodeData.children = children
+        }
+        
+        if (node.nodeType == Node.ELEMENT_NODE) {
+            nodeData.attributes = []
+            for (var i=0; i<node.attributes.length; i++) {
+                nodeData.attributes.push(node.attributes[i].nodeName)
+                nodeData.attributes.push(node.attributes[i].nodeValue)
+            }
+        } 
+        
+        else if (node.nodeType == Node.DOCUMENT_NODE) {
+            nodeData.documentURL = window.location.href
+        }
+    } 
+    
+    else if (node.nodeType == Node.DOCUMENT_TYPE_NODE) {
+        nodeData.publicId       = node.publicId
+        nodeData.systemId       = node.systemId
+        nodeData.internalSubset = node.internalSubset
+    } 
+    
+    else if (node.nodeType == Node.ATTRIBUTE_NODE) {
+        nodeData.name  = node.nodeName
+        nodeData.value = node.nodeValue
+    }
+
+    return nodeData
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method serializeNodeChildren(node, depth)
+    var result   = []
+    var childIds = this.childNodeIds(node)
+    
+    if (depth == 0) {
+        if (childIds.length == 1) {
+            var childNode = this.getNode(childIds[0])
+            if (childNode.nodeType == Node.TEXT_NODE) {
+                result.push(this.serializeNode(childNode))
+            }
+        }
+        return result
+    }
+    
+    depth--;
+    for (var i=0; i<childIds.length; i++) {
+        result.push(this.serializeNode(this.getNode(childIds[i]), depth))
+    }
+    
+    return result
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method childNodeCount(node)
+    var count = 0
+    
+    for (var i=0; i<node.childNodes.length; i++) {
+        if (this.isWhitespace(node.childNodes[i])) continue
+        count++
+    }
+    
+    return count
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method childNodeIds(node)
+    var ids = []
+    
+    for (var i=0; i<node.childNodes.length; i++) {
+        if (this.isWhitespace(node.childNodes[i])) continue
+        ids.push(this.getNodeId(node.childNodes[i]))
+    }
+    
+    return ids
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method isWhitespace(node)
+    if (!node) return false
+    if (node.nodeType != Node.TEXT_NODE) return false
+    return !!node.nodeValue.match(/^\s*$/) 
+

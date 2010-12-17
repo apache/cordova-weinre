@@ -1,0 +1,202 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ../common/Weinre
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class Console
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+static
+    var UsingRemote = false
+    
+    var RemoteConsole   = new Console()
+    var OriginalConsole = window.console
+    
+    RemoteConsole.__original   = OriginalConsole
+    OriginalConsole.__original = OriginalConsole
+    
+    var MessageSource = {
+        HTML: 0,
+        WML: 1,
+        XML: 2,
+        JS: 3,
+        CSS: 4,
+        Other: 5
+    }
+    
+    var MessageType = {
+        Log: 0,
+        Object: 1,
+        Trace: 2,
+        StartGroup: 3,
+        StartGroupCollapsed: 4,
+        EndGroup: 5,
+        Assert: 6,
+        UncaughtException: 7,
+        Result: 8
+    }
+    
+    var MessageLevel = {
+        Tip: 0,
+        Log: 1,
+        Warning: 2,
+        Error: 3,
+        Debug: 4
+    }
+
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+static method useRemote(value)
+    if (arguments.length == 0) return UsingRemote
+    
+    var oldValue = UsingRemote
+    
+    UsingRemote = !!value
+    
+    if (UsingRemote) 
+        window.console = RemoteConsole
+    else
+        window.console = OriginalConsole
+        
+    return oldValue
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method log
+    var messageParts = []
+    
+    for (var i=0; i<arguments.length; i++) {
+        messageParts.push(arguments[i].toString())
+    }
+    
+    var message = messageParts.join(" ")
+    
+    var payload = {
+        source:      MessageSource.JS,
+        type:        MessageType.Log,
+        level:       MessageLevel.Log,
+        message:     message
+    }
+    
+    WebInspector.addConsoleMessage(payload)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method debug
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method error
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method info
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method warn
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method dir
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method dirxml
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method trace
+    Weinre.notImplemented(arguments.callee.signature)
+    
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method assert(condition)
+    Weinre.notImplemented(arguments.callee.signature)
+    
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method count
+    Weinre.notImplemented(arguments.callee.signature)
+    
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method markTimeline
+    Weinre.notImplemented(arguments.callee.signature)
+    
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method lastWMLErrorMessage
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method profile(title)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method profileEnd(title)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method time(title)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method timeEnd(title)
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method group
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method groupCollapsed
+    Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method groupEnd
+    Weinre.notImplemented(arguments.callee.signature)

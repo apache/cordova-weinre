@@ -1,0 +1,304 @@
+
+/*
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+ */
+
+require ../common/Binding
+require ../common/Weinre
+
+require ./ConnectorList
+require ./DOMTemplates as dt
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+class RemotePanel < WebInspector.Panel
+    super("remote")
+
+    this.initialize()
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method autoConnect(value)
+    if (arguments.length >= 1) {
+        this._autoConnect = !!value
+    }
+
+    return this._autoConnect
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method initialize()
+    this.autoConnect(false)
+    
+    // main div
+    var div = dt.DIV()
+    div.style.position = "absolute"
+    div.style.top      = "1em"
+    div.style.right    = "1em"
+    div.style.left     = "1em"
+    div.style.bottom   = "1em"
+    div.style.overflow = "auto"
+
+    // create icon
+    var icon = dt.IMG({
+        src: "../images/weinre-icon-128x128.png"
+    })
+    
+    icon.style.float = "right"
+    div.appendChild(icon)
+        
+    // create target and client lists
+    this.targetList = new TargetList()
+    this.clientList = new ClientList()
+    
+    div.appendChild(this.targetList.getElement())
+    div.appendChild(this.clientList.getElement())
+    
+    // create server properties
+    this.serverProperties = dt.DIV({
+        $className: "weinreServerProperties"
+    })
+        
+    div.appendChild(dt.H1("Server Properties"))
+    div.appendChild(this.serverProperties)
+    
+    // add main div to page
+    this.element.appendChild(div)
+    this.reset();
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method addClient(client) 
+    this.clientList.add(client)
+    
+method addTarget(target) 
+    this.targetList.add(target)
+
+method removeClient(id) 
+    this.clientList.remove(id)
+    
+method removeTarget(id) 
+    this.targetList.remove(id)
+
+method setCurrentClient(id) 
+    this.clientList.setCurrent(id)
+    
+method setCurrentTarget(id) 
+    this.targetList.setCurrent(id)
+
+method setClientState(id, state) 
+    this.clientList.setState(id, state)
+    
+method setTargetState(id, state) 
+    this.targetList.setState(id, state)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method getNewestTargetId(ignoring)
+    return this.targetList.getNewestConnectorId(ignoring)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method afterInitialConnection
+    this.clientList.afterInitialConnection()
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method reset
+    this.clientList.removeAll()
+    this.targetList.removeAll()
+    
+    Weinre.WeinreClientCommands.getTargets(Binding(this, "cb_getTargets"))
+    Weinre.WeinreClientCommands.getClients(Binding(this, "cb_getClients"))
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method connectionClosed
+    this.clientList.removeAll()
+    this.targetList.removeAll()
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method cb_getTargets(targets)
+    targets.forEach(function(target) {
+        this.addTarget(target)
+    }, this)
+   
+    if (!this.autoConnect()) return
+    
+    var newestTargetId = this.getNewestTargetId()
+    if (!newestTargetId) return
+    
+    Weinre.WeinreClientCommands.connectTarget(Weinre.clientId, newestTargetId)
+    
+    
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method cb_getClients(clients)
+    clients.forEach(function(client) {
+        this.addClient(client)
+    }, this)
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+getter toolbarItemClass
+    return "remote"
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+getter toolbarItemLabel
+    return "Remote"
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+getter statusBarItems
+    return []
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+getter defaultFocusedElement
+    return this.contentElement
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method show
+    super()
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method hide()
+    super()
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setServerProperties(properties)
+    var table = "<table>"
+    var keys = []
+    for (var key in properties) {
+        keys.push(key)
+    }
+    
+    keys = keys.sort()
+    keys.forEach(function(key) {
+        val = properties[key]
+        if (typeof val == "string") {
+            val = val.escapeHTML()
+        }
+        else {
+            var finalVal = ""
+            val.forEach(function(aVal){
+                finalVal += "<li>" + aVal.escapeHTML()
+            })
+            val = "<ul>" + finalVal + "</ul>"
+        }
+        table += "<tr class='weinre-normal-text-size'><td valign='top'>" + key.escapeHTML() + ": <td>" + val
+    })
+    table += "</table>"
+    this.serverProperties.innerHTML = table
+
+//=============================================================================
+//=============================================================================
+    
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+class TargetList < ConnectorList
+    super("Targets")
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getListItem(target)
+    var self = this
+    var text = target.hostName + " [id: " + target.id + "]" + " - " + target.url 
+
+    var item = dt.LI(
+        { $connectorId: target.id },
+        text
+    )
+    
+    item.addStyleClass("weinre-connector-item")
+    item.addStyleClass("target")
+    
+    item.addEventListener("click", function(e) {self.connectToTarget(target.id, e)}, false)
+
+    target.element = item
+
+    return item
+
+//-----------------------------------------------------------------------------
+// 
+//-----------------------------------------------------------------------------
+method connectToTarget(targetId, event)
+    if (event) {
+        event.preventDefault()
+        event.stopPropagation()
+    }
+    
+    var target = this.connectors[targetId]
+    if (!target) return false
+    if (target.closed) return false
+    
+    Weinre.WeinreClientCommands.connectTarget(Weinre.clientId, targetId)
+    
+    return false
+
+//=============================================================================
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+class ClientList < ConnectorList
+    super("Clients")
+
+    this.noneItem.innerHTML = "Waiting for connection..."
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method afterInitialConnection()
+    this.noneItem.innerHTML = "Connection lost, reload this page to reconnect."
+    this.noneItem.addStyleClass("error")
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method getListItem(client)
+    var text = client.hostName + " [id: " + client.id + "]"
+    
+    var item = dt.LI(
+        { $connectorId: client.id },
+        text
+    )
+
+    item.addStyleClass("weinre-connector-item")
+    item.addStyleClass("client")
+    
+    if (client.id == Weinre.clientId) {
+        item.addStyleClass("current")
+    }
+
+    client.element = item
+    
+    return item
