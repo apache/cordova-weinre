@@ -1,0 +1,248 @@
+<!doctype html>
+
+<!--
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+-->
+
+<html>
+<head>
+<title>weinre - TestDrive</title>
+<link rel="stylesheet" href="css/main.css" type="text/css">
+<script src="scripts/main.js"></script>
+</head>
+<body>
+
+<a href="https://github.com/pmuellr/weinre"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://assets1.github.com/img/5d21241b64dc708fcbb701f68f72f41e9f1fadd6?repo=&url=http%3A%2F%2Fs3.amazonaws.com%2Fgithub%2Fribbons%2Fforkme_left_red_aa0000.png&path=" alt="Fork me on GitHub"></a>
+
+<!-- ======================================================================= -->
+<h1 class="page-title">weinre - TestDrive</h1>
+
+<div class="toc">
+  <a href="index.html">Home</a>
+- <a href="TestDrive.html">Test Drive</a>
+- <a href="Installing.html">Installing</a>
+- <a href="Running.html">Running</a>
+- <a href="Security.html">Security</a>
+- <a href="Building.html">Building</a>
+- <a href="License.html">License</a>
+<p>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</div>
+
+<!--
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+-->
+
+<p>This page gives a walk through of using <span class="weinre">weinre</span> to 
+debug a sample page that is provided with <span class="weinre">weinre</span> itself.  Read
+this walk through first, then follow along and run <span class="weinre">weinre</span> yourself
+to make sure it's installed and running correctly.  
+
+<p>After you're done with the
+walk through, if you want to learn how to debug your own web pages with
+<span class="weinre">weinre</span>, 
+head to the
+<a href="Running.html">Running page</a> for more information.
+
+<p>The first thing to do is to start the
+<span class="weinre">weinre</span> debug server.  The debug server is
+a specialized HTTP server which is the middleman between the debug
+user interface, and your remote web page.  Both the debug user interface
+and the remote web page will communicate via HTTP to the debug server.
+
+<p>The default configuration of the server is to only bind to localhost,
+so that the server can only communicate with clients running on the
+same machine.  It shouldn't
+be possible for a browser on another machine to connect to this
+server.  To debug a web page on a remote device (later), you'll need to
+bind to something other than just localhost.  The default configuration
+is the safe one, and good enough to run this walk through.
+
+<p>To start the server,  
+<a href="Installing.html">install the <tt>weinre.jar</tt> file</a>,
+then run the following command:
+
+<pre>
+java -jar weinre.jar -httpPort 8081
+</pre> 
+
+<p><img src="images/weinre-con-01-h.jpg">
+
+<p>You should see some output in your console, 
+like this:
+
+<p><img src="images/weinre-con-02-h.jpg">
+
+<p>If you see messages about "Address in use", 
+that means that some other program is using port 8081, and so you'll need to
+use a different one.
+
+<p>Note that the server is now running.  
+When you are ready to stop the server, kill the
+program with Ctrl-C or whatever.
+
+<p>Now, let's go to the
+server's home page, at
+<tt><a href="http://localhost:8081/">http://localhost:8081/</a></tt>.
+
+<p class="note">Note: <span class="weinre">weinre</span> is currently only
+supported in WebKit-based browsers, like Google's Chrome and Apple's Safari
+browsers. 
+
+<p>It should look something like this (the red arrows were added to
+the image for emphasis):
+
+<p><img src="images/weinre-frn-01-h.jpg">
+
+<p>The top
+arrow is pointing to a link to the debug client.
+This page is the Web Inspector user interface that
+you'll be using to debug.  We'll click that link
+in a second.
+
+<p>The bottom arrow is pointing to a link
+to a debug target provided as a demo in the server.
+We'll click that link a little later.
+
+<p>Time to click the link for the debug client.
+Note that you probably want to open this page in
+another window (not just another tab, and not
+replacing this page).
+The link should be 
+<tt><a href="http://localhost:8081/client">http://localhost:8081/client</a></tt>.
+
+<p>You should see the following page in your browser:
+
+<p><img src="images/weinre-cli-01-h.jpg">
+
+<p>The page shown above is the Web Inspector
+user interface for the debugger.  You should have
+landed on the "Remote" panel; there are tabs for three panels
+shown, at the
+top of the web page - "Remote", "Elements", and "Console".
+
+<p>The "Remote" panel 
+provides information about what clients and targets
+are connected to the server, and other goodies.
+
+<p>The "Remote" panel is not included with the desktop browser's
+version of Web Inspector.  But the other two panels, 
+"Elements" and "Console" are the exact same panels from the
+desktop browser version of Web Inspector.
+
+<p>Right now, the "Remote" panel just shows one client connected.
+That's you!  This web page, in particular.
+
+<p>OK, the debug client is running, so let's start a
+debug target.  Go back to the tab or window with the
+server home page displayed (showing the two red
+arrows above).
+
+<p>Click on the link pointed to by the other red arrow,
+for the "target demo".  The link should be:
+<tt><a href="http://localhost:8081/demo/weinre-demo.html">http://localhost:8081/demo/weinre-demo.html</a></tt>.
+Again, you probably want to open this page in
+another window (not just another tab, and not
+replacing this page).
+
+<p><img src="images/weinre-tar-01-h.jpg">
+
+<p>The page shown above is the demo target.  Pretty simple.
+Not much going on.  And yet, it should have connected to
+the debug server.  How would you know?
+
+<p>Let's check by going back to the debug client to see what it says.
+
+<p><img src="images/weinre-cli-03-p.jpg">
+
+<p>You should now see that there's a target connected, as indicated
+by the entry in the Targets section.  That's 
+your demo page - you know because it shows the URL.
+
+<p>It's also green, meaning that a client is connected to it.  That's you!
+The entry for your client also turned green, indicating that it's connected
+to a target.
+
+<p>The debug client will always attempt to connect to the most recently
+connected debug target.  But you can also click on a target to 
+explicitly switch to it.
+
+<p>Now what?  Try clicking the Elements tab, as indicated
+by the red arrow below.
+
+<p><img src="images/weinre-cli-03-h.jpg">
+
+<p>The Elements panel will be displayed, and you're now looking at the DOM of the demo page,
+as shown below.
+
+<p><img src="images/weinre-cli-04-p.jpg">
+
+<p>Let's play with the console.  Click the console
+expander, as indicated by the red arrow below.
+
+<p><img src="images/weinre-cli-04-h.jpg">
+
+<p>The console is now open, as shown below.  
+
+<p><img src="images/weinre-cli-05-h.jpg">
+
+<p>What shall we do?
+
+<p>The first thing I always try is to execute the
+following line in the console:
+
+<pre>
+document.body.style.background = "green"
+</pre>
+
+<p>Guess what that does? 
+
+<p><img src="images/weinre-cli-06-h.jpg">
+
+<p><img src="images/weinre-cli-07-h.jpg">
+
+<p>Well, not much in this page.  But check back at
+the page with the demo running on it.
+
+<p><img src="images/weinre-tar-02-h.jpg">
+
+<p>Glorious!
+
+<p>Well, that's it, just to show you the basic operation.
+Explore a bit more, try reloading the debug target demo,
+and the debug client, etc, etc.
+
+<p>Are you ready to debug your own web pages?  Head to
+<a href="Running.html">the Running page</a> for more information.
+
+
+
+<!--
+ * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2010, IBM Corporation
+-->
+
+<div class="toc">
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<p>
+  <a href="index.html">Home</a>
+- <a href="TestDrive.html">Test Drive</a>
+- <a href="Installing.html">Installing</a>
+- <a href="Running.html">Running</a>
+- <a href="Security.html">Security</a>
+- <a href="Building.html">Building</a>
+- <a href="License.html">License</a>
+
+<br><img src="images/weinre-icon-128x128.png">
+</div>
+
+</body>
+</html>
