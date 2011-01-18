@@ -109,10 +109,10 @@ def writeMergedFile(oFileName, scripts, scriptNames, srcs):
 #
 #--------------------------------------------------------------------
 def min(script):
-    patternCommentC   = re.compile(r"\/\*.*?\*\/", re.MULTILINE + re.DOTALL)
-    patternCommentCPP = re.compile(r"\/\/.*?$",    re.MULTILINE)
-    patternIndent     = re.compile(r"^\s*",        re.MULTILINE)
-    patternBlankLine  = re.compile(r"^\s*\n",      re.MULTILINE)
+    patternCommentC   = re.compile(r"/\*.*?\*/",     re.MULTILINE + re.DOTALL)
+    patternCommentCPP = re.compile(r"(?<!\\)//.*?$", re.MULTILINE)
+    patternIndent     = re.compile(r"^\s*",          re.MULTILINE)
+    patternBlankLine  = re.compile(r"^\s*\n",        re.MULTILINE)
 
     script = patternCommentC.sub(   "", script)
     script = patternCommentCPP.sub( "", script)
