@@ -1,9 +1,9 @@
 
 /*
- * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
  * 
- * Copyright (c) 2010, IBM Corporation
+ * Copyright (c) 2010, 2011 IBM Corporation
  */
 
 require ../common/Weinre
@@ -49,4 +49,3 @@ method connectionDestroyed(/*string*/ clientId, /*string*/ targetId)
 //-----------------------------------------------------------------------------
 method sendCallback(/*int*/ callbackId, /*any*/ result)
     Callback.invoke(callbackId, result)
-
