@@ -102,24 +102,7 @@ public class ServerSettings {
      * 
      */
     private Properties fromPropertiesFile() {
-        Properties result = new Properties();
-        
-        String userHome = System.getProperty("user.home");
-        if (null == userHome) {
-            System.err.println("System property user.home not set!");
-            return result;
-        }
-        
-        File file = new File(new File(userHome, ".weinre"), "server.properties");
-        
-        if (!file.exists()) return result;
-        
-        try {
-            result.load(new FileReader(file));
-        }
-        catch (IOException e) {
-            System.err.println("Exception reading '" + file.getAbsolutePath() + "': " + e);
-        }
+        Properties result = Utility.readPropertiesFile("server.properties");
         
         // ya, Properties doesn't trim space off values
         for (String key: result.stringPropertyNames()) {
