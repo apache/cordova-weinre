@@ -13,6 +13,7 @@ require ../common/Weinre
 
 require ./NodeStore
 require ./CSSStore
+require ./ElementHighlighter
 require ./InjectedScriptHostImpl
 require ./WebInspectorApplicationCacheHandlerImpl
 require ./WebInspectorBackendHandlerImpl
@@ -137,6 +138,9 @@ method onLoaded()
 // 
 //-----------------------------------------------------------------------------
 method setDocument()
+    Weinre.elementHighlighter = new ElementHighlighter()
+    Weinre.nodeStore.setHighlightElement(Weinre.elementHighlighter.element)
+    
     var nodeId = Weinre.nodeStore.getNodeId(document)
     var nodeData = Weinre.nodeStore.getNodeData(nodeId, 2)
 
