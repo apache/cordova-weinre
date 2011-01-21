@@ -146,6 +146,7 @@ method childNodeCount(node)
     
     for (var i=0; i<node.childNodes.length; i++) {
         if (this.isWhitespace(node.childNodes[i])) continue
+        if (node == this.highlightElement) continue
         count++
     }
     
@@ -159,6 +160,7 @@ method childNodeIds(node)
     
     for (var i=0; i<node.childNodes.length; i++) {
         if (this.isWhitespace(node.childNodes[i])) continue
+        if (node == this.highlightElement) continue
         ids.push(this.getNodeId(node.childNodes[i]))
     }
     
@@ -172,3 +174,8 @@ method isWhitespace(node)
     if (node.nodeType != Node.TEXT_NODE) return false
     return !!node.nodeValue.match(/^\s*$/) 
 
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+method setHighlightElement(node) 
+    this.highlightElement = node
