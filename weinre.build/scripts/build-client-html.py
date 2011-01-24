@@ -51,6 +51,8 @@ def createIndexFile(iFileName, oFileName, moduleDir):
             
             newLines.append("<!-- ========== weinre additions: starting ========== -->\n")
             newLines.extend([
+                '<meta http-equiv="X-UA-Compatible" content="chrome=1">\n'
+                '<link rel="shortcut icon" href="../images/weinre-icon-64x64.png">\n',
                 '<title>weinre</title>\n',
                 '<link rel="stylesheet" type="text/css" href="weinre/client.css">\n',
                 '<script type="text/javascript" src="weinre/check-for-webkit.js"></script>\n',
