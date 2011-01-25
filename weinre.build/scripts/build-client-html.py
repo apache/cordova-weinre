@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 # ---
-# PhoneGap is available under *either* the terms of the modified BSD license *or* the
+# weinre is available under *either* the terms of the modified BSD license *or* the
 # MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
 # 
-# Copyright (c) 2010, IBM Corporation
+# Copyright (c) 2010, 2011 IBM Corporation
 # ---
 
 import os
@@ -51,6 +51,8 @@ def createIndexFile(iFileName, oFileName, moduleDir):
             
             newLines.append("<!-- ========== weinre additions: starting ========== -->\n")
             newLines.extend([
+                '<meta http-equiv="X-UA-Compatible" content="chrome=1">\n'
+                '<link rel="shortcut icon" href="../images/weinre-icon-64x64.png">\n',
                 '<title>weinre</title>\n',
                 '<link rel="stylesheet" type="text/css" href="weinre/client.css">\n',
                 '<script type="text/javascript" src="weinre/check-for-webkit.js"></script>\n',

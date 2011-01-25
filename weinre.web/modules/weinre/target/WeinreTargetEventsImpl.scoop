@@ -1,9 +1,9 @@
 
 /*
- * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
  * 
- * Copyright (c) 2010, IBM Corporation
+ * Copyright (c) 2010, 2011 IBM Corporation
  */
 
 require ../common/Weinre
@@ -20,11 +20,13 @@ class WeinreTargetEventsImpl
 //
 //-----------------------------------------------------------------------------
 method connectionCreated(/*string*/ clientId, /*string*/ targetId)
-    console.log("weinre: connected to " + clientId)
+    var message = "weinre: target " + targetId + " connected to client " + clientId
+    
+    console.log(message)
     var oldValue = Console.useRemote(true)
     
     if (!oldValue) {
-        console.log("weinre: connected to " + clientId)
+        console.log(message)
     }
     
     Weinre.target.setDocument()
@@ -33,11 +35,13 @@ method connectionCreated(/*string*/ clientId, /*string*/ targetId)
 //
 //-----------------------------------------------------------------------------
 method connectionDestroyed(/*string*/ clientId, /*string*/ targetId)
-    console.log("weinre: disconnected from " + clientId)
-    var oldValue = Weinre.Console.useRemote(false)
+    var message = "weinre: target " + targetId + " disconnected from client " + clientId
+    
+    console.log(message)
+    var oldValue = Console.useRemote(false)
     
     if (oldValue) {
-        console.log("weinre: disconnected from " + clientId)
+        console.log(message)
     }
 
 //-----------------------------------------------------------------------------
@@ -45,4 +49,3 @@ method connectionDestroyed(/*string*/ clientId, /*string*/ targetId)
 //-----------------------------------------------------------------------------
 method sendCallback(/*int*/ callbackId, /*any*/ result)
     Callback.invoke(callbackId, result)
-

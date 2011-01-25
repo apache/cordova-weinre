@@ -1,9 +1,9 @@
 
 /*
- * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
  * 
- * Copyright (c) 2010, IBM Corporation
+ * Copyright (c) 2010, 2011 IBM Corporation
  */
 
 require ../common/Binding
@@ -13,6 +13,7 @@ require ../common/Weinre
 
 require ./NodeStore
 require ./CSSStore
+require ./ElementHighlighter
 require ./InjectedScriptHostImpl
 require ./WebInspectorApplicationCacheHandlerImpl
 require ./WebInspectorBackendHandlerImpl
@@ -137,6 +138,8 @@ method onLoaded()
 // 
 //-----------------------------------------------------------------------------
 method setDocument()
+    Weinre.elementHighlighter = new ElementHighlighter()
+    
     var nodeId = Weinre.nodeStore.getNodeId(document)
     var nodeData = Weinre.nodeStore.getNodeData(nodeId, 2)
 

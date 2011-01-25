@@ -1,8 +1,8 @@
 /*
- * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
  * 
- * Copyright (c) 2010, IBM Corporation
+ * Copyright (c) 2010, 2011 IBM Corporation
  */
 
 var weinre_protocol = location.protocol
@@ -31,7 +31,8 @@ replaceText("version-swt",       Weinre.Versions.swt)
 replaceText("version-scooj",     Weinre.Versions.scooj)
 replaceText("version-modjewel",  Weinre.Versions.modjewel)
 
-replaceText("target-bookmarklet-src", getTargetBookmarklet())
+replaceText("target-bookmarklet-src-pre",       getTargetBookmarklet())
+replaceText("target-bookmarklet-src-text-area", getTargetBookmarklet())
 
 //---------------------------------------------------------------------
 function buildHttpURL(uri) {
@@ -58,22 +59,19 @@ function buildHttpURL(uri) {
 }
 
 //-----------------------------------------------------------------------------
-function targetBookmarkletFunction(){
-    var e=document.createElement("script");
-    e.setAttribute("language","javascript");
+function targetBookmarkletFunction(e){
     e.setAttribute("src","???");
-    document.body.appendChild(e);
+    document.getElementsByTagName("body")[0].appendChild(e);
 }
 
 //-----------------------------------------------------------------------------
 function getTargetBookmarklet() {
-    script = targetBookmarkletFunction.toString();
-    script = script.replace(/^\s+/g, "")
+    var script = targetBookmarkletFunction.toString();
     script = script.replace(/\n/g,   "")
-    script = script.replace(/\s+/g,  "%20")
     script = script.replace("targetBookmarkletFunction","")
+    script = script.replace(/\s*/g, "")
     script = script.replace("???", buildHttpURL("target/target-script-min.js"))
-    script = ";(" + script + ")();void(0);"
+    script = "(" + script + ')(document.createElement("script"));void(0);'
     return 'javascript:' + script
 }
 

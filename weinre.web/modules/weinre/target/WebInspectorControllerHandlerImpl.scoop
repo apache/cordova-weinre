@@ -1,9 +1,9 @@
 
 /*
- * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
  * 
- * Copyright (c) 2010, IBM Corporation
+ * Copyright (c) 2010, 2011 IBM Corporation
  */
 
 require ../common/Weinre
@@ -171,15 +171,27 @@ method clearConsoleMessages(callback)
 //
 //-----------------------------------------------------------------------------
 method highlightDOMNode(/*int*/ nodeId, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        return
+    }
+
+    Weinre.elementHighlighter.on(node)
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 method hideDOMNodeHighlight(callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    Weinre.elementHighlighter.off()
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 //

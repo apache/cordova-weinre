@@ -1,15 +1,12 @@
 /*
- * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
  * 
- * Copyright (c) 2010, IBM Corporation
+ * Copyright (c) 2010, 2011 IBM Corporation
  */
 
 package com.phonegap.weinre.server;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -102,24 +99,7 @@ public class ServerSettings {
      * 
      */
     private Properties fromPropertiesFile() {
-        Properties result = new Properties();
-        
-        String userHome = System.getProperty("user.home");
-        if (null == userHome) {
-            System.err.println("System property user.home not set!");
-            return result;
-        }
-        
-        File file = new File(new File(userHome, ".weinre"), "server.properties");
-        
-        if (!file.exists()) return result;
-        
-        try {
-            result.load(new FileReader(file));
-        }
-        catch (IOException e) {
-            System.err.println("Exception reading '" + file.getAbsolutePath() + "': " + e);
-        }
+        Properties result = Utility.readPropertiesFile("server.properties");
         
         // ya, Properties doesn't trim space off values
         for (String key: result.stringPropertyNames()) {

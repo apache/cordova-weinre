@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 # ---
-# PhoneGap is available under *either* the terms of the modified BSD license *or* the
+# weinre is available under *either* the terms of the modified BSD license *or* the
 # MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
 # 
-# Copyright (c) 2010, IBM Corporation
+# Copyright (c) 2010, 2011 IBM Corporation
 # ---
 
 import os
@@ -109,10 +109,10 @@ def writeMergedFile(oFileName, scripts, scriptNames, srcs):
 #
 #--------------------------------------------------------------------
 def min(script):
-    patternCommentC   = re.compile(r"\/\*.*?\*\/", re.MULTILINE + re.DOTALL)
-    patternCommentCPP = re.compile(r"\/\/.*?$",    re.MULTILINE)
-    patternIndent     = re.compile(r"^\s*",        re.MULTILINE)
-    patternBlankLine  = re.compile(r"^\s*\n",      re.MULTILINE)
+    patternCommentC   = re.compile(r"/\*.*?\*/",     re.MULTILINE + re.DOTALL)
+    patternCommentCPP = re.compile(r"(?<!\\)//.*?$", re.MULTILINE)
+    patternIndent     = re.compile(r"^\s*",          re.MULTILINE)
+    patternBlankLine  = re.compile(r"^\s*\n",        re.MULTILINE)
 
     script = patternCommentC.sub(   "", script)
     script = patternCommentCPP.sub( "", script)

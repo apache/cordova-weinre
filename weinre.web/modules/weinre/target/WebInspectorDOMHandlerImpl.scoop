@@ -1,9 +1,9 @@
 
 /*
- * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
  * 
- * Copyright (c) 2010, IBM Corporation
+ * Copyright (c) 2010, 2011 IBM Corporation
  */
 
 require ../common/Weinre
@@ -226,42 +226,6 @@ method getStyles(/*int*/ nodeId, /*boolean*/ authOnly, callback)
         Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
     }
 
-//  console.log(this.constructor.name + "." + arguments.callee.name + "() returns '" + JSON.stringify(result,null,4) + "'")
-    
-    /*
-    Element* element = static_cast<Element*>(node);
-    RefPtr<CSSComputedStyleDeclaration> computedStyleInfo = computedStyle(node, true); // Support the viewing of :visited information in computed style.
-
-    RefPtr<InspectorObject> result = InspectorObject::create();
-    if (element->style())
-        result->setObject("inlineStyle", buildObjectForStyle(element->style(), true));
-    result->setObject("computedStyle", buildObjectForStyle(computedStyleInfo.get(), false));
-
-    CSSStyleSelector* selector = element->ownerDocument()->styleSelector();
-    RefPtr<CSSRuleList> matchedRules = selector->styleRulesForElement(element, authorOnly, true);
-    result->setArray("matchedCSSRules", buildArrayForCSSRules(node->ownerDocument(), matchedRules.get()));
-
-    result->setObject("styleAttributes", buildObjectForAttributeStyles(element));
-    result->setArray("pseudoElements", buildArrayForPseudoElements(element, authorOnly));
-
-    RefPtr<InspectorObject> currentStyle = result;
-    Element* parentElement = element->parentElement();
-    while (parentElement) {
-        RefPtr<InspectorObject> parentStyle = InspectorObject::create();
-        currentStyle->setObject("parent", parentStyle);
-        if (parentElement->style() && parentElement->style()->length())
-            parentStyle->setObject("inlineStyle", buildObjectForStyle(parentElement->style(), true));
-
-        CSSStyleSelector* parentSelector = parentElement->ownerDocument()->styleSelector();
-        RefPtr<CSSRuleList> parentMatchedRules = parentSelector->styleRulesForElement(parentElement, authorOnly, true);
-        parentStyle->setArray("matchedCSSRules", buildArrayForCSSRules(parentElement->ownerDocument(), parentMatchedRules.get()));
-
-        parentElement = parentElement->parentElement();
-        currentStyle = parentStyle;
-    }
-    *styles = result.release();
-    */
-
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -273,15 +237,33 @@ method getAllStyles(callback)
 //
 //-----------------------------------------------------------------------------
 method getInlineStyle(/*int*/ nodeId, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        return
+    }
+
+    var result = Weinre.cssStore.getInlineStyle(node)
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 method getComputedStyle(/*int*/ nodeId, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        return
+    }
+
+    var result = Weinre.cssStore.getComputedStyle(node) 
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 //-----------------------------------------------------------------------------
 //

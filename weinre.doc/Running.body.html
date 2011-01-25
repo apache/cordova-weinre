@@ -1,8 +1,8 @@
 <!--
- * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
  * 
- * Copyright (c) 2010, IBM Corporation
+ * Copyright (c) 2010, 2011 IBM Corporation
 -->
 
 <p>This page describes how to use <span class="weinre">weinre</span> to debug
@@ -245,7 +245,7 @@ will be accessible from the debug target.  Let's say that URL
 <p>To make your web page debuggable with <span class="weinre">weinre</span>,
 add the following line to your web page:
 <pre>
-&lt;script src="http://a.b.c:8081/target/target-script.js"&gt;&lt;/script&gt; 
+&lt;script src="http://a.b.c:8081/target/target-script-min.js"&gt;&lt;/script&gt; 
 </pre>
 
 <p>You can now open a debug client by browsing to
@@ -303,26 +303,23 @@ no matter what network you are connected to.
 
 <p>Some platforms support 'bookmarkets', which allow you to inject
 arbitrary JavaScript code into any web page running in your 
-browser.  Mobile Safari is one of these browsers.  
-See the following "open enhancement request" for the methods
-of installing bookmarklets in Mobile Safari -
-<a href="http://www.marco.org/1288715399">http://www.marco.org/1288715399</a>.
+browser.  Mobile Safari is one of these browsers.  It appears that
+the browser shipped with Android 2.2 and later also supports bookmarklets.
 
-<p>The following recipe can be used for a bookmarket to get the 
-weinre debug target code injected into an arbitrary web page:
+<p>Unfortunately, installing bookmarkets on mobile devices isn't usually trivial.  The easiest
+course of action is to add a new random bookmark to your bookmarks,
+and then edit it by hand to change the label and URL.  The URL
+you should use is available in both a 'pre' and 'textarea' section
+of the server's home page (eg, http://localhost:8081/).  You should
+be able to select the text from one of these areas easily, to
+paste into the previously added bookmark.
 
-<pre>
-javascript:;(function%20(){%20var%20e=document.createElement("script");
-%20e.setAttribute("language","javascript");
-%20e.setAttribute("src","http://[debug server host]:[debug server port]/target/target-script.js");
-%20document.body.appendChild(e);})();void(0);
-</pre>
-
-<p>Note that this code is split across multiple lines in this document, but
-should be all one line in your actual bookmark.
+<p>Once the bookmarklet is installed, you can debug any web page
+by visiting it, and selecting the bookmarklet from your bookmarks
+menu.
 
 <!-- ======================================================== -->
-<h2>Using the <tt>target/target-script.js</tt> file statically</h2>
+<h2>Using the <tt>target/target-script-min.js</tt> file statically</h2>
 
 <p>If you'd like to use the debug target code statically, instead of
 downloading it from the server all the time, then you will need to do
@@ -338,7 +335,7 @@ window.WeinreServerURL
 
 <p>This URL overrides what's otherwise calculated from the debug target
 code itself.  You will need to set this value before the
-<tt>target/target-script.js</tt> script is loaded. 
+<tt>target/target-script-min.js</tt> script is loaded. 
 
 <!-- ======================================================== -->
 <h3>Future Enhancements</h3>
@@ -347,7 +344,7 @@ code itself.  You will need to set this value before the
 ham-fisted.  We should look at additional ways to handle this.
 For instance, we could prompt the user for the debug server
 address, and then always using the debug target in a more static
-mode; eg, you'd include the <tt>target-script.js</tt> with all your
+mode; eg, you'd include the <tt>target-script-min.js</tt> with all your
 other files in your application.
 
 <p>Running the debug server on the target device is another option.

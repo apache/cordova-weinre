@@ -1,9 +1,9 @@
 
 /*
- * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
  * 
- * Copyright (c) 2010, IBM Corporation
+ * Copyright (c) 2010, 2011 IBM Corporation
  */
 
 require ./IDLTools
@@ -24,7 +24,8 @@ static method addIDLs(idls)
 //
 //-----------------------------------------------------------------------------
 static 
-    var _notImplemented = {}
+    var _notImplemented     = {}
+    var _showNotImplemented = false
 
 //-----------------------------------------------------------------------------
 //
@@ -33,4 +34,15 @@ static method notImplemented(thing)
     if (_notImplemented[thing]) return
     
     _notImplemented[thing] = true
+    
+    if (!_showNotImplemented) return
     console.log(thing + " not implemented")
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+static method showNotImplemented()
+    _showNotImplemented = true
+    for (var key in _notImplemented) {
+        console.log(key + " not implemented")
+    }

@@ -1,8 +1,8 @@
 <!--
- * PhoneGap is available under *either* the terms of the modified BSD license *or* the
+ * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
  * 
- * Copyright (c) 2010, IBM Corporation
+ * Copyright (c) 2010, 2011 IBM Corporation
 -->
 
 <project name="build" default="build" basedir="."> 
@@ -228,6 +228,7 @@
         <build-html name="Running"      oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="Security"     oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="TestDrive"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
+        <build-html name="ChangeLog"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         
         <move file="${WEB}/doc/Home.html" tofile="${WEB}/doc/index.html"/>
         
