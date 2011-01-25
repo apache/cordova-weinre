@@ -139,7 +139,6 @@ method onLoaded()
 //-----------------------------------------------------------------------------
 method setDocument()
     Weinre.elementHighlighter = new ElementHighlighter()
-    Weinre.nodeStore.setHighlightElement(Weinre.elementHighlighter.element)
     
     var nodeId = Weinre.nodeStore.getNodeId(document)
     var nodeData = Weinre.nodeStore.getNodeData(nodeId, 2)
