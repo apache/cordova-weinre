@@ -59,6 +59,7 @@ public class Main {
         super();
         
         Settings = ServerSettings.getOptions(args);
+        if (null == Settings) System.exit(0);
         
         consoleStdout = ConsoleOutputStream.newPrintStream(this, System.out, true);
         consoleStderr = ConsoleOutputStream.newPrintStream(this, System.err, false);

@@ -16,6 +16,7 @@
 - <a href="Running.html">Running</a>
 - <a href="Security.html">Security</a>
 - <a href="Building.html">Building</a>
+- <a href="ChangeLog.html">ChangeLog</a>
 - <a href="License.html">License</a>
 
 <br><img src="images/weinre-icon-128x128.png">
