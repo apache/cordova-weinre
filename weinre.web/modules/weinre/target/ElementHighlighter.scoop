@@ -37,6 +37,25 @@ class ElementHighlighter
     this.boxPadding.style.position =
     this.boxContent.style.position = "absolute"
     
+    this.boxMargin.style.borderWidth =
+    this.boxBorder.style.borderWidth =
+    this.boxPadding.style.borderWidth =
+    this.boxContent.style.borderWidth = "thin"
+        
+    this.boxMargin.style.borderStyle =
+    this.boxBorder.style.borderStyle =
+    this.boxPadding.style.borderStyle =
+    this.boxContent.style.borderStyle = "solid"
+                
+    this.boxMargin.__weinreHighlighter =
+    this.boxBorder.__weinreHighlighter =
+    this.boxPadding.__weinreHighlighter =
+    this.boxContent.__weinreHighlighter = true
+                        
+    this.boxMargin.style.display = "none"
+        
+    document.body.appendChild(this.boxMargin)
+    
 //-----------------------------------------------------------------------------
 // 
 //-----------------------------------------------------------------------------
@@ -45,15 +64,13 @@ method on(element)
     if (element.nodeType != Node.ELEMENT_NODE) return
     
     this.calculateMetrics(element)
-    document.body.appendChild(this.boxMargin)
-    this.boxMargin.style.opacity = 0.6
+    this.boxMargin.style.display = "block"
 
 //-----------------------------------------------------------------------------
 // 
 //-----------------------------------------------------------------------------
 method off
-    this.boxMargin.style.opacity = 0
-    document.body.removeChild(this.boxMargin)
+    this.boxMargin.style.display = "none"
 
 //-----------------------------------------------------------------------------
 // 
@@ -87,6 +104,8 @@ method calculateMetrics(element)
     this.boxContent.style.left   = metrics.paddingLeft   + "px"
     this.boxContent.style.bottom = metrics.paddingBottom + "px"
     this.boxContent.style.right  = metrics.paddingRight  + "px"
+    
+    
     
 //-----------------------------------------------------------------------------
 // 

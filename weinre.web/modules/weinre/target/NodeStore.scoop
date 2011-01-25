@@ -142,15 +142,7 @@ method serializeNodeChildren(node, depth)
 //
 //-----------------------------------------------------------------------------
 method childNodeCount(node)
-    var count = 0
-    
-    for (var i=0; i<node.childNodes.length; i++) {
-        if (this.isWhitespace(node.childNodes[i])) continue
-        if (node == this.highlightElement) continue
-        count++
-    }
-    
-    return count
+    return this.childNodeIds(node).length
 
 //-----------------------------------------------------------------------------
 //
@@ -159,8 +151,7 @@ method childNodeIds(node)
     var ids = []
     
     for (var i=0; i<node.childNodes.length; i++) {
-        if (this.isWhitespace(node.childNodes[i])) continue
-        if (node == this.highlightElement) continue
+        if (this.isToBeSkipped(node.childNodes[i])) continue
         ids.push(this.getNodeId(node.childNodes[i]))
     }
     
@@ -169,13 +160,8 @@ method childNodeIds(node)
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-method isWhitespace(node)
-    if (!node) return false
+method isToBeSkipped(node)
+    if (!node) return true
+    if (node.__weinreHighlighter) return true 
     if (node.nodeType != Node.TEXT_NODE) return false
     return !!node.nodeValue.match(/^\s*$/) 
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-method setHighlightElement(node) 
-    this.highlightElement = node
