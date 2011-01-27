@@ -13,6 +13,7 @@
     
     <property file="personal.properties" />
     <property file="build.properties" />
+    <property file="vendor.properties" />
 
     <!-- hint: override in your personal.properties -->
     <property name="BUILDER" value="The Unknown Builder"/>
@@ -73,8 +74,8 @@
         
         <echo file="${OUT}/build-info.txt" message="${build-info-text}"/>
         
-        <antcall target="compile-java"/>
         <antcall target="build-vendor"/>
+        <antcall target="compile-java"/>
         <antcall target="build-web"/>
         <antcall target="build-doc"/>
         <antcall target="build-json-idl"/>
