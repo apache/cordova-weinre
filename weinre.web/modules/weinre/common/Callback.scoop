@@ -6,11 +6,13 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+require ./Ex
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 class Callback
-    throw new Error("this class is not intended to be instantiated")
+    throw new Ex(arguments, "this class is not intended to be instantiated")
 
 //-----------------------------------------------------------------------------
 //
@@ -31,14 +33,14 @@ static method setConnectorId(connectorId)
 //-----------------------------------------------------------------------------
 static method register(callback)
     if (typeof callback == "function") callback = [null, callback]
-    if (typeof callback.slice != "function") throw new Error("callback must be an array or function")
+    if (typeof callback.slice != "function") throw new Ex(arguments, "callback must be an array or function")
     
     var receiver = callback[0]
     var func     = callback[1]
     var data     = callback.slice(2)
     
     if (typeof func == "string") func = receiver.func
-    if (typeof func != "function") throw new Error("callback function was null or not found")
+    if (typeof func != "function") throw new Ex(arguments, "callback function was null or not found")
 
     var index = ConnectorId + "::" + CallbackIndex
     
@@ -60,7 +62,7 @@ static method deregister(index)
 //-----------------------------------------------------------------------------
 static method invoke(index, args)
     var callback = CallbackTable[index]
-    if (!callback) throw new Error("callback " + index + " not registered or already invoked")
+    if (!callback) throw new Ex(arguments, "callback " + index + " not registered or already invoked")
     
     var receiver = callback[0]
     var func     = callback[1]

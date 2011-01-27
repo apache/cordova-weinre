@@ -6,13 +6,14 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+require ./Ex
 require ./IDLTools
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 class Weinre
-    throw new Error("this class is not intended to be instantiated")
+    throw new Ex(arguments, "this class is not intended to be instantiated")
 
 //-----------------------------------------------------------------------------
 //

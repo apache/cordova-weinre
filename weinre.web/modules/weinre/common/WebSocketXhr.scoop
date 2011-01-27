@@ -6,6 +6,7 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+require ./Ex
 require ./Weinre
 require ./EventListeners
 
@@ -121,7 +122,7 @@ method _handleXhrResponseGet(xhr)
 //
 //-----------------------------------------------------------------------------
 method send(data)
-    if (typeof data != "string") throw new Error(this.constructor.name + "." + this.caller)
+    if (typeof data != "string") throw new Ex(arguments, this.constructor.name + "." + this.caller)
 
     this._queuedSends.push(data)
     
@@ -192,7 +193,7 @@ method _fireEventListeners(type, event)
 //-----------------------------------------------------------------------------
 method _getListeners(type)
     var listeners = this._listeners[type]
-    if (null == listeners) throw new Error("invalid event listener type: '" + type + "'")
+    if (null == listeners) throw new Ex(arguments, "invalid event listener type: '" + type + "'")
     
     return listeners
 
@@ -217,7 +218,7 @@ method _handleXhrResponseError(xhr)
 //
 //-----------------------------------------------------------------------------
 method _xhr(url, method, data, handler)
-    if (null == handler) throw new Error("handler must not be null")
+    if (null == handler) throw new Ex(arguments, "handler must not be null")
     
     var xhr = new XMLHttpRequest()
     

@@ -189,6 +189,18 @@
             </fileset>
         </copy>
 
+        <echo 
+            file    = "${WEB}/weinre/target/InjectedScript.js"
+            message = "var injectedScriptConstructor = ${line.separator}"
+        />
+        
+        <concat 
+            destfile = "${WEB}/weinre/target/InjectedScript.js"
+            append   = "true"
+        >
+            <fileset file="${VENDOR}/webkit/WebCore/inspector/InjectedScriptSource.js"/>
+        </concat>
+            
         <copy todir="${WEB}">
             <fileset dir="../${PROJECT_WEB}">
                 <include name="versions.js"/>

@@ -6,6 +6,7 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+require ../common/Ex
 require ../common/Binding
 require ../common/Callback
 require ../common/Socket
@@ -66,7 +67,7 @@ method setWeinreServerURLFromScriptSrc()
     
     var message = "unable to calculate the weinre server url; explicity set the variable window.WeinreServerURL instead" 
     alert(message)
-    throw new Error(message)
+    throw new Ex(arguments, message)
 
 //-----------------------------------------------------------------------------
 // 

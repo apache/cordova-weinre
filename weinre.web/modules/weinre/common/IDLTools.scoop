@@ -6,13 +6,14 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+require ./Ex
 require ./Callback
 
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 class IDLTools
-    throw new Error("this class is not intended to be instantiated")
+    throw new Ex(arguments, "this class is not intended to be instantiated")
 
 //-----------------------------------------------------------------------------
 //
@@ -58,7 +59,7 @@ static method getIDLsMatching(regex)
 static method validateAgainstIDL(klass, interfaceName)
     var intf = IDLTools.getIDL(interfaceName)
     var messagePrefix = "IDL validation for " + interfaceName + ": "
-    if (null == intf) throw new Error(messagePrefix + "idl not found: '" + interfaceName + "'")
+    if (null == intf) throw new Ex(arguments, messagePrefix + "idl not found: '" + interfaceName + "'")
     
     var errors = []
     // check that class implements all the methods
@@ -104,7 +105,7 @@ static method validateAgainstIDL(klass, interfaceName)
 static method buildProxyForIDL(proxyObject, interfaceName)
     var intf = IDLTools.getIDL(interfaceName)
     var messagePrefix = "building proxy for IDL " + interfaceName + ": "
-    if (null == intf) throw new Error(messagePrefix + "idl not found: '" + interfaceName + "'")
+    if (null == intf) throw new Ex(arguments, messagePrefix + "idl not found: '" + interfaceName + "'")
     
     intf.methods.forEach(function(intfMethod) {
         proxyObject[intfMethod.name] = getProxyMethod(intf, intfMethod)

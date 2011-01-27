@@ -10,6 +10,7 @@ require ./Weinre
 require ./WebSocketXhr
 require ./IDLTools
 require ./Binding
+require ./Ex
 
 //-----------------------------------------------------------------------------
 //
@@ -44,7 +45,7 @@ static method verbose(value)
 //-----------------------------------------------------------------------------
 method open
     if (this._opened || this._opening) return
-    if (this._closed) throw new Error("socket has already been closed")
+    if (this._closed) throw new Ex(arguments, "socket has already been closed")
     
     this._opening = true 
     this._socket = new WebSocketXhr(this._url)
@@ -82,7 +83,7 @@ method getWebSocket
 method registerInterface(intfName, intf, validate)
     if (validate) IDLTools.validateAgainstIDL(intf.constructor, intfName)
     
-    if (this._interfaces[intfName]) throw new Error("interface " + intfName + " has already been registered")
+    if (this._interfaces[intfName]) throw new Ex(arguments, "interface " + intfName + " has already been registered")
     
     this._interfaces[intfName] = intf
 
@@ -105,8 +106,8 @@ method createProxy(intfName)
 //
 //-----------------------------------------------------------------------------
 method _sendMethodInvocation(intfName, methodName, args)
-    if (typeof intfName   != "string") throw new Error("expecting intf parameter to be a string")
-    if (typeof methodName != "string") throw new Error("expecting method parameter to be a string")
+    if (typeof intfName   != "string") throw new Ex(arguments, "expecting intf parameter to be a string")
+    if (typeof methodName != "string") throw new Ex(arguments, "expecting method parameter to be a string")
     
     var data = {
             "interface": intfName,
@@ -169,7 +170,7 @@ method _handleMessage(message)
         data = JSON.parse(message.data)
     }
     catch (e) {
-        throw new Error("invalid JSON data received: " + e + ": '" + message.data + "'")
+        throw new Ex(arguments, "invalid JSON data received: " + e + ": '" + message.data + "'")
     }
 
     var intfName   = data["interface"]
@@ -179,10 +180,10 @@ method _handleMessage(message)
     var methodSignature = intfName + "." + methodName + "()"
     
     var intf = this._interfaces[intfName]
-    if (!intf) throw new Error("request for non-registered interface:" + methodSignature)
+    if (!intf) throw new Ex(arguments, "request for non-registered interface:" + methodSignature)
     
     var method = intf[methodName]
-    if (typeof method != "function") throw new Error("request for unknown method on interface: " + methodSignature)
+    if (typeof method != "function") throw new Ex(arguments, "request for unknown method on interface: " + methodSignature)
     
     try {
         method.apply(intf, args)

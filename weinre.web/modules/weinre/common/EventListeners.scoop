@@ -6,6 +6,8 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+require ./Ex
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -49,7 +51,7 @@ method fire(event)
         }
         
         if (typeof listener.handleEvent != "function") {
-            throw new Error("listener does not implement the handleEvent() method")
+            throw new Ex(arguments, "listener does not implement the handleEvent() method")
         }
         
         try {
