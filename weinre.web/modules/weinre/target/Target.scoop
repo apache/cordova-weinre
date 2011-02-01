@@ -16,14 +16,31 @@ require ./NodeStore
 require ./CSSStore
 require ./ElementHighlighter
 require ./InjectedScriptHostImpl
-require ./WebInspectorApplicationCacheHandlerImpl
-require ./WebInspectorBackendHandlerImpl
-require ./WebInspectorControllerHandlerImpl
-require ./WebInspectorDOMHandlerImpl   
-require ./WebInspectorDebugHandlerImpl
-require ./WebInspectorProfilerHandlerImpl
-require ./WebInspectorResourceHandlerImpl
+
 require ./WeinreTargetEventsImpl
+
+// require ./WebInspectorApplicationCacheHandlerImpl
+// require ./WebInspectorBackendHandlerImpl
+// require ./WebInspectorControllerHandlerImpl
+// require ./WebInspectorDOMHandlerImpl   
+// require ./WebInspectorDebugHandlerImpl
+// require ./WebInspectorProfilerHandlerImpl
+// require ./WebInspectorResourceHandlerImpl
+
+require ./WiApplicationCacheImpl
+require ./WiBrowserDebuggerImpl
+require ./WiCSSImpl
+require ./WiConsoleImpl
+require ./WiDOMImpl
+require ./WiDOMStorageImpl
+require ./WiDatabaseImpl
+require ./WiDebuggerImpl
+require ./WiFileSystemImpl
+require ./WiInjectedScriptImpl
+require ./WiInspectorImpl
+require ./WiNetworkImpl
+require ./WiProfilerImpl
+require ./WiRuntimeImpl
 
 //-----------------------------------------------------------------------------
 // 
@@ -87,6 +104,7 @@ method initialize()
     var webSocket = new Socket(window.WeinreServerURL + "ws/target")
     Weinre.webSocket = webSocket
 
+    /*
     Weinre.WebInspectorApplicationCacheHandler = new WebInspectorApplicationCacheHandlerImpl()
     Weinre.WebInspectorBackendHandler          = new WebInspectorBackendHandlerImpl()  
     Weinre.WebInspectorControllerHandler       = new WebInspectorControllerHandlerImpl()
@@ -102,8 +120,40 @@ method initialize()
     webSocket.registerInterface("WebInspectorDebugHandler",            Weinre.WebInspectorDebugHandler,            true)
     webSocket.registerInterface("WebInspectorProfilerHandler",         Weinre.WebInspectorProfilerHandler,         true)
     webSocket.registerInterface("WebInspectorResourceHandler",         Weinre.WebInspectorResourceHandler,         true)
+    */
+
+    Weinre.WiApplicationCache = new WiApplicationCacheImpl()
+    Weinre.WiBrowserDebugger  = new WiBrowserDebuggerImpl()
+    Weinre.WiCSS              = new WiCSSImpl()
+    Weinre.WiConsole          = new WiConsoleImpl()
+    Weinre.WiDOM              = new WiDOMImpl()
+    Weinre.WiDOMStorage       = new WiDOMStorageImpl()
+    Weinre.WiDatabase         = new WiDatabaseImpl()
+    Weinre.WiDebugger         = new WiDebuggerImpl()
+    Weinre.WiFileSystem       = new WiFileSystemImpl()
+    Weinre.WiInjectedScript   = new WiInjectedScriptImpl()
+    Weinre.WiInspector        = new WiInspectorImpl()
+    Weinre.WiNetwork          = new WiNetworkImpl()
+    Weinre.WiProfiler         = new WiProfilerImpl()
+    Weinre.WiRuntime          = new WiRuntimeImpl()
+
+    webSocket.registerInterface("ApplicationCache", Weinre.WiApplicationCache , true)
+    webSocket.registerInterface("BrowserDebugger" , Weinre.WiBrowserDebugger  , true)
+    webSocket.registerInterface("CSS",              Weinre.WiCSS              , true)
+    webSocket.registerInterface("Console",          Weinre.WiConsole          , true)
+    webSocket.registerInterface("DOM",              Weinre.WiDOM              , true)
+    webSocket.registerInterface("DOMStorage",       Weinre.WiDOMStorage       , true)
+    webSocket.registerInterface("Database",         Weinre.WiDatabase         , true)
+    webSocket.registerInterface("Debugger",         Weinre.WiDebugger         , true)
+    webSocket.registerInterface("FileSystem",       Weinre.WiFileSystem       , true)
+    webSocket.registerInterface("InjectedScript",   Weinre.WiInjectedScript   , true)
+    webSocket.registerInterface("Inspector",        Weinre.WiInspector        , true)
+    webSocket.registerInterface("Network",          Weinre.WiNetwork          , true)
+    webSocket.registerInterface("Profiler",         Weinre.WiProfiler         , true)
+    webSocket.registerInterface("Runtime",          Weinre.WiRuntime          , true)
     
     webSocket.registerInterface("WeinreTargetEvents", new WeinreTargetEventsImpl(), true)
+    
 
     Weinre.WeinreTargetCommands  = webSocket.createProxy("WeinreTargetCommands")
     window.WebInspector          = webSocket.createProxy("WebInspector")

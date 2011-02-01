@@ -1,0 +1,53 @@
+
+/*
+ * weinre is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2011 IBM Corporation
+ */
+
+require ../common/Weinre
+
+//-----------------------------------------------------------------------------
+class WiBrowserDebuggerImpl
+
+//-----------------------------------------------------------------------------
+method setAllBrowserBreakpoints(/*any*/ breakpoints, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method setDOMBreakpoint(/*int*/ nodeId, /*int*/ type, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method removeDOMBreakpoint(/*int*/ nodeId, /*int*/ type, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method setEventListenerBreakpoint(/*string*/ eventName, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method removeEventListenerBreakpoint(/*string*/ eventName, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method setXHRBreakpoint(/*string*/ url, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method removeXHRBreakpoint(/*string*/ url, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)

@@ -6,22 +6,40 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+require ../common/Ex
 require ../common/IDLTools
 require ../common/Weinre
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 class InspectorBackendImpl
+    this.registeredDomainDispatchers = {}
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 static method setupProxies
-    var webInspectorHandlerIntfs = IDLTools.getIDLsMatching(/^WebInspector\w+Handler$/)
+    var intfNames = [
+        "ApplicationCache",
+        "BrowserDebugger",
+        "CSS",
+        "Console",
+        "DOM",
+        "DOMStorage",
+        "Database",
+        "Debugger",
+        "FileSystem",
+        "InjectedScript",
+        "Inspector",
+        "Network",
+        "Profiler",
+        "Runtime"
+    ]
 
-    webInspectorHandlerIntfs.forEach(function(intf) {
-        var proxy = Weinre.webSocket.createProxy(intf.name)
+    intfNames.forEach(function(intfName) {
+        var proxy = Weinre.webSocket.createProxy("Wi" + intfName)
+        
+        var intf = IDLTools.getIDL("Wi" + intfName)
+        if (!intf) {
+            throw new Ex(arguments, "interface not registered: '" + intfName + "'")
+        }
         
         intf.methods.forEach(function(method) {
             var proxyMethod = InspectorBackendImpl.getProxyMethod(proxy, method)
@@ -30,10 +48,21 @@ static method setupProxies
     })
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 static method getProxyMethod(proxy, method)
     return function() {
         return proxy[method.name].apply(proxy, arguments)
     }
 
+//-----------------------------------------------------------------------------
+method registerDomainDispatcher(name, intf)
+    if (this.registeredDomainDispatchers[name]) {
+        throw new Ex(arguments, "domain dispatcher already registered for '" + name + "'")
+    }
+
+    this.registeredDomainDispatchers[name] = intf
+    
+//-----------------------------------------------------------------------------
+method getRegisteredDomainDispatchers
+    return this.registeredDomainDispatchers
+    
+    registerInterface(intfName, intf, validate)

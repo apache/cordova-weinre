@@ -1,0 +1,119 @@
+
+/*
+ * weinre is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2011 IBM Corporation
+ */
+
+require ../common/Weinre
+
+//-----------------------------------------------------------------------------
+class WiDOMImpl
+
+//-----------------------------------------------------------------------------
+method getChildNodes(/*int*/ nodeId, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method setAttribute(/*int*/ elementId, /*string*/ name, /*string*/ value, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method removeAttribute(/*int*/ elementId, /*string*/ name, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method setTextNodeValue(/*int*/ nodeId, /*string*/ value, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method getEventListenersForNode(/*int*/ nodeId, callback)
+    // callback: function(/*int*/ outNodeId, /*any[]*/ listenersArray)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method copyNode(/*int*/ nodeId, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method removeNode(/*int*/ nodeId, callback)
+    // callback: function(/*int*/ outNodeId)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method changeTagName(/*int*/ nodeId, /*string*/ newTagName, callback)
+    // callback: function(/*int*/ outNodeId)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method getOuterHTML(/*int*/ nodeId, callback)
+    // callback: function(/*string*/ outerHTML)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method setOuterHTML(/*int*/ nodeId, /*string*/ outerHTML, callback)
+    // callback: function(/*int*/ outNodeId)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method addInspectedNode(/*int*/ nodeId, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method performSearch(/*string*/ query, /*boolean*/ runSynchronously, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method searchCanceled(callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method pushNodeByPathToFrontend(/*string*/ path, callback)
+    // callback: function(/*int*/ nodeId)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method resolveNode(/*int*/ nodeId, callback)
+    // callback: function(/*any*/ result)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method getNodeProperties(/*int*/ nodeId, /*any[]*/ propertiesArray, callback)
+    // callback: function(/*any*/ result)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method getNodePrototypes(/*int*/ nodeId, callback)
+    // callback: function(/*any*/ result)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method pushNodeToFrontend(/*any*/ objectId, callback)
+    // callback: function(/*any*/ result)
+    Weinre.notImplemented(arguments.callee.signature)

@@ -97,43 +97,39 @@ def convertOutParms(module):
 #
 #--------------------------------------------------------------------
 def splitInspectorInterfaces(module):
-    intfOrig             = module["interfaces"][0]
-    intfWebInspector     = {}
-    intfInspectorBackend = {}
-    backendInterfaces    = {}
+    intfOrig      = module["interfaces"][0]
+    newInterfaces = {}
     
-    intfWebInspector["name"]     = "WebInspector"
-    intfWebInspector["methods"]  = []
-    
-    module["interfaces"] = [intfWebInspector]
+    module["interfaces"] = []
 
     for method in intfOrig["methods"]:
-        if "notify" not in method["extendedAttributes"]:
-            if "handler" not in method["extendedAttributes"]:
-                log("Inspector method %s has neither a 'notify' nor a 'handler' extended attribute" % (method["name"]))
-                continue
-            
-            handlerInterfaceName = "WebInspector" + method["extendedAttributes"]["handler"] + "Handler"
-            if handlerInterfaceName not in backendInterfaces:
-                backendInterfaces[handlerInterfaceName] = {
-                    "name": handlerInterfaceName,
-                    "methods": []
-                }
-            
-                module["interfaces"].append(backendInterfaces[handlerInterfaceName])
-                
-            handlerInterface = backendInterfaces[handlerInterfaceName]
-                
-            handlerInterface["methods"].append(method)
+        if "domain" not in method["extendedAttributes"]:
+            log("Inspector method %s does not have a 'domain' extended attribute" % (method["name"]))
             continue
             
-        for parameter in method["parameters"]:
-            if "out" not in parameter:
-                log("Inspector method %s has an unexpect non-out parameter %s" % (method["name"], parameter["name"]))
-            else:
-                del parameter["out"]
+        intfName = "Wi" + method["extendedAttributes"]["domain"]
         
-        intfWebInspector["methods"].append(method)
+        if "notify" in method["extendedAttributes"]:
+            intfName += "Notify"
+
+        intf = newInterfaces.get(intfName)
+        if not intf:
+            intf = {
+                "name": intfName,
+                "methods": []
+            }
+            newInterfaces[intfName] = intf
+            module["interfaces"].append(intf)
+            
+        intf["methods"].append(method)
+            
+#        for parameter in method["parameters"]:
+#            if "out" not in parameter:
+#                log("Inspector method %s has an unexpected non-out parameter %s" % (method["name"], parameter["name"]))
+#            else:
+#                del parameter["out"]
+        
+#        intfWebInspector["methods"].append(method)
 
 #--------------------------------------------------------------------
 #

@@ -293,6 +293,12 @@ function showInterfaceIdlAttribute(attribute, html) {
 function showInterfaceJavaScript(intf, html) {
     html.push("<div class='show-JavaScript'><h3>JavaScript</h3><pre>")
     
+    var line = ""
+        
+    line += "\n//-----------------------------------------------------------------------------"
+    line += "\n<span class='interfaceName'>class " + intf.name + "</span>"        
+    html.push(line)
+    
     intf.methods.forEach(function(method){
         showInterfaceJavaScriptMethod(intf, method, html)
     })
@@ -307,11 +313,9 @@ function showInterfaceJavaScriptMethod(intf, method, html) {
     var line = ""
         
     line += "\n//-----------------------------------------------------------------------------"
-    line += "\n//"
-    line += "\n//-----------------------------------------------------------------------------"
     line += "\n<span class='methodName'>method " + method.name + "</span>(" + getJavaScriptParameterListSimple(method.parameters, method.returns) + ")"
     line += "\n    // callback: function(" + getJavaScriptCallbackParameterListSimple(method.callbackParameters) + ")"
-    line += "\n    Weinre.notImplemented('" + intf.name + "::" + method.name + "()')"
+    line += "\n    Weinre.notImplemented(arguments.callee.signature)"
     line += "\n"
     html.push(line)
 }

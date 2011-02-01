@@ -20,7 +20,7 @@ class InspectorFrontendHostImpl
 // 
 //-----------------------------------------------------------------------------
 method loaded
-    WebInspector.Settings.initialize()
+    // WebInspector.Settings.initialize()
     
 //-----------------------------------------------------------------------------
 // 

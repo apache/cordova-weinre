@@ -1,0 +1,89 @@
+
+/*
+ * weinre is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2011 IBM Corporation
+ */
+
+require ../common/Weinre
+
+//-----------------------------------------------------------------------------
+class WiCSSImpl
+
+//-----------------------------------------------------------------------------
+method getStylesForNode2(/*int*/ nodeId, callback)
+    // callback: function(/*any*/ styles)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method getComputedStyleForNode2(/*int*/ nodeId, callback)
+    // callback: function(/*any*/ style)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method getInlineStyleForNode2(/*int*/ nodeId, callback)
+    // callback: function(/*any*/ style)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method getAllStyles2(callback)
+    // callback: function(/*any[]*/ styleSheetIds)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method getStyleSheet2(/*string*/ styleSheetId, callback)
+    // callback: function(/*any*/ styleSheet)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method getStyleSheetText2(/*string*/ styleSheetId, callback)
+    // callback: function(/*string*/ url, /*string*/ text)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method setStyleSheetText2(/*string*/ styleSheetId, /*string*/ text, callback)
+    // callback: function(/*boolean*/ success)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method setPropertyText2(/*any*/ styleId, /*int*/ propertyIndex, /*string*/ text, /*boolean*/ overwrite, callback)
+    // callback: function(/*any*/ style)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method toggleProperty2(/*any*/ styleId, /*int*/ propertyIndex, /*boolean*/ disable, callback)
+    // callback: function(/*any*/ style)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method setRuleSelector2(/*any*/ ruleId, /*string*/ selector, callback)
+    // callback: function(/*any*/ rule)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method addRule2(/*int*/ contextNodeId, /*string*/ selector, callback)
+    // callback: function(/*any*/ rule)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method getSupportedCSSProperties(callback)
+    // callback: function(/*any[]*/ cssProperties)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method querySelectorAll(/*int*/ documentId, /*string*/ selector, callback)
+    // callback: function(/*any[]*/ result)
+    Weinre.notImplemented(arguments.callee.signature)

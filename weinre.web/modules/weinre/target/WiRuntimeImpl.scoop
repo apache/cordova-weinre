@@ -1,0 +1,41 @@
+
+/*
+ * weinre is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2011 IBM Corporation
+ */
+
+require ../common/Weinre
+
+//-----------------------------------------------------------------------------
+class WiRuntimeImpl
+
+//-----------------------------------------------------------------------------
+method evaluate(/*string*/ expression, /*string*/ objectGroup, /*boolean*/ includeCommandLineAPI, callback)
+    // callback: function(/*any*/ result)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method getCompletions(/*string*/ expression, /*boolean*/ includeCommandLineAPI, callback)
+    // callback: function(/*any*/ result)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method getProperties(/*any*/ objectId, /*boolean*/ ignoreHasOwnProperty, /*boolean*/ abbreviate, callback)
+    // callback: function(/*any*/ result)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method setPropertyValue(/*any*/ objectId, /*string*/ propertyName, /*string*/ expression, callback)
+    // callback: function(/*any*/ result)
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method releaseWrapperObjectGroup(/*int*/ injectedScriptId, /*string*/ objectGroup, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
