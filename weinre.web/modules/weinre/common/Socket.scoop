@@ -13,8 +13,6 @@ require ./Binding
 require ./Ex
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 class Socket(url)
     this._url        = url
     
@@ -23,15 +21,13 @@ class Socket(url)
     this._opened     = false
     this._closed     = false
     this._interfaces = {}
+    
+    this._open()
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static
     var Verbose = false
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static method verbose(value)
     if (arguments.length >= 1) {
@@ -41,9 +37,11 @@ static method verbose(value)
     return Verbose
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method open
+    Weinre.deprecated()
+
+//-----------------------------------------------------------------------------
+method _open
     if (this._opened || this._opening) return
     if (this._closed) throw new Ex(arguments, "socket has already been closed")
     
@@ -55,8 +53,6 @@ method open
     this._socket.addEventListener("close",   Binding(this, "_handleClose"))
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method close
     if (this._closed) return
     
@@ -66,19 +62,13 @@ method close
     this._socket.close()
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method send(data)
     this._socket.send(data)
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getWebSocket
     return this._socket
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method registerInterface(intfName, intf, validate)
     if (validate) IDLTools.validateAgainstIDL(intf.constructor, intfName)
@@ -87,8 +77,6 @@ method registerInterface(intfName, intf, validate)
     
     this._interfaces[intfName] = intf
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method createProxy(intfName)
     var proxy = {}
@@ -102,8 +90,6 @@ method createProxy(intfName)
     
     return proxy
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method _sendMethodInvocation(intfName, methodName, args)
     if (typeof intfName   != "string") throw new Ex(arguments, "expecting intf parameter to be a string")
@@ -124,8 +110,6 @@ method _sendMethodInvocation(intfName, methodName, args)
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getState
     if (this._opening) return "opening"
     if (this._opened)  return "opened"
@@ -133,13 +117,9 @@ method getState
     return "unknown"
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method isOpen
     return this._opened == true
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method _handleOpen
     this._opening = false
@@ -150,8 +130,6 @@ method _handleOpen
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method _handleError(message)
     this.error = message
     this.close()
@@ -160,8 +138,6 @@ method _handleError(message)
         console.log(this.constructor.name + "[" + this._url + "]: error: " + message)
     }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method _handleMessage(message)
     var data
@@ -196,8 +172,6 @@ method _handleMessage(message)
         console.log(this.constructor.name + "[" + this._url + "]: recv " + intfName + "." + methodName + "(" + JSON.stringify(args) + ")")
     }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method _handleClose
     this._reallyClosed = true

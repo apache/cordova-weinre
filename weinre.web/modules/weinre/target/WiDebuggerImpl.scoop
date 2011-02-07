@@ -24,19 +24,25 @@ method deactivateBreakpoints(callback)
 
 
 //-----------------------------------------------------------------------------
-method setAllJavaScriptBreakpoints(/*any*/ breakpoints, callback)
-    // callback: function()
+method setJavaScriptBreakpoint(/*string*/ url, /*int*/ lineNumber, /*int*/ columnNumber, /*string*/ condition, /*boolean*/ enabled, callback)
+    // callback: function(/*string*/ breakpointId, /*any[]*/ locations)
     Weinre.notImplemented(arguments.callee.signature)
 
 
 //-----------------------------------------------------------------------------
-method setBreakpoint(/*any*/ breakpoint, callback)
+method setJavaScriptBreakpointBySourceId(/*string*/ sourceId, /*int*/ lineNumber, /*int*/ columnNumber, /*string*/ condition, /*boolean*/ enabled, callback)
     // callback: function(/*string*/ breakpointId, /*int*/ actualLineNumber, /*int*/ actualColumnNumber)
     Weinre.notImplemented(arguments.callee.signature)
 
 
 //-----------------------------------------------------------------------------
-method removeBreakpoint(/*string*/ breakpointId, callback)
+method removeJavaScriptBreakpoint(/*string*/ breakpointId, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
+method continueToLocation(/*string*/ sourceId, /*int*/ lineNumber, /*int*/ columnNumber, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 

@@ -8,28 +8,25 @@
 
 require ./Ex
 require ./IDLTools
+require ./StackTrace
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 class Weinre
     throw new Ex(arguments, "this class is not intended to be instantiated")
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 static method addIDLs(idls)
     IDLTools.addIDLs(idls)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static 
     var _notImplemented     = {}
     var _showNotImplemented = false
 
 //-----------------------------------------------------------------------------
-//
+static method deprecated()
+    StackTrace.dump(arguments)
+    
 //-----------------------------------------------------------------------------
 static method notImplemented(thing)
     if (_notImplemented[thing]) return
@@ -39,8 +36,6 @@ static method notImplemented(thing)
     if (!_showNotImplemented) return
     console.log(thing + " not implemented")
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static method showNotImplemented()
     _showNotImplemented = true

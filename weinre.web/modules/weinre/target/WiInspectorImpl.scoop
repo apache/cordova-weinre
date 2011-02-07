@@ -84,6 +84,12 @@ method setExtraHeaders(/*any*/ headers, callback)
 
 
 //-----------------------------------------------------------------------------
+method setUserAgentOverride(/*string*/ userAgent, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)
+
+
+//-----------------------------------------------------------------------------
 method getCookies(callback)
     // callback: function(/*any[]*/ cookies, /*string*/ cookiesString)
     Weinre.notImplemented(arguments.callee.signature)

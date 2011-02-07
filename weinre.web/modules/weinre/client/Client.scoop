@@ -120,10 +120,10 @@ method _installRemotePanel
     
     WebInspector.currentPanel = panel
     
-    var panelsToClose = ["resources", "scripts", "timeline", "profiles", "storage", "audits"]
-    panelsToClose.forEach(function(panelToClose){
-        WebInspector.panels[panelToClose].toolbarItem.style.display = "none"
-    })
+//    var panelsToClose = ["resources", "scripts", "timeline", "profiles", "storage", "audits"]
+//    panelsToClose.forEach(function(panelToClose){
+//        WebInspector.panels[panelToClose].toolbarItem.style.display = "none"
+//    })
     
     var button = document.getElementById("dock-status-bar-item")
     if (button) button.style.display = "none"
@@ -133,15 +133,12 @@ method _installRemotePanel
 //-----------------------------------------------------------------------------
 method onLoaded
 
-    // install Remote panel
-    this._installRemotePanelEventually()
+    this._installRemotePanel()
 
     var webSocket = Weinre.webSocket
     
 //  Weinre.Socket.verbose(true)
     
-    webSocket.open()
-
     webSocket.registerInterface("WeinreClientEvents",    new WeinreClientEventsImpl(this), true)
     webSocket.registerInterface("InspectorFrontendHost", InspectorFrontendHost, true)
 

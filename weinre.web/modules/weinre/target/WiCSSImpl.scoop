@@ -12,67 +12,67 @@ require ../common/Weinre
 class WiCSSImpl
 
 //-----------------------------------------------------------------------------
-method getStylesForNode2(/*int*/ nodeId, callback)
+method getStylesForNode(/*int*/ nodeId, callback)
     // callback: function(/*any*/ styles)
     Weinre.notImplemented(arguments.callee.signature)
 
 
 //-----------------------------------------------------------------------------
-method getComputedStyleForNode2(/*int*/ nodeId, callback)
+method getComputedStyleForNode(/*int*/ nodeId, callback)
     // callback: function(/*any*/ style)
     Weinre.notImplemented(arguments.callee.signature)
 
 
 //-----------------------------------------------------------------------------
-method getInlineStyleForNode2(/*int*/ nodeId, callback)
+method getInlineStyleForNode(/*int*/ nodeId, callback)
     // callback: function(/*any*/ style)
     Weinre.notImplemented(arguments.callee.signature)
 
 
 //-----------------------------------------------------------------------------
-method getAllStyles2(callback)
+method getAllStyles(callback)
     // callback: function(/*any[]*/ styleSheetIds)
     Weinre.notImplemented(arguments.callee.signature)
 
 
 //-----------------------------------------------------------------------------
-method getStyleSheet2(/*string*/ styleSheetId, callback)
+method getStyleSheet(/*string*/ styleSheetId, callback)
     // callback: function(/*any*/ styleSheet)
     Weinre.notImplemented(arguments.callee.signature)
 
 
 //-----------------------------------------------------------------------------
-method getStyleSheetText2(/*string*/ styleSheetId, callback)
+method getStyleSheetText(/*string*/ styleSheetId, callback)
     // callback: function(/*string*/ url, /*string*/ text)
     Weinre.notImplemented(arguments.callee.signature)
 
 
 //-----------------------------------------------------------------------------
-method setStyleSheetText2(/*string*/ styleSheetId, /*string*/ text, callback)
+method setStyleSheetText(/*string*/ styleSheetId, /*string*/ text, callback)
     // callback: function(/*boolean*/ success)
     Weinre.notImplemented(arguments.callee.signature)
 
 
 //-----------------------------------------------------------------------------
-method setPropertyText2(/*any*/ styleId, /*int*/ propertyIndex, /*string*/ text, /*boolean*/ overwrite, callback)
+method setPropertyText(/*any*/ styleId, /*int*/ propertyIndex, /*string*/ text, /*boolean*/ overwrite, callback)
     // callback: function(/*any*/ style)
     Weinre.notImplemented(arguments.callee.signature)
 
 
 //-----------------------------------------------------------------------------
-method toggleProperty2(/*any*/ styleId, /*int*/ propertyIndex, /*boolean*/ disable, callback)
+method toggleProperty(/*any*/ styleId, /*int*/ propertyIndex, /*boolean*/ disable, callback)
     // callback: function(/*any*/ style)
     Weinre.notImplemented(arguments.callee.signature)
 
 
 //-----------------------------------------------------------------------------
-method setRuleSelector2(/*any*/ ruleId, /*string*/ selector, callback)
+method setRuleSelector(/*any*/ ruleId, /*string*/ selector, callback)
     // callback: function(/*any*/ rule)
     Weinre.notImplemented(arguments.callee.signature)
 
 
 //-----------------------------------------------------------------------------
-method addRule2(/*int*/ contextNodeId, /*string*/ selector, callback)
+method addRule(/*int*/ contextNodeId, /*string*/ selector, callback)
     // callback: function(/*any*/ rule)
     Weinre.notImplemented(arguments.callee.signature)
 
