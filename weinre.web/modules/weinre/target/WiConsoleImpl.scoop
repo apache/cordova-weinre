@@ -10,20 +10,26 @@ require ../common/Weinre
 
 //-----------------------------------------------------------------------------
 class WiConsoleImpl
+    this.messagesEnabled = true
 
 //-----------------------------------------------------------------------------
 method setConsoleMessagesEnabled(/*boolean*/ enabled, callback)
-    // callback: function(/*boolean*/ newState)
-    Weinre.notImplemented(arguments.callee.signature)
-
+    var oldValue = this.messagesEnabled
+    this.messagesEnabled = enabled
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [oldValue])
+    }
 
 //-----------------------------------------------------------------------------
 method clearConsoleMessages(callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [])
+    }
 
 
 //-----------------------------------------------------------------------------
 method setMonitoringXHREnabled(/*boolean*/ enabled, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [])
+    }

@@ -13,21 +13,67 @@ class WiCSSImpl
 
 //-----------------------------------------------------------------------------
 method getStylesForNode(/*int*/ nodeId, callback)
-    // callback: function(/*any*/ styles)
-    Weinre.notImplemented(arguments.callee.signature)
-
+    var result = {}
+    
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        return
+    }
+    
+    var result = {
+        inlineStyle:     Weinre.cssStore.getInlineStyle(node),
+        computedStyle:   Weinre.cssStore.getComputedStyle(node),
+        matchedCSSRules: Weinre.cssStore.getMatchedCSSRules(node),
+        styleAttributes: Weinre.cssStore.getStyleAttributes(node),
+        pseudoElements:  Weinre.cssStore.getPseudoElements(node),
+        inherited:       []
+    }
+    
+    var parentNode   = node.parentNode
+    
+    while (parentNode) {
+        var parentStyle = {
+            inlineStyle:     Weinre.cssStore.getInlineStyle(parentNode),
+            matchedCSSRules: Weinre.cssStore.getMatchedCSSRules(parentNode),
+        }
+        
+        result.inherited.push(parentStyle)
+        parentNode = parentNode.parentNode
+    }
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 //-----------------------------------------------------------------------------
 method getComputedStyleForNode(/*int*/ nodeId, callback)
-    // callback: function(/*any*/ style)
-    Weinre.notImplemented(arguments.callee.signature)
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        return
+    }
+
+    var result = Weinre.cssStore.getComputedStyle(node) 
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 
 //-----------------------------------------------------------------------------
 method getInlineStyleForNode(/*int*/ nodeId, callback)
-    // callback: function(/*any*/ style)
-    Weinre.notImplemented(arguments.callee.signature)
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        return
+    }
 
+    var result = Weinre.cssStore.getInlineStyle(node)
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 //-----------------------------------------------------------------------------
 method getAllStyles(callback)
@@ -79,8 +125,7 @@ method addRule(/*int*/ contextNodeId, /*string*/ selector, callback)
 
 //-----------------------------------------------------------------------------
 method getSupportedCSSProperties(callback)
-    // callback: function(/*any[]*/ cssProperties)
-    Weinre.notImplemented(arguments.callee.signature)
+    return Weinre.getCSSProperties()
 
 
 //-----------------------------------------------------------------------------

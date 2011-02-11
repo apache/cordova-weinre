@@ -55,15 +55,25 @@ method didEvaluateForTestInFrontend(/*int*/ testCallId, /*string*/ jsonResult, c
 
 //-----------------------------------------------------------------------------
 method highlightDOMNode(/*int*/ nodeId, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        return
+    }
 
+    Weinre.elementHighlighter.on(node)
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 method hideDOMNodeHighlight(callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
-
+    Weinre.elementHighlighter.off()
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 method highlightFrame(/*int*/ frameId, callback)

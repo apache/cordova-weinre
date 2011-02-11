@@ -15,13 +15,22 @@ class Weinre
     throw new Ex(arguments, "this class is not intended to be instantiated")
 
 //-----------------------------------------------------------------------------
+static 
+    var _notImplemented     = {}
+    var _showNotImplemented = false
+    var CSSProperties       = []
+
+//-----------------------------------------------------------------------------
 static method addIDLs(idls)
     IDLTools.addIDLs(idls)
 
 //-----------------------------------------------------------------------------
-static 
-    var _notImplemented     = {}
-    var _showNotImplemented = false
+static method addCSSProperties(cssProperties)
+    CSSProperties = cssProperties
+
+//-----------------------------------------------------------------------------
+static method getCSSProperties
+    return CSSProperties
 
 //-----------------------------------------------------------------------------
 static method deprecated()

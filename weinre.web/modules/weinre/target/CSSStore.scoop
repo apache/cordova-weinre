@@ -88,9 +88,10 @@ method getPseudoElements(node)
 //-----------------------------------------------------------------------------
 method buildObjectForStyle(style, bind)
     var result = {
-        width:      null,
-        height:     null,
-        properties: []
+        width:         null,
+        height:        null,
+        properties:    [],
+        cssProperties: []
     }
     
     if (!style) return result
@@ -147,7 +148,7 @@ method populateObjectWithStyleProperties(style, result)
         }
     }
     
-    result.properties      = properties
+    result.cssProperties   = properties
     result.shorthandValues = shorthandValues
 
 //-----------------------------------------------------------------------------

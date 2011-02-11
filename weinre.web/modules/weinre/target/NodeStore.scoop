@@ -49,7 +49,7 @@ method nextNodeId()
 //
 //-----------------------------------------------------------------------------
 method serializeNode(node, depth)
-    var nodeName  = null
+    var nodeName  = ""
     var nodeValue = null
     var localName = null
     var id = this.getNodeId(node) 

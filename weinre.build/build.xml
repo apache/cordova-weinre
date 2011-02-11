@@ -189,11 +189,11 @@
             </fileset>
         </copy>
 
+        <echo message="building InjectedScript.js"/>
         <echo 
             file    = "${WEB}/weinre/target/InjectedScript.js"
             message = "var injectedScriptConstructor = ${line.separator}"
         />
-        
         <concat 
             destfile = "${WEB}/weinre/target/InjectedScript.js"
             append   = "true"
@@ -201,6 +201,7 @@
             <fileset file="${VENDOR}/webkit/WebCore/inspector/InjectedScriptSource.js"/>
         </concat>
             
+        <echo message="building versions.js"/>
         <copy todir="${WEB}">
             <fileset dir="../${PROJECT_WEB}">
                 <include name="versions.js"/>
@@ -221,6 +222,13 @@
                 <filter token="JAVAX_SERVLET_VERSION_IMPL" value="${JAVAX_SERVLET_VERSION_IMPL}"/>
             </filterset>
         </copy>
+
+        <echo message="building add-css-properties.js"/>
+        <exec executable="python" failonerror="true" failifexecutionfails="true">
+            <arg  file="scripts/build-css-properties.py"/>
+            <arg value="vendor/webkit/WebCore/CSSPropertyNames.in"/>
+            <arg value="${WEB}/add-css-properties.js"/>
+        </exec>
         
     </target>
 
