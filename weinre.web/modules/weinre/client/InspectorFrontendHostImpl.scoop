@@ -86,7 +86,8 @@ method localizedStringsURL
 // 
 //-----------------------------------------------------------------------------
 method hiddenPanels
-    return "audits,profiles,resources,scripts,timeline,network"
+    return "audits,profiles,resources,timeline,network"
+//    return "audits,profiles,resources,scripts,timeline,network"
 
 //-----------------------------------------------------------------------------
 // 

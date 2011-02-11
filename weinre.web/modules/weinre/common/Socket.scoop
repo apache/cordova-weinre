@@ -27,7 +27,12 @@ class Socket(url)
 //-----------------------------------------------------------------------------
 static
     var Verbose = false
+    var InspectorBackend
 
+//-----------------------------------------------------------------------------
+static method setInspectorBackend(inspectorBackend)
+    InspectorBackend = inspectorBackend
+    
 //-----------------------------------------------------------------------------
 static method verbose(value)
     if (arguments.length >= 1) {
@@ -156,6 +161,10 @@ method _handleMessage(message)
     var methodSignature = intfName + "." + methodName + "()"
     
     var intf = this._interfaces[intfName]
+    if (!intf && InspectorBackend && intfName.match(/.*Notify/)) {
+        intf = InspectorBackend.getRegisteredDomainDispatcher(intfName.substr(0,intfName.length-6))
+    }
+    
     if (!intf) throw new Ex(arguments, "request for non-registered interface:" + methodSignature)
     
     var method = intf[methodName]
@@ -165,7 +174,7 @@ method _handleMessage(message)
         method.apply(intf, args)
     }
     catch (e) {
-        console.log("Weinre.Socket._handleMessage() invocation exception: " + e)
+        console.log("Weinre.Socket._handleMessage() invocation exception on " + methodSignature + ": " + e)
     }
     
     if (Verbose) {

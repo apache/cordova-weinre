@@ -122,7 +122,7 @@ public class MessageHandler {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private void serviceMethodInvoker(Channel channel, String intfName, String methodName, JSONArray argsJSON) {
         Object service;
-        String methodSignature = intfName + "." + methodName + "()";
+        String methodSignature = intfName + "." + methodName + "(" + argsJSON.toString() + ")";
 
         Main.debug(channel.getName() + ": recv " + methodSignature);
         

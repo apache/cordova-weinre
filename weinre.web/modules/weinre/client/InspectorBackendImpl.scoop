@@ -8,14 +8,17 @@
 
 require ../common/Ex
 require ../common/IDLTools
+require ../common/Socket
 require ../common/Weinre
 
 //-----------------------------------------------------------------------------
 class InspectorBackendImpl
     this.registeredDomainDispatchers = {}
+    Socket.setInspectorBackend(this)
 
 //-----------------------------------------------------------------------------
 static method setupProxies
+
     var intfNames = [
         "ApplicationCache",
         "BrowserDebugger",
@@ -34,9 +37,9 @@ static method setupProxies
     ]
 
     intfNames.forEach(function(intfName) {
-        var proxy = Weinre.webSocket.createProxy("Wi" + intfName)
+        var proxy = Weinre.webSocket.createProxy(intfName)
         
-        var intf = IDLTools.getIDL("Wi" + intfName)
+        var intf = IDLTools.getIDL(intfName)
         if (!intf) {
             throw new Ex(arguments, "interface not registered: '" + intfName + "'")
         }
@@ -46,6 +49,7 @@ static method setupProxies
             InspectorBackendImpl.prototype[method.name] = proxyMethod
         })
     })
+    
 
 //-----------------------------------------------------------------------------
 static method getProxyMethod(proxy, method)
@@ -55,14 +59,8 @@ static method getProxyMethod(proxy, method)
 
 //-----------------------------------------------------------------------------
 method registerDomainDispatcher(name, intf)
-    if (this.registeredDomainDispatchers[name]) {
-        throw new Ex(arguments, "domain dispatcher already registered for '" + name + "'")
-    }
-
     this.registeredDomainDispatchers[name] = intf
-    
+
 //-----------------------------------------------------------------------------
-method getRegisteredDomainDispatchers
-    return this.registeredDomainDispatchers
-    
-    registerInterface(intfName, intf, validate)
+method getRegisteredDomainDispatcher(name)
+    return this.registeredDomainDispatchers[name]

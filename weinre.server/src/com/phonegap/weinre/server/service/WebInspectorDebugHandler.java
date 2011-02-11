@@ -7,11 +7,13 @@
 
 package com.phonegap.weinre.server.service;
 
+import com.phonegap.weinre.server.BasicService;
+
 
 /**
  * 
  */
-public class WebInspectorDebugHandler extends InspectorBackend {
+public class WebInspectorDebugHandler extends BasicService {
 
     /**
      * 

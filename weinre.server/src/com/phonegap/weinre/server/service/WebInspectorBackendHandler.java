@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import org.apache.wink.json4j.JSONArray;
 
+import com.phonegap.weinre.server.BasicService;
 import com.phonegap.weinre.server.Channel;
 import com.phonegap.weinre.server.Main;
 
@@ -18,7 +19,7 @@ import com.phonegap.weinre.server.Main;
 /**
  * 
  */
-public class WebInspectorBackendHandler extends InspectorBackend {
+public class WebInspectorBackendHandler extends BasicService {
 
     /**
      * 

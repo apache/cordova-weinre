@@ -107,10 +107,16 @@ def splitInspectorInterfaces(module):
             log("Inspector method %s does not have a 'domain' extended attribute" % (method["name"]))
             continue
             
-        intfName = "Wi" + method["extendedAttributes"]["domain"]
+        intfName = method["extendedAttributes"]["domain"]
         
         if "notify" in method["extendedAttributes"]:
             intfName += "Notify"
+
+            for parameter in method["parameters"]:
+                if "out" not in parameter:
+                    log("Inspector method %s has an unexpected non-out parameter %s" % (method["name"], parameter["name"]))
+                else:
+                    del parameter["out"]
 
         intf = newInterfaces.get(intfName)
         if not intf:

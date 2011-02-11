@@ -10,30 +10,64 @@ require ../common/Weinre
 
 //-----------------------------------------------------------------------------
 class WiDOMImpl
+    this.inspectedNodes = []
 
 //-----------------------------------------------------------------------------
 method getChildNodes(/*int*/ nodeId, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature  + " passed an invalid nodeId: " + nodeId)
+        return
+    }
 
+    var children = Weinre.nodeStore.serializeNodeChildren(node, 1)
+    Weinre.wi.DOMNotify.setChildNodes(nodeId, children)
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 method setAttribute(/*int*/ elementId, /*string*/ name, /*string*/ value, callback)
-    // callback: function(/*boolean*/ success)
-    Weinre.notImplemented(arguments.callee.signature)
+    var element = Weinre.nodeStore.getNode(elementId)
+    if (!element) {
+        console.log(arguments.callee.signature + " passed an invalid elementId: " + elementId)
+        return
+    }
 
+    element.setAttribute(name, value)
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 method removeAttribute(/*int*/ elementId, /*string*/ name, callback)
-    // callback: function(/*boolean*/ success)
-    Weinre.notImplemented(arguments.callee.signature)
+    var element = Weinre.nodeStore.getNode(elementId)
+    if (!element) {
+        console.log(arguments.callee.signature + " passed an invalid elementId: " + elementId)
+        return
+    }
 
+    element.removeAttribute(name)
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 method setTextNodeValue(/*int*/ nodeId, /*string*/ value, callback)
-    // callback: function(/*boolean*/ success)
-    Weinre.notImplemented(arguments.callee.signature)
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        return
+    }
 
+    node.nodeValue = value
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 method getEventListenersForNode(/*int*/ nodeId, callback)
@@ -49,33 +83,66 @@ method copyNode(/*int*/ nodeId, callback)
 
 //-----------------------------------------------------------------------------
 method removeNode(/*int*/ nodeId, callback)
-    // callback: function(/*int*/ outNodeId)
-    Weinre.notImplemented(arguments.callee.signature)
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        return
+    }
 
+    if (!node.parentNode) {
+        console.log(arguments.callee.signature + " passed a parentless node: " + node)
+        return
+    }
+
+    node.parentNode.removeChild(node)
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 method changeTagName(/*int*/ nodeId, /*string*/ newTagName, callback)
     // callback: function(/*int*/ outNodeId)
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method getOuterHTML(/*int*/ nodeId, callback)
-    // callback: function(/*string*/ outerHTML)
-    Weinre.notImplemented(arguments.callee.signature)
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        return
+    }
 
+    value = node.outerHTML
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [value])
+    }
 
 //-----------------------------------------------------------------------------
 method setOuterHTML(/*int*/ nodeId, /*string*/ outerHTML, callback)
-    // callback: function(/*int*/ outNodeId)
-    Weinre.notImplemented(arguments.callee.signature)
+    var node = Weinre.nodeStore.getNode(nodeId)
+    if (!node) {
+        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        return
+    }
 
+    node.outerHTML = outerHTML
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 method addInspectedNode(/*int*/ nodeId, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
-
+    this.inspectedNodes.unshift(nodeId)
+    if (this.inspectedNodes.length > 5) {
+        this.inspectedNodes = this.inspectedNodes.slice(0,5)
+    }
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 method performSearch(/*string*/ query, /*boolean*/ runSynchronously, callback)

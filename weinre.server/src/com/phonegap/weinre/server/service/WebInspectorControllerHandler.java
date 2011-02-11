@@ -13,6 +13,7 @@ import java.util.Properties;
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
+import com.phonegap.weinre.server.BasicService;
 import com.phonegap.weinre.server.Channel;
 import com.phonegap.weinre.server.Utility;
 
@@ -20,7 +21,7 @@ import com.phonegap.weinre.server.Utility;
 /**
  * 
  */
-public class WebInspectorControllerHandler extends InspectorBackend {
+public class WebInspectorControllerHandler extends BasicService {
 
     static final private String AppKey       = "applicationSettings";
     static final private String SesKey       = "sessionSettings";
