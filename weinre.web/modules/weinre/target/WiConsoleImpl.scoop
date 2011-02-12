@@ -23,10 +23,11 @@ method setConsoleMessagesEnabled(/*boolean*/ enabled, callback)
 
 //-----------------------------------------------------------------------------
 method clearConsoleMessages(callback)
+    Weinre.wi.ConsoleNotify.consoleMessagesCleared()
+    
     if (callback) {
         Weinre.WeinreTargetCommands.sendClientCallback(callback, [])
     }
-
 
 //-----------------------------------------------------------------------------
 method setMonitoringXHREnabled(/*boolean*/ enabled, callback)

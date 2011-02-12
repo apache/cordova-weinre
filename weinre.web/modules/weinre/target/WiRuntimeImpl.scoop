@@ -13,29 +13,43 @@ class WiRuntimeImpl
 
 //-----------------------------------------------------------------------------
 method evaluate(/*string*/ expression, /*string*/ objectGroup, /*boolean*/ includeCommandLineAPI, callback)
-    // callback: function(/*any*/ result)
-    Weinre.notImplemented(arguments.callee.signature)
-
+    var result = Weinre.injectedScript.evaluate(expression, objectGroup, includeCommandLineAPI)
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 //-----------------------------------------------------------------------------
 method getCompletions(/*string*/ expression, /*boolean*/ includeCommandLineAPI, callback)
-    // callback: function(/*any*/ result)
-    Weinre.notImplemented(arguments.callee.signature)
+    var result = Weinre.injectedScript.getCompletions(expression, includeCommandLineAPI)
 
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 //-----------------------------------------------------------------------------
 method getProperties(/*any*/ objectId, /*boolean*/ ignoreHasOwnProperty, /*boolean*/ abbreviate, callback)
-    // callback: function(/*any*/ result)
-    Weinre.notImplemented(arguments.callee.signature)
+    var objectId = JSON.stringify(objectId)
+    var result = Weinre.injectedScript.getProperties(objectId, ignoreHasOwnProperty, abbreviate)
 
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 //-----------------------------------------------------------------------------
 method setPropertyValue(/*any*/ objectId, /*string*/ propertyName, /*string*/ expression, callback)
-    // callback: function(/*any*/ result)
-    Weinre.notImplemented(arguments.callee.signature)
+    var objectId = JSON.stringify(objectId)
+    var result = Weinre.injectedScript.setPropertyValue(objectId, propertyName, expression)
 
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 //-----------------------------------------------------------------------------
 method releaseWrapperObjectGroup(/*int*/ injectedScriptId, /*string*/ objectGroup, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    var result = Weinre.injectedScript.releaseWrapperObjectGroup(objectGroupName)
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
+    
