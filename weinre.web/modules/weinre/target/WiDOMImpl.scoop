@@ -168,6 +168,7 @@ method resolveNode(/*int*/ nodeId, callback)
 
 //-----------------------------------------------------------------------------
 method getNodeProperties(/*int*/ nodeId, /*any[]*/ propertiesArray, callback)
+    var propertiesArray = JSON.stringify(propertiesArray)
     var result = Weinre.injectedScript.getNodeProperties(nodeId, propertiesArray)
 
     if (callback) {

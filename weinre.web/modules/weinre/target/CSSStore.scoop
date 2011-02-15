@@ -70,6 +70,25 @@ method getComputedStyle(node)
 method getMatchedCSSRules(node)
     var result = []
     
+    for (var i=0; i<document.styleSheets.length; i++) {
+        var cssStyleSheet = document.styleSheets[i]
+        
+        if (!cssStyleSheet.cssRules) continue
+        
+        for (var j=0; j<cssStyleSheet.cssRules.length; j++) {
+            var cssRule = cssStyleSheet.cssRules[j]
+            
+            if (!elementMatchesSelector(node, cssRule.selectorText)) continue
+            
+            var object = {}
+            
+            object.ruleId = this.getStyleId(cssRule)
+            object.selectorText = cssRule.selectorText
+            object.style = this.buildObjectForStyle(cssRule.style, true)
+            result.push(object)
+        }
+    }
+    
     return result
 
 //-----------------------------------------------------------------------------
@@ -139,19 +158,12 @@ method populateObjectWithStyleProperties(style, result)
             property.name = name
             property.priority = style.getPropertyPriority(name)
             property.implicit = false // style.isPropertyImplicit(name)
-            // String shorthand = style->getPropertyShorthand(name);
             property.shorthand = ""
             property.status    = "active"
             property.parsedOk  = true
-                /*
-        if (!shorthand.isEmpty() && !foundShorthands.contains(shorthand)) {
-            foundShorthands.add(shorthand);
-            shorthandValues->setString(shorthand, shorthandValue(style, shorthand));
-        }
-                 */
-                property.value = style.getPropertyValue(name)
+            property.value     = style.getPropertyValue(name)
 
-                properties.push(property);
+            properties.push(property);
         }
     }
     
@@ -163,3 +175,26 @@ method populateObjectWithStyleProperties(style, result)
 //-----------------------------------------------------------------------------
 method _nextId
     return "" + (++this.__nextId)
+    
+//-----------------------------------------------------------------------------
+function mozMatchesSelector(element, selector)
+    if (!element.mozMatchesSelector) return false
+    return element.mozMatchesSelector(selector)
+
+//-----------------------------------------------------------------------------
+function webkitMatchesSelector(element, selector)
+    if (!element.webkitMatchesSelector) return false
+    return element.webkitMatchesSelector(selector)
+
+//-----------------------------------------------------------------------------
+function fallbackMatchesSelector(element, selector)
+    return false
+    
+    
+//-----------------------------------------------------------------------------
+static
+    var elementMatchesSelector
+    
+    if      (Element.prototype.webkitMatchesSelector) elementMatchesSelector = webkitMatchesSelector 
+    else if (Element.prototype.mozMatchesSelector)    elementMatchesSelector = mozMatchesSelector
+    else                                              elementMatchesSelector = fallbackMatchesSelector

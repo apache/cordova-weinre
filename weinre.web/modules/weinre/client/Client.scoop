@@ -120,10 +120,12 @@ method _installRemotePanel
     
     WebInspector.currentPanel = panel
     
-//    var panelsToClose = ["resources", "scripts", "timeline", "profiles", "storage", "audits"]
-//    panelsToClose.forEach(function(panelToClose){
-//        WebInspector.panels[panelToClose].toolbarItem.style.display = "none"
-//    })
+    var toolButtonsToHide = ["scripts"]
+    toolButtonsToHide.forEach(function(toolButtonToHide){
+        if (!WebInspector.panels[toolButtonToHide]) continue
+        if (!WebInspector.panels[toolButtonToHide].toolbarItem) continue
+        WebInspector.panels[toolButtonToHide].toolbarItem.style.display = "none"
+    })
     
     var button = document.getElementById("dock-status-bar-item")
     if (button) button.style.display = "none"
