@@ -48,7 +48,11 @@ method getStyleId(style)
 //
 //-----------------------------------------------------------------------------
 method getInlineStyle(node)
-    return this.buildObjectForStyle(node.style, true)
+    var styleObject = this.buildObjectForStyle(node.style, true)
+    for (var i=0; i<styleObject.cssProperties.length; i++) {
+        styleObject.cssProperties[i].status = "style"
+    }
+    return styleObject
 
 //-----------------------------------------------------------------------------
 //
@@ -57,7 +61,8 @@ method getComputedStyle(node)
     if (!node) return {}
     if (node.nodeType != Node.ELEMENT_NODE) return {}
     
-    return this.buildObjectForStyle(window.getComputedStyle(node), false)
+    var styleObject = this.buildObjectForStyle(window.getComputedStyle(node), false)
+    return styleObject
 
 //-----------------------------------------------------------------------------
 //
@@ -136,6 +141,8 @@ method populateObjectWithStyleProperties(style, result)
             property.implicit = false // style.isPropertyImplicit(name)
             // String shorthand = style->getPropertyShorthand(name);
             property.shorthand = ""
+            property.status    = "active"
+            property.parsedOk  = true
                 /*
         if (!shorthand.isEmpty() && !foundShorthands.contains(shorthand)) {
             foundShorthands.add(shorthand);
