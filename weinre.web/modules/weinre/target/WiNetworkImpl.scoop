@@ -16,8 +16,12 @@ method cachedResources(callback)
     // callback: function(/*any*/ resources)
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method resourceContent(/*int*/ frameId, /*string*/ url, /*boolean*/ base64Encode, callback)
     // callback: function(/*string*/ content)
     Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+method setExtraHeaders(/*any*/ headers, callback)
+    // callback: function()
+    Weinre.notImplemented(arguments.callee.signature)    

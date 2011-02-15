@@ -18,8 +18,6 @@ import optparse
 # for some info on JSON Schema for interfaces
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def main():
     
     # parse args
@@ -47,10 +45,12 @@ def main():
     # convert to JSONable
     module = parseIDL(content)
     
-    if module["name"] == "core":
-        if len(module["interfaces"]) == 1:
-            if module["interfaces"][0]["name"] == "Inspector":
-                splitInspectorInterfaces(module)
+    splitNotifyInterfaces(module)
+    
+#    if module["name"] == "core":
+#        if len(module["interfaces"]) == 1:
+#            if module["interfaces"][0]["name"] == "Inspector":
+#                splitInspectorInterfaces(module)
 
     # convert out parms to callback parms
     convertOutParms(module)
@@ -75,8 +75,6 @@ def main():
         log("generated json file '%s'" %oFileName)
 
 #--------------------------------------------------------------------
-# 
-#--------------------------------------------------------------------
 def convertOutParms(module):
     for interface in module["interfaces"]:
         
@@ -94,7 +92,36 @@ def convertOutParms(module):
                 method["parameters"] = newParameters
 
 #--------------------------------------------------------------------
-#
+def splitNotifyInterfaces(module):
+    newInterfaces = {}
+    
+    for interface in module["interfaces"][:]:
+
+        if "methods" in interface:
+            for method in interface["methods"][:]:
+                if "extendedAttributes" not in method: continue
+                if "notify" not in method["extendedAttributes"]: continue
+                
+                newInterfaceName = interface["name"] + "Notify"
+                newInterface     = newInterfaces.get(newInterfaceName)
+                
+                if not newInterface:
+                    newInterface = {
+                        "name": newInterfaceName,
+                        "methods": []
+                    }
+                    newInterfaces[newInterfaceName] = newInterface
+                    module["interfaces"].append(newInterface)
+
+                for parameter in method["parameters"]:
+                    if "out" not in parameter:
+                        log("%s notify method %s has an unexpected non-out parameter %s" % (interface["name"], method["name"], parameter["name"]))
+                    else:
+                        del parameter["out"]
+
+                newInterface["methods"].append(method)
+                interface["methods"].remove(method)
+
 #--------------------------------------------------------------------
 def splitInspectorInterfaces(module):
     intfOrig      = module["interfaces"][0]
@@ -138,8 +165,6 @@ def splitInspectorInterfaces(module):
 #        intfWebInspector["methods"].append(method)
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def validate(module):
     interfaces = {}
 
@@ -168,8 +193,6 @@ def validate(module):
 
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def checkType(location, interfaces, type):
     typeName = type["name"]
     
@@ -181,8 +204,6 @@ def checkType(location, interfaces, type):
     return True
     
 
-#--------------------------------------------------------------------
-#
 #--------------------------------------------------------------------
 def parseIDL(content):
 
@@ -244,8 +265,6 @@ def parseIDL(content):
     return module
 
 #--------------------------------------------------------------------
-# parse extended attributes
-#--------------------------------------------------------------------
 def parseExtendedAttributes(object, eaStrings):
     if not eaStrings: return
     if eaStrings == "": return
@@ -268,8 +287,6 @@ def parseExtendedAttributes(object, eaStrings):
         object["extendedAttributes"] = eas
 
 #--------------------------------------------------------------------
-# parse method
-#--------------------------------------------------------------------
 def parseMethod(match):
     method = {}
     
@@ -283,8 +300,6 @@ def parseMethod(match):
     return method
 
 #--------------------------------------------------------------------
-# parse attribute
-#--------------------------------------------------------------------
 def parseAttribute(match):
     attribute = {}
     
@@ -296,8 +311,6 @@ def parseAttribute(match):
 
     return attribute
 
-#--------------------------------------------------------------------
-# get type information
 #--------------------------------------------------------------------
 def parseMethodParameters(parameterString):
     parameters = []
@@ -331,8 +344,6 @@ def parseMethodParameters(parameterString):
         
     return parameters
 
-#--------------------------------------------------------------------
-# parse parameters
 #--------------------------------------------------------------------
 def getType(name, rank):
     name = name.strip()
@@ -368,8 +379,6 @@ def getType(name, rank):
     return result
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def clean(content):
     content = PatternCommentsPP.sub("", content)
     content = PatternPreprocessor.sub("", content)
@@ -379,21 +388,15 @@ def clean(content):
     return content
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def log(message):
     message = "%s: %s" % (PROGRAM_NAME, message)
     print >>sys.stderr, message
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def error(message):
     log(message)
     sys.exit(-1)
 
-#--------------------------------------------------------------------
-#
 #--------------------------------------------------------------------
 PROGRAM_NAME = os.path.basename(sys.argv[0])
 

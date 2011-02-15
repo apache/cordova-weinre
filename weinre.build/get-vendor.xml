@@ -13,22 +13,6 @@
     
     <!-- ============================================================ -->
 
-    <target name="old-get-vendor">
-            
-        <delete dir="${VENDOR}"/>
-        <mkdir  dir="${VENDOR}"/>
-
-        <delete dir="${TMP}"/>
-        <mkdir  dir="${TMP}"/>
-
-        <get src="${VENDOR_URL}" dest="${TMP}/vendor.zip" verbose="false"/>
-        <unzip src="${TMP}/vendor.zip" dest="."/>
-        
-        <delete dir="${TMP}"/>
-    </target>
-    
-    <!-- ============================================================ -->
-
     <target name="get-vendor">
         <echo>Go get some coffee, this is going to take a while</echo>
             

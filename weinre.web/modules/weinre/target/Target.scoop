@@ -35,7 +35,6 @@ require ./WiDOMImpl
 require ./WiDOMStorageImpl
 require ./WiDatabaseImpl
 require ./WiDebuggerImpl
-require ./WiFileSystemImpl
 require ./WiInjectedScriptImpl
 require ./WiInspectorImpl
 require ./WiNetworkImpl
@@ -104,24 +103,6 @@ method initialize()
     var webSocket = new Socket(window.WeinreServerURL + "ws/target")
     Weinre.webSocket = webSocket
 
-    /*
-    Weinre.WebInspectorApplicationCacheHandler = new WebInspectorApplicationCacheHandlerImpl()
-    Weinre.WebInspectorBackendHandler          = new WebInspectorBackendHandlerImpl()  
-    Weinre.WebInspectorControllerHandler       = new WebInspectorControllerHandlerImpl()
-    Weinre.WebInspectorDOMHandler              = new WebInspectorDOMHandlerImpl()        
-    Weinre.WebInspectorDebugHandler            = new WebInspectorDebugHandlerImpl()
-    Weinre.WebInspectorProfilerHandler         = new WebInspectorProfilerHandlerImpl()
-    Weinre.WebInspectorResourceHandler         = new WebInspectorResourceHandlerImpl()
-
-    webSocket.registerInterface("WebInspectorApplicationCacheHandler", Weinre.WebInspectorApplicationCacheHandler, true)
-    webSocket.registerInterface("WebInspectorBackendHandler",          Weinre.WebInspectorBackendHandler,          true)
-    webSocket.registerInterface("WebInspectorControllerHandler",       Weinre.WebInspectorControllerHandler,       true)
-    webSocket.registerInterface("WebInspectorDOMHandler",              Weinre.WebInspectorDOMHandler,              true)
-    webSocket.registerInterface("WebInspectorDebugHandler",            Weinre.WebInspectorDebugHandler,            true)
-    webSocket.registerInterface("WebInspectorProfilerHandler",         Weinre.WebInspectorProfilerHandler,         true)
-    webSocket.registerInterface("WebInspectorResourceHandler",         Weinre.WebInspectorResourceHandler,         true)
-    */
-
     Weinre.wi = {}
     
     Weinre.wi.ApplicationCache = new WiApplicationCacheImpl()
@@ -132,7 +113,6 @@ method initialize()
     Weinre.wi.Debugger         = new WiDebuggerImpl()
     Weinre.wi.DOM              = new WiDOMImpl()
     Weinre.wi.DOMStorage       = new WiDOMStorageImpl()
-    Weinre.wi.FileSystem       = new WiFileSystemImpl()
     Weinre.wi.InjectedScript   = new WiInjectedScriptImpl()
     Weinre.wi.Inspector        = new WiInspectorImpl()
     Weinre.wi.Network          = new WiNetworkImpl()
@@ -147,7 +127,6 @@ method initialize()
     webSocket.registerInterface("Debugger",         Weinre.wi.Debugger         , true)
     webSocket.registerInterface("DOM",              Weinre.wi.DOM              , true)
     webSocket.registerInterface("DOMStorage",       Weinre.wi.DOMStorage       , true)
-    webSocket.registerInterface("FileSystem",       Weinre.wi.FileSystem       , true)
     webSocket.registerInterface("InjectedScript",   Weinre.wi.InjectedScript   , true)
     webSocket.registerInterface("Inspector",        Weinre.wi.Inspector        , true)
     webSocket.registerInterface("Network",          Weinre.wi.Network          , true)
@@ -162,7 +141,6 @@ method initialize()
     Weinre.wi.DOMStorageNotify       = webSocket.createProxy("DOMStorageNotify")
     Weinre.wi.DatabaseNotify         = webSocket.createProxy("DatabaseNotify")
     Weinre.wi.DebuggerNotify         = webSocket.createProxy("DebuggerNotify")
-    Weinre.wi.FileSystemNotify       = webSocket.createProxy("FileSystemNotify")
     Weinre.wi.InspectorNotify        = webSocket.createProxy("InspectorNotify")
     Weinre.wi.NetworkNotify          = webSocket.createProxy("NetworkNotify")
     Weinre.wi.ProfilerNotify         = webSocket.createProxy("ProfilerNotify")

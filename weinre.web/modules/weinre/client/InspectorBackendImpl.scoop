@@ -28,7 +28,6 @@ static method setupProxies
         "DOMStorage",
         "Database",
         "Debugger",
-        "FileSystem",
         "InjectedScript",
         "Inspector",
         "Network",
