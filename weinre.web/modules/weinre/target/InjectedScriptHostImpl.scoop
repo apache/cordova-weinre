@@ -28,12 +28,19 @@ method nodeForId(/*int*/ nodeId, callback)
 //-----------------------------------------------------------------------------
 method pushNodePathToFrontend(/*any*/ node, /*boolean*/ withChildren, /*boolean*/ selectInUI, callback)
     // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    var nodeId = Weinre.nodeStore.getNodeId(node)
+    var children = Weinre.nodeStore.serializeNode(node, 1)
+    Weinre.wi.DOMNotify.setChildNodes(nodeId, children)
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 method inspectedNode(/*int*/ num, callback)
     // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    var nodeId = Weinre.nodeStore.getInspectedNode(num)
+    return nodeId
 
 //-----------------------------------------------------------------------------
 method currentCallFrame(callback)

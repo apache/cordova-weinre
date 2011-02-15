@@ -10,7 +10,6 @@ require ../common/Weinre
 
 //-----------------------------------------------------------------------------
 class WiDOMImpl
-    this.inspectedNodes = []
 
 //-----------------------------------------------------------------------------
 method getChildNodes(/*int*/ nodeId, callback)
@@ -135,15 +134,12 @@ method setOuterHTML(/*int*/ nodeId, /*string*/ outerHTML, callback)
 
 //-----------------------------------------------------------------------------
 method addInspectedNode(/*int*/ nodeId, callback)
-    this.inspectedNodes.unshift(nodeId)
-    if (this.inspectedNodes.length > 5) {
-        this.inspectedNodes = this.inspectedNodes.slice(0,5)
-    }
+    Weinre.nodeStore.addInspectedNode(nodeId)
     
     if (callback) {
         Weinre.WeinreTargetCommands.sendClientCallback(callback)
     }
-
+    
 //-----------------------------------------------------------------------------
 method performSearch(/*string*/ query, /*boolean*/ runSynchronously, callback)
     // callback: function()
@@ -164,23 +160,33 @@ method pushNodeByPathToFrontend(/*string*/ path, callback)
 
 //-----------------------------------------------------------------------------
 method resolveNode(/*int*/ nodeId, callback)
-    // callback: function(/*any*/ result)
-    Weinre.notImplemented(arguments.callee.signature)
-
+    var result = Weinre.injectedScript.resolveNode(nodeId)
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 //-----------------------------------------------------------------------------
 method getNodeProperties(/*int*/ nodeId, /*any[]*/ propertiesArray, callback)
-    // callback: function(/*any*/ result)
-    Weinre.notImplemented(arguments.callee.signature)
+    var result = Weinre.injectedScript.getNodeProperties(nodeId, propertiesArray)
 
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 //-----------------------------------------------------------------------------
 method getNodePrototypes(/*int*/ nodeId, callback)
-    // callback: function(/*any*/ result)
-    Weinre.notImplemented(arguments.callee.signature)
+    var result = Weinre.injectedScript.getNodePrototypes(nodeId)
 
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 //-----------------------------------------------------------------------------
 method pushNodeToFrontend(/*any*/ objectId, callback)
-    // callback: function(/*any*/ result)
-    Weinre.notImplemented(arguments.callee.signature)
+    var objectId = JSON.stringify(objectId)
+    var result = Weinre.injectedScript.pushNodeToFrontend(objectId)
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }

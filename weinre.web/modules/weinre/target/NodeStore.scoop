@@ -10,9 +10,22 @@
 // 
 //-----------------------------------------------------------------------------
 class NodeStore
-    this.__nodeMap     = {}
-    this.__nodeDataMap = {}
-    this.__nextId      = 0
+    this.__nodeMap      = {}
+    this.__nodeDataMap  = {}
+    this.__nextId       = 0
+    this.inspectedNodes = []
+
+
+//-----------------------------------------------------------------------------
+method addInspectedNode(nodeId)
+    this.inspectedNodes.unshift(nodeId)
+    if (this.inspectedNodes.length > 5) {
+        this.inspectedNodes = this.inspectedNodes.slice(0,5)
+    }
+
+//-----------------------------------------------------------------------------
+method getInspectedNode(index)
+    return this.inspectedNodes[index]
 
 //-----------------------------------------------------------------------------
 //
