@@ -6,7 +6,7 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ./Ex
+requireClass ./Ex
 
 //-----------------------------------------------------------------------------
 class Binding(receiver, method)

@@ -6,14 +6,14 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ./Ex
+requireClass ./Ex
 
 //-----------------------------------------------------------------------------
 class Callback
     throw new Ex(arguments, "this class is not intended to be instantiated")
 
 //-----------------------------------------------------------------------------
-static 
+init 
     var CallbackTable = {}
     var CallbackIndex = 1
     var ConnectorId   = "???"

@@ -6,10 +6,10 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ../common/Ex
-require ../common/IDLTools
-require ../common/Socket
-require ../common/Weinre
+requireClass ../common/Ex
+requireClass ../common/IDLTools
+requireClass ../common/Socket
+requireClass ../common/Weinre
 
 //-----------------------------------------------------------------------------
 class InspectorBackendImpl

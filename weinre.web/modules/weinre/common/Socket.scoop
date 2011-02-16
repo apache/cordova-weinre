@@ -6,11 +6,11 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ./Weinre
-require ./WebSocketXhr
-require ./IDLTools
-require ./Binding
-require ./Ex
+requireClass ./Weinre
+requireClass ./WebSocketXhr
+requireClass ./IDLTools
+requireClass ./Binding
+requireClass ./Ex
 
 //-----------------------------------------------------------------------------
 class Socket(url)
@@ -25,7 +25,7 @@ class Socket(url)
     this._open()
 
 //-----------------------------------------------------------------------------
-static
+init
     var Verbose = false
     var InspectorBackend
 

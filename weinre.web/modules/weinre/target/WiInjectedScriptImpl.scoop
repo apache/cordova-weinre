@@ -6,7 +6,7 @@
  * Copyright (c) 2011 IBM Corporation
  */
 
-require ../common/Weinre
+requireClass ../common/Weinre
 
 //-----------------------------------------------------------------------------
 class WiInjectedScriptImpl

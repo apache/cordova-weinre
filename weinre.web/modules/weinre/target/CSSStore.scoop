@@ -12,7 +12,7 @@ class CSSStore
     this.__nextId      = 0
 
 //-----------------------------------------------------------------------------
-static
+init
     var Properties = []
 
 //-----------------------------------------------------------------------------
@@ -165,7 +165,7 @@ function fallbackMatchesSelector(element, selector)
     return false
     
 //-----------------------------------------------------------------------------
-static
+init
     var elementMatchesSelector
     
     if      (Element.prototype.webkitMatchesSelector) elementMatchesSelector = webkitMatchesSelector 

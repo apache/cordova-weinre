@@ -6,23 +6,23 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ../common/IDLTools
-require ../common/Callback
-require ../common/Weinre
-require ../common/Socket
-require ../common/Binding
+requireClass ../common/IDLTools
+requireClass ../common/Callback
+requireClass ../common/Weinre
+requireClass ../common/Socket
+requireClass ../common/Binding
 
-require ./InspectorBackendImpl
-require ./InspectorFrontendHostImpl
-require ./WeinreClientEventsImpl
-require ./RemotePanel
+requireClass ./InspectorBackendImpl
+requireClass ./InspectorFrontendHostImpl
+requireClass ./WeinreClientEventsImpl
+requireClass ./RemotePanel
 
 //-----------------------------------------------------------------------------
 class Client
     this.initialize()
 
 //-----------------------------------------------------------------------------
-static
+init
     var AutoConnect = true
     
     Weinre.showNotImplemented()

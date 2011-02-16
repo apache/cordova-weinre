@@ -6,15 +6,15 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ./Ex
-require ./Callback
+requireClass ./Ex
+requireClass ./Callback
 
 //-----------------------------------------------------------------------------
 class IDLTools
     throw new Ex(arguments, "this class is not intended to be instantiated")
 
 //-----------------------------------------------------------------------------
-static
+init
     var IDLs = {}
     IDLTools._idls = IDLs
 

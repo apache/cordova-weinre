@@ -6,7 +6,7 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ./StackTrace
+requireClass ./StackTrace
 
 //-----------------------------------------------------------------------------
 class Ex(args, message)

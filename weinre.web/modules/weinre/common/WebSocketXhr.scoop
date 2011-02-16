@@ -6,16 +6,16 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ./Ex
-require ./Weinre
-require ./EventListeners
+requireClass ./Ex
+requireClass ./Weinre
+requireClass ./EventListeners
 
 //-----------------------------------------------------------------------------
 class WebSocketXhr(url)
     this.initialize(url)
     
 //-----------------------------------------------------------------------------
-static
+init
     WebSocketXhr.CONNECTING = 0
     WebSocketXhr.OPEN       = 1
     WebSocketXhr.CLOSING    = 2

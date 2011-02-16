@@ -6,11 +6,11 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ../common/Binding
-require ../common/Weinre
+requireClass ../common/Binding
+requireClass ../common/Weinre
 
-require ./ConnectorList
-require ./DOMTemplates as dt
+requireClass ./ConnectorList
+requireClass ./DOMTemplates as dt
 
 //-----------------------------------------------------------------------------
 class RemotePanel < WebInspector.Panel

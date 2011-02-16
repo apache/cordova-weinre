@@ -154,7 +154,6 @@
         <echo message="compiling scoop modules"/>
         <exec executable="python" failonerror="true" failifexecutionfails="true">
             <arg  file="vendor/scooj/scoopc.py"/>
-            <arg value="--quiet"/>
             <arg value="--out"/>
             <arg  file="${TMP}/modules"/>
             <arg  file="../${PROJECT_WEB}/modules"/>

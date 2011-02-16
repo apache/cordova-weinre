@@ -6,7 +6,7 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ./DOMTemplates as dt
+requireClass ./DOMTemplates as dt
 
 //-----------------------------------------------------------------------------
 class ConnectorList(title)

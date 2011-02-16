@@ -6,16 +6,16 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ./Ex
-require ./IDLTools
-require ./StackTrace
+requireClass ./Ex
+requireClass ./IDLTools
+requireClass ./StackTrace
 
 //-----------------------------------------------------------------------------
 class Weinre
     throw new Ex(arguments, "this class is not intended to be instantiated")
 
 //-----------------------------------------------------------------------------
-static 
+init 
     var _notImplemented     = {}
     var _showNotImplemented = false
     var CSSProperties       = []
