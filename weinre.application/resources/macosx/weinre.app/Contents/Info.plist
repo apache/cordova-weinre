@@ -17,7 +17,7 @@
     <key>CFBundleIconFile</key>
         <string>weinre.icns</string>
     <key>CFBundleIdentifier</key>
-        <string>com.phonegap.weinre.application</string>
+        <string>weinre.application</string>
     <key>CFBundleInfoDictionaryVersion</key>
         <string>6.0</string>
     <key>CFBundleName</key>

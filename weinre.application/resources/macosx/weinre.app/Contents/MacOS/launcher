@@ -12,4 +12,4 @@ BASEDIR=`dirname $0`
 java \
     -XstartOnFirstThread \
     -classpath $BASEDIR/weinre-ui.jar:$BASEDIR/weinre.jar:$BASEDIR/swt.jar \
-    com.phonegap.weinre.application.GUIMain
+    weinre.application.GUIMain

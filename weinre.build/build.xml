@@ -355,7 +355,7 @@
         <jar destfile="${OUT}/weinre.jar">
             <manifest>
                 <attribute name="Built-By" value="${ant.file.basename} - ${ant.project.name}"/>
-                <attribute name="Main-Class" value="com.phonegap.weinre.server.Main"/>
+                <attribute name="Main-Class" value="weinre.server.Main"/>
             </manifest>
             
             <fileset file="${OUT}/build-info.txt"/>
@@ -399,7 +399,7 @@
         <jar destfile="${OUT}/weinre-ui.jar">
             <manifest>
                 <attribute name="Built-By" value="${ant.file.basename} - ${ant.project.name}"/>
-                <attribute name="Main-Class" value="com.phonegap.weinre.application.GUIMain"/>
+                <attribute name="Main-Class" value="weinre.application.GUIMain"/>
             </manifest>
             
             <fileset file="${OUT}/build-info.txt"/>
