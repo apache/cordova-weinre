@@ -6,14 +6,16 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+require ./Ex
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
 class Binding(receiver, method)
 
-    if (receiver == null) throw new Error("receiver argument for Binding constructor was null")
+    if (receiver == null) throw new Ex(arguments, "receiver argument for Binding constructor was null")
     if (typeof(method) == "string") method = receiver[method]
-    if (typeof(method) != "function") throw new Error("method argument didn't specify a function")
+    if (typeof(method) != "function") throw new Ex(arguments, "method argument didn't specify a function")
 
     return function() {
         return method.apply(receiver, [].slice.call(arguments))

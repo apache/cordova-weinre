@@ -91,7 +91,7 @@ method log
         message:     message
     }
     
-    WebInspector.addConsoleMessage(payload)
+    Weinre.wi.ConsoleNotify.addConsoleMessage(payload)
 
 //-----------------------------------------------------------------------------
 // 

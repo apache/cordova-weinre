@@ -10,9 +10,8 @@ require ./Weinre
 require ./WebSocketXhr
 require ./IDLTools
 require ./Binding
+require ./Ex
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 class Socket(url)
     this._url        = url
@@ -22,15 +21,18 @@ class Socket(url)
     this._opened     = false
     this._closed     = false
     this._interfaces = {}
+    
+    this._open()
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static
     var Verbose = false
+    var InspectorBackend
 
 //-----------------------------------------------------------------------------
-//
+static method setInspectorBackend(inspectorBackend)
+    InspectorBackend = inspectorBackend
+    
 //-----------------------------------------------------------------------------
 static method verbose(value)
     if (arguments.length >= 1) {
@@ -40,11 +42,13 @@ static method verbose(value)
     return Verbose
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method open
+    Weinre.deprecated()
+
+//-----------------------------------------------------------------------------
+method _open
     if (this._opened || this._opening) return
-    if (this._closed) throw new Error("socket has already been closed")
+    if (this._closed) throw new Ex(arguments, "socket has already been closed")
     
     this._opening = true 
     this._socket = new WebSocketXhr(this._url)
@@ -53,8 +57,6 @@ method open
     this._socket.addEventListener("message", Binding(this, "_handleMessage"))
     this._socket.addEventListener("close",   Binding(this, "_handleClose"))
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method close
     if (this._closed) return
@@ -65,29 +67,21 @@ method close
     this._socket.close()
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method send(data)
     this._socket.send(data)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method getWebSocket
     return this._socket
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method registerInterface(intfName, intf, validate)
     if (validate) IDLTools.validateAgainstIDL(intf.constructor, intfName)
     
-    if (this._interfaces[intfName]) throw new Error("interface " + intfName + " has already been registered")
+    if (this._interfaces[intfName]) throw new Ex(arguments, "interface " + intfName + " has already been registered")
     
     this._interfaces[intfName] = intf
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method createProxy(intfName)
     var proxy = {}
@@ -102,11 +96,9 @@ method createProxy(intfName)
     return proxy
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method _sendMethodInvocation(intfName, methodName, args)
-    if (typeof intfName   != "string") throw new Error("expecting intf parameter to be a string")
-    if (typeof methodName != "string") throw new Error("expecting method parameter to be a string")
+    if (typeof intfName   != "string") throw new Ex(arguments, "expecting intf parameter to be a string")
+    if (typeof methodName != "string") throw new Ex(arguments, "expecting method parameter to be a string")
     
     var data = {
             "interface": intfName,
@@ -123,8 +115,6 @@ method _sendMethodInvocation(intfName, methodName, args)
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getState
     if (this._opening) return "opening"
     if (this._opened)  return "opened"
@@ -132,13 +122,9 @@ method getState
     return "unknown"
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method isOpen
     return this._opened == true
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method _handleOpen
     this._opening = false
@@ -149,8 +135,6 @@ method _handleOpen
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method _handleError(message)
     this.error = message
     this.close()
@@ -160,8 +144,6 @@ method _handleError(message)
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method _handleMessage(message)
     var data
     
@@ -169,7 +151,7 @@ method _handleMessage(message)
         data = JSON.parse(message.data)
     }
     catch (e) {
-        throw new Error("invalid JSON data received: " + e + ": '" + message.data + "'")
+        throw new Ex(arguments, "invalid JSON data received: " + e + ": '" + message.data + "'")
     }
 
     var intfName   = data["interface"]
@@ -179,24 +161,26 @@ method _handleMessage(message)
     var methodSignature = intfName + "." + methodName + "()"
     
     var intf = this._interfaces[intfName]
-    if (!intf) throw new Error("request for non-registered interface:" + methodSignature)
+    if (!intf && InspectorBackend && intfName.match(/.*Notify/)) {
+        intf = InspectorBackend.getRegisteredDomainDispatcher(intfName.substr(0,intfName.length-6))
+    }
+    
+    if (!intf) throw new Ex(arguments, "request for non-registered interface:" + methodSignature)
     
     var method = intf[methodName]
-    if (typeof method != "function") throw new Error("request for unknown method on interface: " + methodSignature)
+    if (typeof method != "function") throw new Ex(arguments, "request for unknown method on interface: " + methodSignature)
     
     try {
         method.apply(intf, args)
     }
     catch (e) {
-        console.log("Weinre.Socket._handleMessage() invocation exception: " + e)
+        console.log("Weinre.Socket._handleMessage() invocation exception on " + methodSignature + ": " + e)
     }
     
     if (Verbose) {
         console.log(this.constructor.name + "[" + this._url + "]: recv " + intfName + "." + methodName + "(" + JSON.stringify(args) + ")")
     }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method _handleClose
     this._reallyClosed = true

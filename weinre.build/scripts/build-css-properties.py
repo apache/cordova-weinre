@@ -36,7 +36,7 @@ def main():
     properties.sort()
         
     jsonString = json.dumps(properties, indent=4)
-    jsString = "Weinre.addCSSProperties(%s)" % jsonString
+    jsString = 'require("weinre/common/Weinre").addCSSProperties(%s)' % jsonString
 
     oFile = open(oFileName, "w")
     oFile.write(jsString)

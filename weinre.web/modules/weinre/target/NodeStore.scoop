@@ -10,9 +10,22 @@
 // 
 //-----------------------------------------------------------------------------
 class NodeStore
-    this.__nodeMap     = {}
-    this.__nodeDataMap = {}
-    this.__nextId      = 0
+    this.__nodeMap      = {}
+    this.__nodeDataMap  = {}
+    this.__nextId       = 0
+    this.inspectedNodes = []
+
+
+//-----------------------------------------------------------------------------
+method addInspectedNode(nodeId)
+    this.inspectedNodes.unshift(nodeId)
+    if (this.inspectedNodes.length > 5) {
+        this.inspectedNodes = this.inspectedNodes.slice(0,5)
+    }
+
+//-----------------------------------------------------------------------------
+method getInspectedNode(index)
+    return this.inspectedNodes[index]
 
 //-----------------------------------------------------------------------------
 //
@@ -49,7 +62,7 @@ method nextNodeId()
 //
 //-----------------------------------------------------------------------------
 method serializeNode(node, depth)
-    var nodeName  = null
+    var nodeName  = ""
     var nodeValue = null
     var localName = null
     var id = this.getNodeId(node) 

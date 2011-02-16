@@ -6,29 +6,36 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+require ./Ex
 require ./IDLTools
+require ./StackTrace
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 class Weinre
-    throw new Error("this class is not intended to be instantiated")
+    throw new Ex(arguments, "this class is not intended to be instantiated")
 
 //-----------------------------------------------------------------------------
-//
+static 
+    var _notImplemented     = {}
+    var _showNotImplemented = false
+    var CSSProperties       = []
+
 //-----------------------------------------------------------------------------
 static method addIDLs(idls)
     IDLTools.addIDLs(idls)
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-static 
-    var _notImplemented     = {}
-    var _showNotImplemented = false
+static method addCSSProperties(cssProperties)
+    CSSProperties = cssProperties
 
 //-----------------------------------------------------------------------------
-//
+static method getCSSProperties
+    return CSSProperties
+
+//-----------------------------------------------------------------------------
+static method deprecated()
+    StackTrace.dump(arguments)
+    
 //-----------------------------------------------------------------------------
 static method notImplemented(thing)
     if (_notImplemented[thing]) return
@@ -38,8 +45,6 @@ static method notImplemented(thing)
     if (!_showNotImplemented) return
     console.log(thing + " not implemented")
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static method showNotImplemented()
     _showNotImplemented = true

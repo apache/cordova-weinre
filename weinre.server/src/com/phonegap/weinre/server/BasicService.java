@@ -5,39 +5,44 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-package com.phonegap.weinre.server.service;
+package com.phonegap.weinre.server;
 
 import java.io.IOException;
 import java.util.List;
 
 import org.apache.wink.json4j.JSONArray;
 
-import com.phonegap.weinre.server.Channel;
-import com.phonegap.weinre.server.Connector;
 
-/**
- * 
- */
-public class WebInspector {
+public abstract class BasicService {
 
-    /**
-     * 
-     */
-    public WebInspector() {
-        super();
-    }
+    public static String lastActivePanelName;
     
     /**
      * 
      */
+    public BasicService() {
+        super();
+    }
+
+    /**
+     * 
+     */
+    public String getInterfaceName() {
+        return getClass().getSimpleName();
+    }
+    
+    /**
+     * forwards all requests to connected peers 
+     */
     public void __doesNotUnderstand(Channel channel, String methodName, JSONArray args) throws IOException {
         Connector connector = channel.getConnector();
+        if (null == connector) return;
+        
         List<Connector> connections = connector.getConnections();
         
         for (Connector connection: connections) {
-            connection.getChannel().sendEvent("WebInspector", methodName, args.toArray());
-        }
+            connection.getChannel().sendEvent(getInterfaceName(), methodName, args.toArray());
+        } 
     }
-
 
 }

@@ -20,7 +20,7 @@ class InspectorFrontendHostImpl
 // 
 //-----------------------------------------------------------------------------
 method loaded
-    WebInspector.Settings.initialize()
+    // WebInspector.Settings.initialize()
     
 //-----------------------------------------------------------------------------
 // 
@@ -86,8 +86,8 @@ method localizedStringsURL
 // 
 //-----------------------------------------------------------------------------
 method hiddenPanels
-//  return "audits,profiles,resources,scripts,timeline"
-    return ""
+    return "audits,profiles,resources,timeline,network"
+//    return "audits,profiles,resources,scripts,timeline,network"
 
 //-----------------------------------------------------------------------------
 // 

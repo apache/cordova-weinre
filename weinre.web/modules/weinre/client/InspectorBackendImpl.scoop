@@ -6,34 +6,60 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+require ../common/Ex
 require ../common/IDLTools
+require ../common/Socket
 require ../common/Weinre
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 class InspectorBackendImpl
+    this.registeredDomainDispatchers = {}
+    Socket.setInspectorBackend(this)
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 static method setupProxies
-    var webInspectorHandlerIntfs = IDLTools.getIDLsMatching(/^WebInspector\w+Handler$/)
 
-    webInspectorHandlerIntfs.forEach(function(intf) {
-        var proxy = Weinre.webSocket.createProxy(intf.name)
+    var intfNames = [
+        "ApplicationCache",
+        "BrowserDebugger",
+        "CSS",
+        "Console",
+        "DOM",
+        "DOMStorage",
+        "Database",
+        "Debugger",
+        "InjectedScript",
+        "Inspector",
+        "Network",
+        "Profiler",
+        "Runtime"
+    ]
+
+    intfNames.forEach(function(intfName) {
+        var proxy = Weinre.webSocket.createProxy(intfName)
+        
+        var intf = IDLTools.getIDL(intfName)
+        if (!intf) {
+            throw new Ex(arguments, "interface not registered: '" + intfName + "'")
+        }
         
         intf.methods.forEach(function(method) {
             var proxyMethod = InspectorBackendImpl.getProxyMethod(proxy, method)
             InspectorBackendImpl.prototype[method.name] = proxyMethod
         })
     })
+    
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 static method getProxyMethod(proxy, method)
     return function() {
         return proxy[method.name].apply(proxy, arguments)
     }
 
+//-----------------------------------------------------------------------------
+method registerDomainDispatcher(name, intf)
+    this.registeredDomainDispatchers[name] = intf
+
+//-----------------------------------------------------------------------------
+method getRegisteredDomainDispatcher(name)
+    return this.registeredDomainDispatchers[name]

@@ -3,62 +3,51 @@
  * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
  * 
- * Copyright (c) 2010, 2011 IBM Corporation
+ * Copyright (c) 2011 IBM Corporation
  */
 
 require ../common/Weinre
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
-class WebInspectorProfilerHandlerImpl
+class WiBrowserDebuggerImpl
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-method startProfiling(callback)
+method setAllBrowserBreakpoints(/*any*/ breakpoints, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
+
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-method stopProfiling(callback)
+method setDOMBreakpoint(/*int*/ nodeId, /*int*/ type, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
+
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-method getProfileHeaders(callback)
+method removeDOMBreakpoint(/*int*/ nodeId, /*int*/ type, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
+
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-method getProfile(/*string*/ type, /*int*/ uid, callback)
+method setEventListenerBreakpoint(/*string*/ eventName, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
+
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-method removeProfile(/*string*/ type, /*int*/ uid, callback)
+method removeEventListenerBreakpoint(/*string*/ eventName, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
+
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-method clearProfiles(callback)
+method setXHRBreakpoint(/*string*/ url, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
+
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-method takeHeapSnapshot(callback)
+method removeXHRBreakpoint(/*string*/ url, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-

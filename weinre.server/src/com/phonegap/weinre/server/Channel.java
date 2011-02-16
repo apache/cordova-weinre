@@ -152,6 +152,8 @@ public class Channel {
         if (null == klass) throw new ClassNotFoundException("class not found: " + klassName);
         
         result = klass.newInstance();
+        serviceMap.put(name, result);
+        Main.debug("loaded service class: " + klassName);
         return result;
     }
     

@@ -19,6 +19,8 @@
 //      (the resulting property name doesn't include "$")
 //-----------------------------------------------------------------------------
 
+require ../common/Ex
+
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
@@ -35,12 +37,12 @@ function getElementFunction(elementName)
     return function() {
         var element = document.createElement(elementName)
         
-        var arguments = [].slice.call(arguments)
-        arguments.forEach(function(argument) {
+        var args = [].slice.call(arguments)
+        args.forEach(function(argument) {
             if      (argument.nodeType)           addToElement_Node(   element, argument )
             else if (typeof argument == "string") addToElement_String( element, argument )
             else if (typeof argument == "object") addToElement_Object( element, argument )
-            else throw new Error("invalid value passed to  DOMTemplates." + elementName + "(): " + argument)
+            else throw new Ex(arguments, "invalid value passed to  DOMTemplates." + elementName + "(): " + argument)
         })
         
         return element
