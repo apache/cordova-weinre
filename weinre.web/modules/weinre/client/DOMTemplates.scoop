@@ -22,16 +22,12 @@
 require ../common/Ex
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 class DOMTemplates
 
 static 
     var ElementNames = "H1 H2 H3 H4 H5 H6 UL OL DL LI DT DD SPAN DIV A B I TT P HR BR PRE IMG CANVAS TABLE TR TD FORM INPUT BUTTON SELECT OPTGROUP OPTION TEXTAREA"
     ElementNames = ElementNames.split(" ")
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function getElementFunction(elementName)
     return function() {
@@ -49,19 +45,13 @@ function getElementFunction(elementName)
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function addToElement_String(element, aString)
     addToElement_Node(element, document.createTextNode(aString))
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function addToElement_Node(element, anElement)
     element.appendChild(anElement)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function addToElement_Object(element, anObject)
     for (var key in anObject) {
@@ -78,8 +68,6 @@ function addToElement_Object(element, anObject)
         }
     }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static 
     ElementNames.forEach(function(elementName) {

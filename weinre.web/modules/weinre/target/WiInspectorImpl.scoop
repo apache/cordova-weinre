@@ -16,42 +16,35 @@ method addScriptToEvaluateOnLoad(/*string*/ scriptSource, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method removeAllScriptsToEvaluateOnLoad(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method reloadPage(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method populateScriptObjects(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method openInInspectedWindow(/*string*/ url, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method setSearchingForNode(/*boolean*/ enabled, callback)
     // callback: function(/*boolean*/ newState)
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method didEvaluateForTestInFrontend(/*int*/ testCallId, /*string*/ jsonResult, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method highlightDOMNode(/*int*/ nodeId, callback)
@@ -80,78 +73,65 @@ method highlightFrame(/*int*/ frameId, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method hideFrameHighlight(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method setExtraHeaders(/*any*/ headers, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method setUserAgentOverride(/*string*/ userAgent, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method getCookies(callback)
     // callback: function(/*any[]*/ cookies, /*string*/ cookiesString)
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method deleteCookie(/*string*/ cookieName, /*string*/ domain, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method startTimelineProfiler(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method stopTimelineProfiler(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method enableDebugger(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method disableDebugger(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method enableProfiler(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method disableProfiler(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method startProfiling(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method stopProfiling(callback)

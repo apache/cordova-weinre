@@ -16,12 +16,10 @@ method getDOMStorageEntries(/*int*/ storageId, callback)
     // callback: function(/*any[]*/ entries)
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method setDOMStorageItem(/*int*/ storageId, /*string*/ key, /*string*/ value, callback)
     // callback: function(/*boolean*/ success)
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method removeDOMStorageItem(/*int*/ storageId, /*string*/ key, callback)

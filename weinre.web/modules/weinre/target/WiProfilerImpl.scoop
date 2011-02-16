@@ -16,24 +16,20 @@ method getProfileHeaders(callback)
     // callback: function(/*any[]*/ headers)
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method getProfile(/*string*/ type, /*int*/ uid, callback)
     // callback: function(/*any*/ profile)
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method removeProfile(/*string*/ type, /*int*/ uid, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method clearProfiles(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method takeHeapSnapshot(/*boolean*/ detailed, callback)

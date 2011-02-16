@@ -10,21 +10,15 @@ require ../common/Callback
 require ../common/Weinre
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 class WeinreClientEventsImpl(client)
     this.client = client
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method clientRegistered(clientDescription)
     if (this.client.uiAvailable()) {
         WebInspector.panels.remote.addClient(clientDescription)
     }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method targetRegistered(targetDescription)
     if (this.client.uiAvailable()) {
@@ -36,23 +30,17 @@ method targetRegistered(targetDescription)
     Weinre.WeinreClientCommands.connectTarget(Weinre.clientId, targetDescription.id)
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method clientUnregistered(/*int*/ clientId)
     if (this.client.uiAvailable()) {
         WebInspector.panels.remote.removeClient(clientId)
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method targetUnregistered(/*int*/ targetId)
     if (this.client.uiAvailable()) {
         WebInspector.panels.remote.removeTarget(targetId)
     }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method connectionCreated(/*int*/ clientId, /*int*/ targetId)
     if (this.client.uiAvailable()) {
@@ -64,8 +52,6 @@ method connectionCreated(/*int*/ clientId, /*int*/ targetId)
 
     Weinre.targetId = targetId
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method connectionDestroyed(/*int*/ clientId, /*int*/ targetId)
     if (this.client.uiAvailable()) {
@@ -87,13 +73,9 @@ method connectionDestroyed(/*int*/ clientId, /*int*/ targetId)
     console.log("autoconnecting to " + nextTargetId)
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method sendCallback(/*int*/ callbackId, /*any*/ result)
     Callback.invoke(callbackId, result)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method serverProperties(/*any*/ properties)
     if (this.client.uiAvailable()) {

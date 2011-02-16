@@ -9,8 +9,6 @@
 require ./DOMTemplates as dt
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 class ConnectorList(title)
     this.connectors   = {}
     this.noneItem     = dt.LI("none")
@@ -20,13 +18,9 @@ class ConnectorList(title)
     this.noneItem.addStyleClass("weinre-connector-item")
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getElement
     return this.div
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method add(connector)
     if (this.connectors[connector.id]) return
@@ -50,8 +44,6 @@ method add(connector)
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getNewestConnectorId(ignoring)
     var newest = 0
     
@@ -64,8 +56,6 @@ method getNewestConnectorId(ignoring)
     return newest
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getConnectorInsertionPoint(connector)
     for (var i=0; i<this.ulConnectors.childNodes.length; i++) {
         var childNode = this.ulConnectors.childNodes[i]
@@ -77,8 +67,6 @@ method getConnectorInsertionPoint(connector)
     
     return null
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method remove(id, fast)
     var self = this
@@ -106,8 +94,6 @@ method remove(id, fast)
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method _remove(element)
     this.ulConnectors.removeChild(element)
     if (this.getConnectors().length == 0) {
@@ -115,15 +101,11 @@ method _remove(element)
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method removeAll()
     this.getConnectors().forEach(function(connector) {
         this.remove(connector.id, true)
     }, this)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method getConnectors()
     var result = []
@@ -136,16 +118,12 @@ method getConnectors()
     return result
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getConnectorElement(id)
     var connector = this.connectors[id]
     if (!connector) return null
     
     return connector.element
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method setCurrent(id)
     this.getConnectors().forEach(function(connector) {
@@ -157,8 +135,6 @@ method setCurrent(id)
     
     element.addStyleClass("current")
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method setState(id, state)
     if (typeof id == "string") {

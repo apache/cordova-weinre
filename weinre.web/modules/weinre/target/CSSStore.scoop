@@ -7,32 +7,22 @@
  */
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 class CSSStore
     this.__styleMap    = {}
     this.__nextId      = 0
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 static
     var Properties = []
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static method addCSSProperties(properties)
     Properties = properties
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getStyle(styleId)
     return this.__styleMap[styleId]
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method getStyleId(style)
     if (style.__weinre_id) { 
@@ -45,8 +35,6 @@ method getStyleId(style)
     return style.__weinre_id
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getInlineStyle(node)
     var styleObject = this.buildObjectForStyle(node.style, true)
     for (var i=0; i<styleObject.cssProperties.length; i++) {
@@ -55,8 +43,6 @@ method getInlineStyle(node)
     return styleObject
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getComputedStyle(node)
     if (!node) return {}
     if (node.nodeType != Node.ELEMENT_NODE) return {}
@@ -64,8 +50,6 @@ method getComputedStyle(node)
     var styleObject = this.buildObjectForStyle(window.getComputedStyle(node), false)
     return styleObject
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method getMatchedCSSRules(node)
     var result = []
@@ -92,23 +76,17 @@ method getMatchedCSSRules(node)
     return result
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getStyleAttributes(node)
     var result = {}
     
     return result
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getPseudoElements(node)
     var result = []
     
     return result
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method buildObjectForStyle(style, bind)
     var result = {
@@ -143,8 +121,6 @@ method buildObjectForStyle(style, bind)
     return result
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method populateObjectWithStyleProperties(style, result)
     var properties = []
     var shorthandValues = {}
@@ -171,8 +147,6 @@ method populateObjectWithStyleProperties(style, result)
     result.shorthandValues = shorthandValues
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method _nextId
     return "" + (++this.__nextId)
     
@@ -189,7 +163,6 @@ function webkitMatchesSelector(element, selector)
 //-----------------------------------------------------------------------------
 function fallbackMatchesSelector(element, selector)
     return false
-    
     
 //-----------------------------------------------------------------------------
 static

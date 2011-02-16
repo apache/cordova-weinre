@@ -7,8 +7,6 @@
  */
 
 //-----------------------------------------------------------------------------
-// return a stack trace - an array of lines, one per stack frame
-//-----------------------------------------------------------------------------
 class StackTrace(args)
     if (!args || !args.callee) {
         throw Error("first parameter to " + arguments.callee.signature + " must be an Arguments object") 

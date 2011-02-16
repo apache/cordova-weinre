@@ -16,90 +16,75 @@ method activateBreakpoints(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method deactivateBreakpoints(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method setJavaScriptBreakpoint(/*string*/ url, /*int*/ lineNumber, /*int*/ columnNumber, /*string*/ condition, /*boolean*/ enabled, callback)
     // callback: function(/*string*/ breakpointId, /*any[]*/ locations)
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method setJavaScriptBreakpointBySourceId(/*string*/ sourceId, /*int*/ lineNumber, /*int*/ columnNumber, /*string*/ condition, /*boolean*/ enabled, callback)
     // callback: function(/*string*/ breakpointId, /*int*/ actualLineNumber, /*int*/ actualColumnNumber)
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method removeJavaScriptBreakpoint(/*string*/ breakpointId, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method continueToLocation(/*string*/ sourceId, /*int*/ lineNumber, /*int*/ columnNumber, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method stepOver(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method stepInto(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method stepOut(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method pause(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method resume(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method editScriptSource(/*string*/ sourceID, /*string*/ newContent, callback)
     // callback: function(/*boolean*/ success, /*string*/ result, /*any*/ newCallFrames)
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method getScriptSource(/*string*/ sourceID, callback)
     // callback: function(/*string*/ scriptSource)
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method setPauseOnExceptionsState(/*int*/ pauseOnExceptionsState, callback)
     // callback: function(/*int*/ newState)
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method evaluateOnCallFrame(/*any*/ callFrameId, /*string*/ expression, /*string*/ objectGroup, /*boolean*/ includeCommandLineAPI, callback)
     // callback: function(/*any*/ result)
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method getCompletionsOnCallFrame(/*any*/ callFrameId, /*string*/ expression, /*boolean*/ includeCommandLineAPI, callback)

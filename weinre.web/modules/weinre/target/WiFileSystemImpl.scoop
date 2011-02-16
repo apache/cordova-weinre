@@ -16,7 +16,6 @@ method getFileSystemPathAsync(/*int*/ type, /*string*/ origin, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method revealFolderInOS(/*string*/ path, callback)
     // callback: function()

@@ -9,8 +9,6 @@
 require ./StackTrace
 
 //-----------------------------------------------------------------------------
-// returns a new Error object after dumping a stack trace
-//-----------------------------------------------------------------------------
 class Ex(args, message)
     if (!args || !args.callee) {
         throw Ex(arguments, "first parameter must be an Arguments object") 

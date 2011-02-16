@@ -42,13 +42,9 @@ require ./WiProfilerImpl
 require ./WiRuntimeImpl
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 class Target
     this.initialize()
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static method main
     Weinre.target = new Target()
@@ -57,8 +53,6 @@ static method main
         CSSStore.addCSSProperties(properties)
     }
     
-//------------------------------------------------------------------------------
-//
 //------------------------------------------------------------------------------
 method setWeinreServerURLFromScriptSrc()
     if (window.WeinreServerURL) return
@@ -85,8 +79,6 @@ method setWeinreServerURLFromScriptSrc()
     alert(message)
     throw new Ex(arguments, message)
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method initialize()
     this.setWeinreServerURLFromScriptSrc()
@@ -157,13 +149,9 @@ method initialize()
     Weinre.cssStore  = new CSSStore()
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method cb_webSocketOpened()
     Weinre.WeinreTargetCommands.registerTarget(window.location.href, Binding(this, this.cb_registerTarget))
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method cb_registerTarget(targetId)
     Weinre.targetId    = targetId
@@ -172,12 +160,8 @@ method cb_registerTarget(targetId)
     Callback.setConnectorId(targetId)
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method onLoaded()
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method setDocument()
     Weinre.elementHighlighter = new ElementHighlighter()

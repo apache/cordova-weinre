@@ -9,8 +9,6 @@
 require ./Ex
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 class Binding(receiver, method)
 
     if (receiver == null) throw new Ex(arguments, "receiver argument for Binding constructor was null")

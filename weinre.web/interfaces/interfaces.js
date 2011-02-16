@@ -32,8 +32,6 @@ if (!window.localStorage) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function onLoad() {
     e_interfaceList  = document.getElementById("interface-list")
     e_interfaceName  = document.getElementById("interface-name")
@@ -47,16 +45,12 @@ function onLoad() {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function setUpShowCheckBoxes() {
     setUpShowCheckBox(e_showIdl,        "show-Idl")
     setUpShowCheckBox(e_showJavaScript, "show-JavaScript")
     setUpShowCheckBox(e_showJava,       "show-Java")
 }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function setUpShowCheckBox(element, key) {
     var value = localStorage.getItem(key)
@@ -72,8 +66,6 @@ function setUpShowCheckBox(element, key) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function el_showCheckBoxClicked(event) {
     var element = event.target
     
@@ -83,16 +75,12 @@ function el_showCheckBoxClicked(event) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function reapplyDisplayStyles() {
     reapplyDisplayStyle(".show-Idl",        e_showIdl.checked)
     reapplyDisplayStyle(".show-JavaScript", e_showJavaScript.checked)
     reapplyDisplayStyle(".show-Java",       e_showJava.checked)
 }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function reapplyDisplayStyle(className, value) {
     value = value ? "block" : "none"
@@ -101,8 +89,6 @@ function reapplyDisplayStyle(className, value) {
     })
 }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function populateInterfacesList(intfs) {
     e_interfaceList.innerHTML = ""
@@ -133,16 +119,12 @@ function populateInterfacesList(intfs) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function el_interfaceClicked(event) {
     event.preventDefault()
 
     showInterface(event.target.interfaceName)
 }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function showInterface(interfaceName) {
     var intf = Interfaces[interfaceName]
@@ -163,8 +145,6 @@ function showInterface(interfaceName) {
 window.showInterface = showInterface
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function showInterfaceIdl(intf, html) {
     html.push("<div class='show-Idl'><h3>IDL</h3><pre>")
     html.push("interface {")
@@ -184,8 +164,6 @@ function showInterfaceIdl(intf, html) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function showInterfaceIdlMethod(method, html) {
     var line = "\n   "
     
@@ -196,8 +174,6 @@ function showInterfaceIdlMethod(method, html) {
     html.push(line)
 }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function getIdlParameterList(parameters) {
     var result = []
@@ -218,8 +194,6 @@ function getIdlParameterList(parameters) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function getIdlType(type) {
     var result
     
@@ -239,8 +213,6 @@ function getIdlType(type) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 IDL2Java = {
     string: "String",
     any:    "Object",
@@ -249,8 +221,6 @@ IDL2Java = {
     "":     "?"
 }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function getJavaType(type) {
     var result
@@ -276,8 +246,6 @@ function getJavaType(type) {
 
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function showInterfaceIdlAttribute(attribute, html) {
     var line = "<tr><td>" + Indent + "attribute "
         
@@ -287,8 +255,6 @@ function showInterfaceIdlAttribute(attribute, html) {
     
 }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function showInterfaceJavaScript(intf, html) {
     html.push("<div class='show-JavaScript'><h3>JavaScript</h3><pre>")
@@ -307,8 +273,6 @@ function showInterfaceJavaScript(intf, html) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function showInterfaceJavaScriptMethod(intf, method, html) {
     var line = ""
         
@@ -320,8 +284,6 @@ function showInterfaceJavaScriptMethod(intf, method, html) {
     html.push(line)
 }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function getJavaScriptParameterList(parameters, returnType) {
     var result = []
@@ -342,8 +304,6 @@ function getJavaScriptParameterList(parameters, returnType) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function getJavaScriptParameterListSimple(parameters, returnType) {
     var result = []
     
@@ -357,8 +317,6 @@ function getJavaScriptParameterListSimple(parameters, returnType) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function getJavaScriptCallbackParameterListSimple(parameters) {
     var result = []
     
@@ -371,8 +329,6 @@ function getJavaScriptCallbackParameterListSimple(parameters) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function showInterfaceJava(intf, html) {
     html.push("<div class='show-Java'><h3>Java</h3><pre>")
 
@@ -383,8 +339,6 @@ function showInterfaceJava(intf, html) {
     html.push("</pre></div>")
 }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function showInterfaceJavaMethod(intf, method, html) {
     var line = ""
@@ -401,8 +355,6 @@ function showInterfaceJavaMethod(intf, method, html) {
     html.push(line)
 }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function getJavaParameterList(parameters, returnType) {
     var result = []
@@ -423,8 +375,6 @@ function getJavaParameterList(parameters, returnType) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function getJavaParameterListSimple(parameters, returnType) {
     var result = []
 
@@ -439,8 +389,6 @@ function getJavaParameterListSimple(parameters, returnType) {
     return result.join(", ")
 }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function getJavaCallbackParameterListSimple(parameters) {
     var result = []
@@ -458,26 +406,18 @@ function getJavaCallbackParameterListSimple(parameters) {
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function toArray(arrayLike) {
     return [].slice.call(arrayLike)
 }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 ExBreak = new Error("breaks out of loops")
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function exBreak() {
     throw ExBreak
 }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function allowExBreak(func) {
     try {
