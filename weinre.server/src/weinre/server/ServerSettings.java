@@ -25,9 +25,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class ServerSettings {
 
     final static private String BoundHostAllConstant = "-all-";
@@ -41,26 +39,20 @@ public class ServerSettings {
     private int         deathTimeoutSeconds;
     private Properties  fileProperties;
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public ServerSettings getOptions(String[] commandLine) {
         ServerSettings settings = new ServerSettings();
         return settings.parse(commandLine);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private ServerSettings() {
         super();
         
         fileProperties = fromPropertiesFile();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private Options getOptions() {
         Options options = new Options();
        
@@ -77,9 +69,7 @@ public class ServerSettings {
         return options;
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Map<String,Object> asProperties() {
         Map<String,Object> result = new HashMap<String,Object>();
 
@@ -95,9 +85,7 @@ public class ServerSettings {
         return result;
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private Properties fromPropertiesFile() {
         Properties result = Utility.readPropertiesFile("server.properties");
         
@@ -110,10 +98,7 @@ public class ServerSettings {
         return result;
     }
 
-    
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private ServerSettings parse(String[] commandLineArgs) {
         Options options = getOptions();
 
@@ -150,9 +135,7 @@ public class ServerSettings {
         return this;
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private int getIntFromOption(CommandLine commandLine, String name, int defaultValue, int min, int max) {
         int result = defaultValue;
         
@@ -178,9 +161,7 @@ public class ServerSettings {
         return result;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private String getStringFromOption(CommandLine commandLine, String name, String defaultValue) {
         String stringValue = commandLine.getOptionValue(name);
         if (null == stringValue) {
@@ -192,9 +173,7 @@ public class ServerSettings {
         return stringValue;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private boolean getBooleanFromOption(CommandLine commandLine, String name, boolean defaultValue) {
         boolean result = defaultValue;
         
@@ -210,37 +189,27 @@ public class ServerSettings {
         return result;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void error(String message) {
         System.out.println("error with command-line option: " + message);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void printHelp(Options options) {
         new HelpFormatter().printHelp("java -jar weinre.jar [options]", options);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public int getHttpPort() {
         return httpPort;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getBoundHost() {
         return boundHost;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String[] getBoundHosts() {
         if (getBoundHostValue() != null) {
             return new String[] { getBoundHost() };
@@ -266,62 +235,46 @@ public class ServerSettings {
         return hosts.toArray(new String[]{});
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getBoundHostValue() {
         if (BoundHostAllConstant.equals(boundHost)) return null;
         
         return boundHost;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public boolean getVerbose() {
         return verbose;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public int getReadTimeoutSeconds() {
         return readTimeoutSeconds;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public int getDeathTimeoutSeconds() {
         return deathTimeoutSeconds;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public boolean useProxy() {
         return false; // useProxy;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public boolean reuseAddr() {
         return reuseAddr;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getNiceHostName() {
         String hostName = getBoundHostValue();
         if (null == hostName) return "localhost";
         return hostName;
     }
         
-    /**
-     *
-     */
+    //---------------------------------------------------------------
     @SuppressWarnings("unused")
     private String getSuperNiceHostName() {
         String hostName = getBoundHost();

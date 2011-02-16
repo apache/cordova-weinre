@@ -11,9 +11,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class ConsoleOutputStream extends OutputStream {
 
     private Main                 main;
@@ -21,16 +19,12 @@ public class ConsoleOutputStream extends OutputStream {
     private StringBuffer         stringBuffer;
     private boolean              stdout;
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public PrintStream newPrintStream(Main main, PrintStream originalStream, boolean stdout) {
         return new PrintStream(new ConsoleOutputStream(main, originalStream, stdout));
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public ConsoleOutputStream(Main main, PrintStream originalStream, boolean stdout) {
         this.main           = main;
         this.originalStream = originalStream;
@@ -38,6 +32,7 @@ public class ConsoleOutputStream extends OutputStream {
         this.stringBuffer   = new StringBuffer();
     }
     
+    //---------------------------------------------------------------
     @Override
     public void write(int c) throws IOException {
         if (c == 0x0D) return;
@@ -52,9 +47,7 @@ public class ConsoleOutputStream extends OutputStream {
         _writeLine(line);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void _writeLine(String line) {
         originalStream.println(line);
         

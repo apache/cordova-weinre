@@ -9,16 +9,12 @@ package weinre.server;
 
 import java.util.List;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class WatchDog {
 
     public static long ChannelLivelinessTimeout = 5000;
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public void start() {
 
         final WatchDog watchDog = new WatchDog();
@@ -32,16 +28,12 @@ public class WatchDog {
         thread.start();
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private WatchDog() {
         super();
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void run() {
         while(true) {
             sleep();
@@ -50,9 +42,7 @@ public class WatchDog {
         }
     }
 
-    /**
-     * Note that this is the only place channels are closed, and eventually, connectors also.
-     */
+    //---------------------------------------------------------------
     private void checkForDeadChannels() {
         List<Channel> channels = ChannelManager.$.getChannels();
         
@@ -68,9 +58,7 @@ public class WatchDog {
         }
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void sleep() {
         try {
             Thread.sleep(1000);

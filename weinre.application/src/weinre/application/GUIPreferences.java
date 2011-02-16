@@ -20,16 +20,12 @@ import org.eclipse.swt.widgets.Shell;
 import weinre.server.Main;
 
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class GUIPreferences {
     private Properties properties;
     private String     fileName;
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public GUIPreferences() {
         super();
 
@@ -55,16 +51,12 @@ public class GUIPreferences {
         loadFromFile();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getBoundsKey(Shell shell, String name) {
         return "bounds-" + name + "-" + ShellSizeTracker.getMonitorSetupKey(shell.getDisplay());        
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void loadFromFile() {
         properties.clear();
         
@@ -76,9 +68,7 @@ public class GUIPreferences {
         }
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void saveToFile() {
         if (null == fileName) return;
         
@@ -90,17 +80,13 @@ public class GUIPreferences {
         }
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getPreference(String key) {
         if (null == properties) loadFromFile();
         return properties.getProperty(key);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public JSONObject getPreferenceFromJSON(String key) throws IOException {
         String val = getPreference(key);
         if (null == val) return null;
@@ -112,16 +98,12 @@ public class GUIPreferences {
         }
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void setPreference(String key, String val) {
         properties.setProperty(key, val);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void setPreference(String key, JSONObject json) throws IOException {
         String val = json.toString();
         

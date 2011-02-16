@@ -12,9 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class ChannelManager {
 
     static final public ChannelManager $ = new ChannelManager();
@@ -22,9 +20,7 @@ public class ChannelManager {
     private Map<String, Channel>              channelMap;
     private List<ChannelManagerEventListener> eventListeners;
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private ChannelManager() {
         super();
         
@@ -32,50 +28,36 @@ public class ChannelManager {
         eventListeners = new ArrayList<ChannelManagerEventListener>();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void addEventListener(ChannelManagerEventListener listener) {
         eventListeners.add(listener);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void removeEventListener(ChannelManagerEventListener listener) {
         eventListeners.add(listener);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void fireRegisteredEvent(Channel channel) {
         for (ChannelManagerEventListener listener: eventListeners) {
             listener.channelRegistered(channel);
         }
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void fireDeregisteredEvent(Channel channel) {
         for (ChannelManagerEventListener listener: eventListeners) {
             listener.channelDeregistered(channel);
         }
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Channel getChannel(String channelName) {
         return channelMap.get(channelName);
     }
     
-    /**
-     * This version of getChannel() double-checks that the remoteAddress
-     * this request came from matches the original remoteAddress the
-     * channel was created with.
-     */
+    //---------------------------------------------------------------
     public Channel getChannel(String channelName, String remoteAddress) {
         Channel channel = getChannel(channelName);
         if (null == channel) return null;
@@ -85,16 +67,12 @@ public class ChannelManager {
         return channel;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public List<Channel> getChannels() {
         return new ArrayList<Channel>(channelMap.values());
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Channel registerChannel(String pathPrefix, String channelName, String remoteHost, String remoteAddress) {
         if (channelMap.containsKey(channelName)) return null;
         
@@ -106,9 +84,7 @@ public class ChannelManager {
         return channel;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Channel deregisterChannel(String channelName) {
         Channel channel = getChannel(channelName);
         if (null == channel) return null;

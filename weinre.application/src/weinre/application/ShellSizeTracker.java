@@ -17,9 +17,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class ShellSizeTracker {
 
     private String         name;
@@ -30,9 +28,7 @@ public class ShellSizeTracker {
     private Point          lastLocation;
     private long           lastChange;
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public String getMonitorSetupKey(final Display display) {
         StringBuffer keyBuffer = new StringBuffer();
 
@@ -59,9 +55,7 @@ public class ShellSizeTracker {
         return keyBuffer.toString();
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public ShellSizeTracker(String name, final Shell shell, GUIPreferences preferences) {
         super();
         
@@ -81,9 +75,7 @@ public class ShellSizeTracker {
         startWaiterThread();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void shellMoved() {
         dirty        = true;
         lastChange   = System.currentTimeMillis();
@@ -91,9 +83,7 @@ public class ShellSizeTracker {
         lastSize     = shell.getSize();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void checkForChanges() {
         if (!dirty) return;
         if (shell.isDisposed()) return;
@@ -122,9 +112,7 @@ public class ShellSizeTracker {
     }
 
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private Thread startWaiterThread() {
         Runnable runnable = new Runnable() {
             public void run() {

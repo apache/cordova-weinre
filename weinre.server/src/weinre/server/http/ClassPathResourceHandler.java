@@ -14,25 +14,19 @@ import java.net.URL;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.resource.Resource;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class ClassPathResourceHandler extends ResourceHandler {
 
     private String pathPrefix;
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public ClassPathResourceHandler(String pathPrefix) {
         super();
         
         this.pathPrefix = pathPrefix;
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Resource getResource(String path) throws MalformedURLException {
         if ((path == null) || !path.startsWith("/")) {
             throw new MalformedURLException(path);

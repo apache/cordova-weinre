@@ -16,11 +16,7 @@ import org.eclipse.jetty.util.log.StdErrLog;
 
 import weinre.server.http.HttpServer;
 
-
-
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class Main {
     
     private static ServerSettings  Settings;
@@ -30,32 +26,29 @@ public class Main {
     private PrintStream  consoleStdout;
     private PrintStream  consoleStderr;
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public void main(String[] args) throws Throwable {
         Main main = new Main(args);
         
         main.run();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public ServerSettings getSettings() {
         return Settings;
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
+    static public boolean isDebug() {
+        return Settings.getVerbose();
+    }
+
+    //---------------------------------------------------------------
     static public void warn(  String message ) { Logger.warn(message);  }
     static public void info(  String message ) { Logger.info(message);  }
     static public void debug( String message ) { Logger.debug(message); }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Main(String[] args) {
         super();
         
@@ -69,18 +62,14 @@ public class Main {
         System.setErr(consoleStderr);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void run() throws Throwable, Exception {
         httpServerStart();
         httpServerWaitTillDone();
         exit();
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public int exit() {
         if (null != server) {
             try {
@@ -103,9 +92,7 @@ public class Main {
         return 0;
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void httpServerStart() {
         // get the default logger - this should be the first thing to touch the log
         Logger defaultLog = Log.getLog();
@@ -131,9 +118,7 @@ public class Main {
         MessageHandler.start();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void httpServerWaitTillDone() {
         try {
             server.join();
@@ -143,21 +128,15 @@ public class Main {
         }
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void serverStarted() {
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void addServerConsoleMessage(String line, boolean stdout) {
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public int severeError(String message) {
         Logger.warn(message);
         Logger.warn("exiting...");

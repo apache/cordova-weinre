@@ -19,9 +19,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class Channel {
     
     private String                pathPrefix;
@@ -35,9 +33,7 @@ public class Channel {
     private String                remoteHost;
     private String                remoteAddress;
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Channel(String pathPrefix, String name, String remoteHost, String remoteAddress) {
         this.pathPrefix         = pathPrefix;
         this.name               = name;
@@ -51,37 +47,27 @@ public class Channel {
         this.lastRead           = System.currentTimeMillis();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Connector getConnector() {
         return connector;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getRemoteHost() {
         return remoteHost;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getRemoteAddress() {
         return remoteAddress;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     protected void _setConnector(Connector connector) {
         this.connector = connector;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void sendCallback(String intfName, String callbackId, Object... args) throws IOException {
         if (callbackId == null) return;
         
@@ -92,9 +78,7 @@ public class Channel {
         sendEvent(intfName, "sendCallback", innerArgs.toArray());
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void sendEvent(String intfName, String methodName, Object... args) {
         Main.debug(getName() + ": send " + intfName + "." + methodName + "()");
         
@@ -119,15 +103,10 @@ public class Channel {
         this.postResponse(responseString);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Object getService(String name) {
         try {
             return getService_(name);
-        }
-        catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
         catch (InstantiationException e) {
             throw new RuntimeException(e);
@@ -137,29 +116,29 @@ public class Channel {
         }
     }
     
-    /**
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
-     * 
-     */
+    //---------------------------------------------------------------
     @SuppressWarnings("rawtypes")
-    private Object getService_(String name) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Object result = serviceMap.get(name);
-        if (null != result) return result;
+    private Object getService_(String name) throws InstantiationException, IllegalAccessException {
+        if (serviceMap.containsKey(name)) return serviceMap.get(name);
         
         String klassName = "weinre.server.service." + name;
-        Class klass = Class.forName(klassName);
-        if (null == klass) throw new ClassNotFoundException("class not found: " + klassName);
+        Class  klass = null;
+        try {
+            klass = Class.forName(klassName);
+        }
+        catch (ClassNotFoundException e) {
+            Main.debug("service class not found: " + klassName);
+            serviceMap.put(name, null);
+            return null;
+        }
         
-        result = klass.newInstance();
+        Object result = klass.newInstance();
         serviceMap.put(name, result);
         Main.debug("loaded service class: " + klassName);
         return result;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void close() {
         isClosed = true;
         requestQueue.shutdown();
@@ -168,62 +147,46 @@ public class Channel {
         ChannelManager.$.deregisterChannel(name);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public boolean isClosed() {
         return isClosed;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getPathPrefix() {
         return pathPrefix;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getName() {
         return name;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public long getLastRead() {
         return lastRead;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void updateLastRead() {
         lastRead = System.currentTimeMillis();
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void postRequest(String json) {
         if (isClosed()) return;
         
         requestQueue.add(json);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void postResponse(String json) {
         if (isClosed()) return;
         
         responseQueue.add(json);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public List<String> getRequests(int timeoutSeconds) throws InterruptedException {
         if (isClosed()) return new LinkedList<String>();
         
@@ -232,9 +195,7 @@ public class Channel {
         return result;
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public List<String> getResponses(int timeoutSeconds) throws InterruptedException {
         if (isClosed()) return new LinkedList<String>();
         
@@ -243,9 +204,7 @@ public class Channel {
         return result;
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String toString() {
         return getClass().getName() + "{" + pathPrefix + ":" + name + "}";
     }

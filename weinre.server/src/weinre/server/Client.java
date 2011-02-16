@@ -11,38 +11,28 @@ import org.apache.wink.json4j.JSONArray;
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class Client extends Connector {
 
     private Target connectedTarget;
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Client(Channel channel) {
         super(channel);
         _register();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public boolean isClient() {
         return true;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Target getConnectedTarget() {
         return connectedTarget;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     protected void _connect(Target target) {
         if (null == target) return;
         
@@ -56,9 +46,7 @@ public class Client extends Connector {
         }
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     protected void _disconnect(Target target) {
         if (null == target) return;
         
@@ -72,9 +60,7 @@ public class Client extends Connector {
         }
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public JSONObject getDescription() {
       JSONObject result = new JSONObject();
       

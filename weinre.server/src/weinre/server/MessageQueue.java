@@ -27,9 +27,7 @@ public class MessageQueue<E> {
     private boolean          closed;
     private Object           closeLock;
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public MessageQueue() {
         super();
         
@@ -38,9 +36,7 @@ public class MessageQueue<E> {
         closeLock = new Object();
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void shutdown() {
         synchronized(closeLock) {
             if (closed) return;
@@ -50,9 +46,7 @@ public class MessageQueue<E> {
         }
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void add(E item) {
         synchronized(closeLock) {
             if (closed) throw new IllegalStateException("the blocking queue is closed");
@@ -61,9 +55,7 @@ public class MessageQueue<E> {
         queue.add(item);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public List<E> getAll(int timeout, TimeUnit timeUnit) throws InterruptedException {
         synchronized(closeLock) {
             if (closed) throw new IllegalStateException("the blocking queue is closed");
@@ -91,9 +83,7 @@ public class MessageQueue<E> {
         return result;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String toString()  {
         return getClass().getName() + "{" + queue.size() + "}";
     }

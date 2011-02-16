@@ -14,18 +14,14 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.wink.json4j.JSONObject;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 abstract public class Connector {
 
     static final protected Lock Lock = new ReentrantLock();
     
     private Channel channel;
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Connector(Channel channel) {
         super();
         
@@ -33,31 +29,23 @@ abstract public class Connector {
         channel._setConnector(this);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     protected void _register() {
         if (isClient()) ConnectionManager.$.addClient((Client) this);
         if (isTarget()) ConnectionManager.$.addTarget((Target) this);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Channel getChannel() {
         return channel;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getName() {
         return channel.getName();
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public List<Connector> getConnections() {
         List<Connector> result = new ArrayList<Connector>();
         
@@ -79,35 +67,25 @@ abstract public class Connector {
         return result;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     abstract public JSONObject getDescription();
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public boolean isClosed() {
         return channel.isClosed();
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public boolean isClient() {
         return false;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public boolean isTarget() {
         return false;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String toString() {
         return getClass().getName() + "{" + channel + "}";
     }

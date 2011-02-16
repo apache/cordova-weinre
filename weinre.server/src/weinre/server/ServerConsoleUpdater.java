@@ -7,21 +7,15 @@
 
 package weinre.server;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class ServerConsoleUpdater {
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public ServerConsoleUpdater() {
         super();
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public boolean addServerConsoleMessage(String message, boolean stdout) {
         return false;
     }

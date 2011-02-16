@@ -15,24 +15,17 @@ import weinre.server.ChannelManager;
 import weinre.server.Main;
 import weinre.server.Target;
 
-
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class WeinreTargetCommands {
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void registerTarget(Channel channel, String url, String callbackId) throws IOException {
         Target target = new Target(channel, url);
         
         channel.sendCallback("WeinreTargetEvents", callbackId, target.getName());
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     @SuppressWarnings("unchecked")
     public void sendClientCallback(Channel channel, String clientCallbackId, Object args, String callbackId) throws IOException {
         Object[] argsArray;
@@ -58,9 +51,7 @@ public class WeinreTargetCommands {
         channel.sendCallback("WeinreClientEvents", clientCallbackId, argsArray);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private String getCallbackConnectorId(String callbackId) {
         int index = callbackId.indexOf("::");
         return callbackId.substring(0, index);

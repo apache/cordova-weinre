@@ -16,14 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class FilteredRequestLogHandler extends RequestLogHandler {
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int status = baseRequest.getResponse().getStatus();

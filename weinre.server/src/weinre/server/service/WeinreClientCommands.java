@@ -18,15 +18,10 @@ import weinre.server.ConnectionManager;
 import weinre.server.Main;
 import weinre.server.Target;
 
-
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class WeinreClientCommands {
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void registerClient(Channel channel, String callbackId) throws IOException {
         Client client = new Client(channel);
         
@@ -34,9 +29,7 @@ public class WeinreClientCommands {
         channel.sendEvent("WeinreClientEvents", "serverProperties", Main.getSettings().asProperties());
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void getTargets(Channel channel, String callbackId) throws IOException {
         List<Target> targets = ConnectionManager.$.getTargets();
         JSONArray targetResults = new JSONArray();
@@ -48,9 +41,7 @@ public class WeinreClientCommands {
         channel.sendCallback("WeinreClientEvents", callbackId, targetResults);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void getClients(Channel channel, String callbackId) throws IOException {
         List<Client> clients = ConnectionManager.$.getClients();
         JSONArray clientResults = new JSONArray();
@@ -62,9 +53,7 @@ public class WeinreClientCommands {
         channel.sendCallback("WeinreClientEvents", callbackId, clientResults);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void connectTarget(Channel channel, String clientId, String targetId, String callbackId) {
         Client client = ConnectionManager.$.getClient(clientId);
         if (client == null) return;
@@ -75,9 +64,7 @@ public class WeinreClientCommands {
         ConnectionManager.$.connect(client, target);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void disconnectTarget(Channel channel, String clientId, String callbackId) {
         Client client = ConnectionManager.$.getClient(clientId);
         if (client == null) return;

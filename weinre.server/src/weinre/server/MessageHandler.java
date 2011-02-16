@@ -16,14 +16,10 @@ import org.apache.wink.json4j.JSONArray;
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class MessageHandler {
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public void start() {
         final MessageHandler messageHandler = new MessageHandler();
         
@@ -45,15 +41,11 @@ public class MessageHandler {
         thread.start();
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private MessageHandler() {
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void handleMessages() throws InterruptedException {
         List<Channel> channels = ChannelManager.$.getChannels();
         
@@ -116,21 +108,28 @@ public class MessageHandler {
         }
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private void serviceMethodInvoker(Channel channel, String intfName, String methodName, JSONArray argsJSON) {
         Object service;
-        String methodSignature = intfName + "." + methodName + "(" + argsJSON.toString() + ")";
 
-        Main.debug(channel.getName() + ": recv " + methodSignature);
+        String methodSignature = intfName + "." + methodName + "()";
+
+        if (Main.isDebug()) {
+            String methodSignatureParms = intfName + "." + methodName + "(" + argsJSON.toString() + ")";
+            Main.debug(channel.getName() + ": recv " + methodSignatureParms);
+        }
         
         try {
             service = channel.getService(intfName);
         }
         catch (RuntimeException e) {
             Main.warn("unable to get service object for: " + methodSignature + "; " + e);
+            return;
+        }
+        
+        if (null == service) {
+            redirectToConnections(channel, intfName, methodName, argsJSON);
             return;
         }
         
@@ -145,6 +144,7 @@ public class MessageHandler {
                 Main.warn("invalid number of parameters specified for : " + methodSignature);
                 return;
             }
+            
             args.add(0, channel);
             
             try {
@@ -167,41 +167,21 @@ public class MessageHandler {
             
             return;
         }
-        
-        Method dnuMethod;
-        try {
-            dnuMethod = serviceClass.getMethod("__doesNotUnderstand", Channel.class, String.class, JSONArray.class);
-        } 
-        catch (SecurityException e) {
-            Main.warn("security exception looking up method __doesNotUnderstand invoking : " + methodSignature + "; " + e);
-            return;
-        } 
-        catch (NoSuchMethodException e) {
-            Main.warn("no __doesNotUnderstand method found while invoking : " + methodSignature + "; " + e);
-            return;
-        }
-        
-        Object[] dnuArgs = new Object[3];
-        dnuArgs[0] = channel;
-        dnuArgs[1] = methodName;
-        try {
-            dnuArgs[2] = new JSONArray(args);
-        } catch (JSONException e1) {
-            throw new RuntimeException(e1);
-        }
-        
-        try {
-            dnuMethod.invoke(service, dnuArgs);
-        } 
-        catch (IllegalArgumentException e) {
-            Main.warn("illegal argument exception invoking __doesNotUnderstand invoking: " + methodSignature + "; " + e);
-        } 
-        catch (IllegalAccessException e) {
-            Main.warn("illegal access exception invoking __doesNotUnderstand invoking: " + methodSignature + "; " + e);
-        } 
-        catch (InvocationTargetException e) {
-            Main.warn("invocation target exception invoking __doesNotUnderstand invoking: " + methodSignature + "; " + e);
-        }
+
+        Main.warn("no method found to invoke for: " + methodSignature);
     }
+
+    //---------------------------------------------------------------
+    private void redirectToConnections(Channel channel, String interfaceName, String methodName, JSONArray args) {
+        Connector connector = channel.getConnector();
+        if (null == connector) return;
+        
+        List<Connector> connections = connector.getConnections();
+        
+        for (Connector connection: connections) {
+            connection.getChannel().sendEvent(interfaceName, methodName, args.toArray());
+        } 
+    }
+
     
 }

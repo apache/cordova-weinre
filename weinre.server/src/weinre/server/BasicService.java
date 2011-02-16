@@ -12,28 +12,22 @@ import java.util.List;
 
 import org.apache.wink.json4j.JSONArray;
 
-
+//-------------------------------------------------------------------
 public abstract class BasicService {
 
     public static String lastActivePanelName;
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public BasicService() {
         super();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getInterfaceName() {
         return getClass().getSimpleName();
     }
     
-    /**
-     * forwards all requests to connected peers 
-     */
+    //---------------------------------------------------------------
     public void __doesNotUnderstand(Channel channel, String methodName, JSONArray args) throws IOException {
         Connector connector = channel.getConnector();
         if (null == connector) return;

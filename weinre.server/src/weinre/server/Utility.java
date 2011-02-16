@@ -14,21 +14,15 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Properties;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class Utility {
     
     static private int SequenceNumber = 1 + new SecureRandom().nextInt(Integer.MAX_VALUE - 1);
 
-    /**
-     * class may not be instantiated
-     */
+    //---------------------------------------------------------------
     private Utility() {}
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public synchronized int getNextSequenceNumber() {
         int result = SequenceNumber;
         
@@ -37,9 +31,7 @@ public class Utility {
         return result;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public String reverse(String string) {
         char[] responseChars = string.toCharArray();
         
@@ -51,9 +43,7 @@ public class Utility {
         return String.valueOf(responseChars);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public byte[] reverse(byte[] data, int offset, int length) {
         byte[] response = new byte[length];
         
@@ -64,9 +54,7 @@ public class Utility {
         return response;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public Properties readPropertiesFile(String fileName) {
         Properties result = new Properties();
         
@@ -101,9 +89,7 @@ public class Utility {
         return result;
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public void writePropertiesFile(String fileName, Properties properties) {
         String userHome = System.getProperty("user.home");
         if (null == userHome) {

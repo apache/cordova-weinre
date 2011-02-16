@@ -32,10 +32,7 @@ import org.eclipse.swt.widgets.Text;
 import weinre.server.Main;
 import weinre.server.ServerSettings;
 
-
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class GUIMain extends Main {
     private Display        display;
     private Shell          shell;
@@ -45,26 +42,20 @@ public class GUIMain extends Main {
     private Color          red;
     private GUIPreferences preferences;
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     static public void main(String[] args) {
         GUIMain main = new GUIMain(args);
         main.run();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public GUIMain(String[] args) {
         super(args);
         
         preferences = new GUIPreferences();
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void run() {
         uiBuild();
 
@@ -81,16 +72,12 @@ public class GUIMain extends Main {
         exit();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public GUIPreferences getPreferences() {
         return preferences;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void uiBuild() {
         Display.setAppName("weinre");
         Display.setAppVersion("???");
@@ -160,9 +147,7 @@ public class GUIMain extends Main {
         
     }
  
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void createMenuBar() {
 //        Menu menu = new Menu(shell, SWT.BAR);
 //        shell.setMenuBar(menu);
@@ -172,9 +157,7 @@ public class GUIMain extends Main {
 //        editMenuItem.setText("Edit");
      }        
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void uiRun() {
         shell.open();
         
@@ -185,9 +168,7 @@ public class GUIMain extends Main {
         display.dispose();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public CTabItem createTabItem(CTabFolder tabFolder, String text) {
         CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
         tabItem.setText(text);
@@ -206,9 +187,7 @@ public class GUIMain extends Main {
         return tabItem;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void fillParent(Control control, int marginT, int marginR, int marginB, int marginL ) {
         FormLayout formLayout = new FormLayout();
         
@@ -228,9 +207,7 @@ public class GUIMain extends Main {
         control.setLayoutData(formData);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void serverStarted() {
         debugger.getDisplay().asyncExec(new Runnable() {
             public void run() {
@@ -240,9 +217,7 @@ public class GUIMain extends Main {
         });
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getBrowserURL() {
         String result;
         
@@ -257,9 +232,7 @@ public class GUIMain extends Main {
     }
     
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void addServerConsoleMessage(final String line, final boolean stdout) {
         if (null == console) return;
         
@@ -286,9 +259,7 @@ public class GUIMain extends Main {
     }
     
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     @Override
     public int severeError(final String message) {
         if (null == display) return super.severeError(message);
@@ -318,9 +289,7 @@ public class GUIMain extends Main {
         return 0;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private Font getMonospaceFont(Control control) {
         FontData[] fontData = control.getDisplay().getFontList(null, true);
         
@@ -341,6 +310,7 @@ public class GUIMain extends Main {
         return new Font(control.getDisplay(), fontFound);
     }
     
+    //---------------------------------------------------------------
     private FontData findFontNamed(FontData[] fontData, String name) {
         for (FontData fontDatum: fontData) {
             if (fontDatum.getStyle() != SWT.NORMAL) continue;
@@ -350,6 +320,7 @@ public class GUIMain extends Main {
         return null;
     }
     
+    //---------------------------------------------------------------
     @SuppressWarnings("unused")
     private void dumpFontData(FontData[] fontData) {
         for (FontData fontDatum: fontData) {

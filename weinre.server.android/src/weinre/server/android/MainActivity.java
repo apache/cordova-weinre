@@ -6,7 +6,7 @@ import android.os.Bundle;
 import weinre.server.Main;
 import weinre.server.android.R;
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
 public class MainActivity extends Activity {
     
     private Main main;

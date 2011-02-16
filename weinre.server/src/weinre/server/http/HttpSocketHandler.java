@@ -28,17 +28,12 @@ import weinre.server.ChannelManager;
 import weinre.server.Main;
 import weinre.server.Utility;
 
-
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class HttpSocketHandler extends AbstractHandler {
     private String pathPrefix; 
     private int    pathPrefixParts;
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public HttpSocketHandler(String pathPrefix) {
         super();
         
@@ -46,9 +41,7 @@ public class HttpSocketHandler extends AbstractHandler {
         this.pathPrefixParts = pathPrefix.split("/").length;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // ! * pathPrefix*
@@ -121,18 +114,14 @@ public class HttpSocketHandler extends AbstractHandler {
         response.sendError(405);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void setCORSHeaders(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Max-Age", "600");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST");
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void setCacheHeaders(HttpServletResponse response) {
         response.setHeader("Pragma",        "no-cache");
         response.setHeader("Expires",       "0");
@@ -140,17 +129,13 @@ public class HttpSocketHandler extends AbstractHandler {
         response.setHeader("Cache-Control", "no-store");
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void handleOptions(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setStatus(200);
         response.setContentType("text/plain");
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void handleCreate(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String channelName = "" + Utility.getNextSequenceNumber();
         
@@ -164,9 +149,7 @@ public class HttpSocketHandler extends AbstractHandler {
         oStream.close();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void handleGet(String channelName, String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Channel channel = ChannelManager.$.getChannel(channelName, request.getRemoteAddr());
         if (null == channel) {
@@ -193,9 +176,7 @@ public class HttpSocketHandler extends AbstractHandler {
         oStream.close();
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void printJSONList(ServletOutputStream oStream, List<String> json) throws IOException {
         try {
             oStream.print(new JSONArray(json).toString());
@@ -205,9 +186,7 @@ public class HttpSocketHandler extends AbstractHandler {
         }
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void handlePost(String channelName, String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Channel channel = ChannelManager.$.getChannel(channelName, request.getRemoteAddr());
         if (null == channel) {
@@ -239,9 +218,7 @@ public class HttpSocketHandler extends AbstractHandler {
         response.getOutputStream().close();
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private String readRequestBody(InputStream is) throws IOException {
         StringBuffer stringBuffer = new StringBuffer();
         Reader       reader       = new InputStreamReader(is, "UTF-8");

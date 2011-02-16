@@ -29,9 +29,7 @@ import org.eclipse.jetty.server.handler.HandlerWrapper;
 */
 public class DebugHandler extends HandlerWrapper {
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void handle(String target, Request request, HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws IOException, ServletException {
         try {
             getHandler().handle(target, request, servletRequest, servletResponse);
@@ -45,9 +43,7 @@ public class DebugHandler extends HandlerWrapper {
         dump(System.out, target, request, response);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void dump(PrintStream oStream, String target, Request request, Response response) {
         oStream.println("----------------------------------------------------------");
         oStream.println("target: " + target);
@@ -60,9 +56,7 @@ public class DebugHandler extends HandlerWrapper {
         oStream.println("   status: " + response.getStatus());
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     @SuppressWarnings("rawtypes")
     private void dumpHeaders(PrintStream oStream, Request request) {
         Enumeration e = request.getHeaderNames();

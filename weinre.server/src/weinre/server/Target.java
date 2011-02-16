@@ -15,17 +15,13 @@ import org.apache.wink.json4j.JSONArray;
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class Target extends Connector {
 
     private List<Client> connectedClients;
     private String       url;
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Target(Channel channel, String url) {
         super(channel);
         
@@ -35,23 +31,17 @@ public class Target extends Connector {
 
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public String getURL() {
         return this.url;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public boolean isTarget() {
         return true;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public List<Client> getConnectedClients() {
         List<Client> result = new LinkedList<Client>();
         
@@ -66,9 +56,7 @@ public class Target extends Connector {
         return result;
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     protected void _connect(Client client) {
         if (null == client) return;
         
@@ -84,9 +72,7 @@ public class Target extends Connector {
         }
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     protected void _disconnect(Client client) {
         if (null == client) return;
         
@@ -102,9 +88,7 @@ public class Target extends Connector {
         }
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public JSONObject getDescription() {
         JSONObject result = new JSONObject();
         
@@ -119,6 +103,5 @@ public class Target extends Connector {
         
         return result;
     }
-    
     
 }

@@ -21,12 +21,13 @@ import org.eclipse.jetty.util.component.LifeCycle;
 import weinre.server.Main;
 import weinre.server.ServerSettings;
 
-
+//-------------------------------------------------------------------
 public class HttpServer {
 
     private Main           main;
     private ServerSettings settings;
     
+    //---------------------------------------------------------------
     public HttpServer(Main main, ServerSettings settings) {
         super();
         
@@ -34,6 +35,7 @@ public class HttpServer {
         this.settings = settings;
     }
     
+    //---------------------------------------------------------------
     public Server run() throws Exception {
         String hostName     = settings.getBoundHostValue();
         String niceHostName = settings.getNiceHostName();

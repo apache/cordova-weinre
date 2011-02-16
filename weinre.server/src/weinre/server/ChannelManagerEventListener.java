@@ -7,18 +7,12 @@
 
 package weinre.server;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public interface ChannelManagerEventListener {
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void channelRegistered(Channel channel);
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void channelDeregistered(Channel channel);
 }

@@ -22,16 +22,18 @@ import org.eclipse.jetty.servlets.ProxyServlet;
 import weinre.server.Main;
 import weinre.server.ServerSettings;
 
-
+//-------------------------------------------------------------------
 public class ProxyServer {
     private ServerSettings settings;
     
+    //---------------------------------------------------------------
     public ProxyServer(ServerSettings settings) {
         super();
         
         this.settings = settings;
     }
     
+    //---------------------------------------------------------------
     public void run() throws Exception {
         SelectChannelConnector connector = new SelectChannelConnector();
 

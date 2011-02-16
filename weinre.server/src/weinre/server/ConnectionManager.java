@@ -13,9 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 
- */
+//-------------------------------------------------------------------
 public class ConnectionManager {
 
     static final public ConnectionManager $ = new ConnectionManager();
@@ -24,9 +22,7 @@ public class ConnectionManager {
     private Map<String,Target> targetMap;
     private boolean            listening = false; 
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private ConnectionManager() {
         super();
         
@@ -34,9 +30,7 @@ public class ConnectionManager {
         targetMap = Collections.synchronizedMap(new HashMap<String,Target>());
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void startChannelListener() {
         if (listening) return;
         listening = true;
@@ -58,55 +52,41 @@ public class ConnectionManager {
         });
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void addClient(Client client) {
         clientMap.put(client.getName(), client);
         _sendAllClientsEvent("WeinreClientEvents", "clientRegistered", client.getDescription());
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void addTarget(Target target) {
         targetMap.put(target.getName(), target);
         _sendAllClientsEvent("WeinreClientEvents", "targetRegistered", target.getDescription());
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void _removeClient(Client client) {
         _sendAllClientsEvent("WeinreClientEvents", "clientUnregistered", client.getName());
         clientMap.remove(client.getName());
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void _removeTarget(Target target) {
         _sendAllClientsEvent("WeinreClientEvents", "targetUnregistered", target.getName());
         targetMap.remove(target.getName());
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Client getClient(String id) {
         return clientMap.get(id);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public Target getTarget(String id) {
         return targetMap.get(id);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public List<Client> getClients() {
         List<Client> result = new ArrayList<Client>();
         
@@ -115,9 +95,7 @@ public class ConnectionManager {
         return result;
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public List<Target> getTargets() {
         List<Target> result = new ArrayList<Target>();
         
@@ -126,9 +104,7 @@ public class ConnectionManager {
         return result;
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void connect(Client client, Target target) {
         if ((client == null) || (target == null)) return;
 
@@ -143,9 +119,7 @@ public class ConnectionManager {
         _sendConnectionCreatedEvent(client, target);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     public void disconnect(Client client, Target target) {
         if ((client == null) || (target == null)) return;
 
@@ -155,23 +129,17 @@ public class ConnectionManager {
         _sendConnectionDestroyedEvent(client, target);
     }
 
-    /*
-     * 
-     */
+    //---------------------------------------------------------------
     private void _sendConnectionCreatedEvent(Client client, Target target) {
         _sendConnectionEvent(client, target, "connectionCreated");
     }
     
-    /*
-     * 
-     */
+    //---------------------------------------------------------------
     private void _sendConnectionDestroyedEvent(Client client, Target target) {
         _sendConnectionEvent(client, target, "connectionDestroyed");
     }
     
-    /*
-     * 
-     */
+    //---------------------------------------------------------------
     private void _sendConnectionEvent(Client client, Target target, String message) {
         String clientName = client.getChannel().getName();
         String targetName = target.getChannel().getName();
@@ -180,18 +148,14 @@ public class ConnectionManager {
         target.getChannel().sendEvent("WeinreTargetEvents", message, clientName, targetName);
     }
     
-    /*
-     * 
-     */
+    //---------------------------------------------------------------
     private void _sendAllClientsEvent(String intfName, String message, Object... args) {
         for (Client aClient: getClients()) {
             aClient.getChannel().sendEvent(intfName, message, args);
         }
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     protected void closeConnector(Connector connector) {
         if (null == connector) return;
         
@@ -199,9 +163,7 @@ public class ConnectionManager {
         if (connector.isTarget()) _closeTarget((Target)connector);
     }
 
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void _closeClient(Client client) {
         if (null == client) return;
 
@@ -213,9 +175,7 @@ public class ConnectionManager {
         _removeClient(client);
     }
     
-    /**
-     * 
-     */
+    //---------------------------------------------------------------
     private void _closeTarget(Target target) {
         if (null == target) return;
 
