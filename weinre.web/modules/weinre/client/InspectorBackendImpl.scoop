@@ -8,13 +8,13 @@
 
 requireClass ../common/Ex
 requireClass ../common/IDLTools
-requireClass ../common/Socket
+requireClass ../common/MessageDispatcher
 requireClass ../common/Weinre
 
 //-----------------------------------------------------------------------------
 class InspectorBackendImpl
     this.registeredDomainDispatchers = {}
-    Socket.setInspectorBackend(this)
+    MessageDispatcher.setInspectorBackend(this)
 
 //-----------------------------------------------------------------------------
 static method setupProxies
@@ -36,7 +36,7 @@ static method setupProxies
     ]
 
     intfNames.forEach(function(intfName) {
-        var proxy = Weinre.webSocket.createProxy(intfName)
+        var proxy = Weinre.messageDispatcher.createProxy(intfName)
         
         var intf = IDLTools.getIDL(intfName)
         if (!intf) {

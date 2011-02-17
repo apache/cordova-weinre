@@ -9,7 +9,7 @@
 requireClass ../common/IDLTools
 requireClass ../common/Callback
 requireClass ../common/Weinre
-requireClass ../common/Socket
+requireClass ../common/MessageDispatcher
 requireClass ../common/Binding
 
 requireClass ./InspectorBackendImpl
@@ -58,17 +58,17 @@ method initialize
     window.addEventListener("load", Binding(this, "onLoaded"), false)
 
     // create the socket
-    var webSocket = new Socket("../ws/client")
-    Weinre.webSocket = webSocket
+    var messageDispatcher = new MessageDispatcher("../ws/client")
+    Weinre.messageDispatcher = messageDispatcher
 
     // finish setting up InspectorBackend
     InspectorBackendImpl.setupProxies()
 
     // create the client commands proxy
-    Weinre.WeinreClientCommands = webSocket.createProxy("WeinreClientCommands")
+    Weinre.WeinreClientCommands = messageDispatcher.createProxy("WeinreClientCommands")
 
     // register WebInspector interface
-    webSocket.registerInterface("WebInspector", WebInspector, false)
+    messageDispatcher.registerInterface("WebInspector", WebInspector, false)
 
 //-----------------------------------------------------------------------------
 method uiAvailable
@@ -119,12 +119,12 @@ method onLoaded
 
     this._installRemotePanel()
 
-    var webSocket = Weinre.webSocket
+    var messageDispatcher = Weinre.messageDispatcher
     
 //  Weinre.Socket.verbose(true)
     
-    webSocket.registerInterface("WeinreClientEvents",    new WeinreClientEventsImpl(this), true)
-    webSocket.registerInterface("InspectorFrontendHost", InspectorFrontendHost, true)
+    messageDispatcher.registerInterface("WeinreClientEvents",    new WeinreClientEventsImpl(this), true)
+    messageDispatcher.registerInterface("InspectorFrontendHost", InspectorFrontendHost, true)
 
     Weinre.WeinreClientCommands.registerClient(Binding(this, this.cb_registerClient))
 
@@ -139,7 +139,7 @@ method cb_registerClient(clientId)
         WebInspector.panels.remote.afterInitialConnection()
     }
     
-    Weinre.webSocket.getWebSocket().addEventListener("close", Binding(this, this.cb_webSocketClosed))
+    Weinre.messageDispatcher.getWebSocket().addEventListener("close", Binding(this, this.cb_webSocketClosed))
 
 //-----------------------------------------------------------------------------
 method cb_webSocketClosed

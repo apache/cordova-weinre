@@ -9,7 +9,7 @@
 requireClass ../common/Ex
 requireClass ../common/Binding
 requireClass ../common/Callback
-requireClass ../common/Socket
+requireClass ../common/MessageDispatcher
 requireClass ../common/Weinre
 
 requireClass ./NodeStore
@@ -92,8 +92,8 @@ method initialize()
     
     window.addEventListener("load", Binding(this, "onLoaded"), false)
 
-    var webSocket = new Socket(window.WeinreServerURL + "ws/target")
-    Weinre.webSocket = webSocket
+    var messageDispatcher = new MessageDispatcher(window.WeinreServerURL + "ws/target")
+    Weinre.messageDispatcher = messageDispatcher
 
     Weinre.wi = {}
     
@@ -111,39 +111,36 @@ method initialize()
     Weinre.wi.Profiler         = new WiProfilerImpl()
     Weinre.wi.Runtime          = new WiRuntimeImpl()
     
-    webSocket.registerInterface("ApplicationCache", Weinre.wi.ApplicationCache , true)
-    webSocket.registerInterface("BrowserDebugger" , Weinre.wi.BrowserDebugger  , true)
-    webSocket.registerInterface("Console",          Weinre.wi.Console          , true)
-    webSocket.registerInterface("CSS",              Weinre.wi.CSS              , true)
-    webSocket.registerInterface("Database",         Weinre.wi.Database         , true)
-    webSocket.registerInterface("Debugger",         Weinre.wi.Debugger         , true)
-    webSocket.registerInterface("DOM",              Weinre.wi.DOM              , true)
-    webSocket.registerInterface("DOMStorage",       Weinre.wi.DOMStorage       , true)
-    webSocket.registerInterface("InjectedScript",   Weinre.wi.InjectedScript   , true)
-    webSocket.registerInterface("Inspector",        Weinre.wi.Inspector        , true)
-    webSocket.registerInterface("Network",          Weinre.wi.Network          , true)
-    webSocket.registerInterface("Profiler",         Weinre.wi.Profiler         , true)
-    webSocket.registerInterface("Runtime",          Weinre.wi.Runtime          , true)
+    messageDispatcher.registerInterface("ApplicationCache", Weinre.wi.ApplicationCache , true)
+    messageDispatcher.registerInterface("BrowserDebugger" , Weinre.wi.BrowserDebugger  , true)
+    messageDispatcher.registerInterface("Console",          Weinre.wi.Console          , true)
+    messageDispatcher.registerInterface("CSS",              Weinre.wi.CSS              , true)
+    messageDispatcher.registerInterface("Database",         Weinre.wi.Database         , true)
+    messageDispatcher.registerInterface("Debugger",         Weinre.wi.Debugger         , true)
+    messageDispatcher.registerInterface("DOM",              Weinre.wi.DOM              , true)
+    messageDispatcher.registerInterface("DOMStorage",       Weinre.wi.DOMStorage       , true)
+    messageDispatcher.registerInterface("InjectedScript",   Weinre.wi.InjectedScript   , true)
+    messageDispatcher.registerInterface("Inspector",        Weinre.wi.Inspector        , true)
+    messageDispatcher.registerInterface("Network",          Weinre.wi.Network          , true)
+    messageDispatcher.registerInterface("Profiler",         Weinre.wi.Profiler         , true)
+    messageDispatcher.registerInterface("Runtime",          Weinre.wi.Runtime          , true)
     
-    webSocket.registerInterface("WeinreTargetEvents", new WeinreTargetEventsImpl(), true)
+    messageDispatcher.registerInterface("WeinreTargetEvents", new WeinreTargetEventsImpl(), true)
 
-    Weinre.wi.ApplicationCacheNotify = webSocket.createProxy("ApplicationCacheNotify")
-    Weinre.wi.ConsoleNotify          = webSocket.createProxy("ConsoleNotify")
-    Weinre.wi.DOMNotify              = webSocket.createProxy("DOMNotify")
-    Weinre.wi.DOMStorageNotify       = webSocket.createProxy("DOMStorageNotify")
-    Weinre.wi.DatabaseNotify         = webSocket.createProxy("DatabaseNotify")
-    Weinre.wi.DebuggerNotify         = webSocket.createProxy("DebuggerNotify")
-    Weinre.wi.InspectorNotify        = webSocket.createProxy("InspectorNotify")
-    Weinre.wi.NetworkNotify          = webSocket.createProxy("NetworkNotify")
-    Weinre.wi.ProfilerNotify         = webSocket.createProxy("ProfilerNotify")
-    Weinre.wi.TimelineNotify         = webSocket.createProxy("TimelineNotify")
+    Weinre.wi.ApplicationCacheNotify = messageDispatcher.createProxy("ApplicationCacheNotify")
+    Weinre.wi.ConsoleNotify          = messageDispatcher.createProxy("ConsoleNotify")
+    Weinre.wi.DOMNotify              = messageDispatcher.createProxy("DOMNotify")
+    Weinre.wi.DOMStorageNotify       = messageDispatcher.createProxy("DOMStorageNotify")
+    Weinre.wi.DatabaseNotify         = messageDispatcher.createProxy("DatabaseNotify")
+    Weinre.wi.DebuggerNotify         = messageDispatcher.createProxy("DebuggerNotify")
+    Weinre.wi.InspectorNotify        = messageDispatcher.createProxy("InspectorNotify")
+    Weinre.wi.NetworkNotify          = messageDispatcher.createProxy("NetworkNotify")
+    Weinre.wi.ProfilerNotify         = messageDispatcher.createProxy("ProfilerNotify")
+    Weinre.wi.TimelineNotify         = messageDispatcher.createProxy("TimelineNotify")
     
-    Weinre.WeinreTargetCommands  = webSocket.createProxy("WeinreTargetCommands")
-//  window.WebInspector          = webSocket.createProxy("WebInspector")
+    Weinre.WeinreTargetCommands  = messageDispatcher.createProxy("WeinreTargetCommands")
 
-//  Weinre.Socket.verbose(true)
-//  webSocket.open()
-    webSocket._socket.addEventListener("open", Binding(this, this.cb_webSocketOpened))
+    messageDispatcher.getWebSocket().addEventListener("open", Binding(this, this.cb_webSocketOpened))
     
     Weinre.nodeStore = new NodeStore()
     Weinre.cssStore  = new CSSStore()
