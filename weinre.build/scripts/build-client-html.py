@@ -14,8 +14,6 @@ import json
 import optparse
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def main():
     if len(sys.argv) < 2:
         error("expecting parameters [web directory]")
@@ -32,8 +30,6 @@ def main():
     
     createIndexFile(iFileName, oFileName, moduleDir)
 
-#--------------------------------------------------------------------
-#
 #--------------------------------------------------------------------
 def createIndexFile(iFileName, oFileName, moduleDir):
     with open(iFileName) as iFile: lines = iFile.readlines()
@@ -86,8 +82,6 @@ def createIndexFile(iFileName, oFileName, moduleDir):
     log("created %s" % oFileName)
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def getModules(moduleDir):
     modules = []
     
@@ -98,24 +92,17 @@ def getModules(moduleDir):
         modules.append("weinre/client/%s" % module)
 
     return modules
-    
         
-#--------------------------------------------------------------------
-#
 #--------------------------------------------------------------------
 def log(message):
     message = "%s: %s" % (PROGRAM_NAME, message)
     print >>sys.stderr, message
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def error(message):
     log(message)
     sys.exit(-1)
 
-#--------------------------------------------------------------------
-#
 #--------------------------------------------------------------------
 PROGRAM_NAME = os.path.basename(sys.argv[0])
 

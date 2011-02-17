@@ -5,7 +5,6 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-
 (function() {
     var InspectorBackendImpl = require("weinre/client/InspectorBackendImpl")
     window.InspectorBackend = new InspectorBackendImpl()

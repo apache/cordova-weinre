@@ -6,11 +6,9 @@
  * Copyright (c) 2011 IBM Corporation
  */
 
-require ../common/Binding
-require ../common/Weinre
+requireClass ../common/Binding
+requireClass ../common/Weinre
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 class ElementHighlighter
     this.boxMargin  = document.createElement("div")
@@ -57,8 +55,6 @@ class ElementHighlighter
     document.body.appendChild(this.boxMargin)
     
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method on(element)
     if (null == element) return
     if (element.nodeType != Node.ELEMENT_NODE) return
@@ -67,19 +63,13 @@ method on(element)
     this.boxMargin.style.display = "block"
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method off
     this.boxMargin.style.display = "none"
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 getter element
     return this.boxMargin
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method calculateMetrics(element)
 
@@ -105,10 +95,6 @@ method calculateMetrics(element)
     this.boxContent.style.bottom = metrics.paddingBottom + "px"
     this.boxContent.style.right  = metrics.paddingRight  + "px"
     
-    
-    
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 function getMetrics(element)
     var result = {}
@@ -165,8 +151,6 @@ function getMetrics(element)
 
     return result
     
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 function fromPx(string) 
     return parseInt(string.replace(/px$/,""))

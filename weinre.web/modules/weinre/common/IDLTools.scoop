@@ -6,24 +6,18 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ./Ex
-require ./Callback
+requireClass ./Ex
+requireClass ./Callback
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 class IDLTools
     throw new Ex(arguments, "this class is not intended to be instantiated")
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-static
+init
     var IDLs = {}
     IDLTools._idls = IDLs
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static method addIDLs(idls)
     idls.forEach(function(idl){
@@ -34,13 +28,9 @@ static method addIDLs(idls)
     })
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 static method getIDL(name)
     return IDLs[name]
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static method getIDLsMatching(regex)
     var results = []
@@ -53,8 +43,6 @@ static method getIDLsMatching(regex)
     }
     return results
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static method validateAgainstIDL(klass, interfaceName)
     var intf = IDLTools.getIDL(interfaceName)
@@ -100,8 +88,6 @@ static method validateAgainstIDL(klass, interfaceName)
     })
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 static method buildProxyForIDL(proxyObject, interfaceName)
     var intf = IDLTools.getIDL(interfaceName)
     var messagePrefix = "building proxy for IDL " + interfaceName + ": "
@@ -111,8 +97,6 @@ static method buildProxyForIDL(proxyObject, interfaceName)
         proxyObject[intfMethod.name] = getProxyMethod(intf, intfMethod)
     })
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function getProxyMethod(intf, method)
     var result = function proxyMethod() {

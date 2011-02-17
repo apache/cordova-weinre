@@ -6,114 +6,66 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ../common/IDLTools
-require ../common/Callback
-require ../common/Weinre
-require ../common/Socket
-require ../common/Binding
+requireClass ../common/IDLTools
+requireClass ../common/Callback
+requireClass ../common/Weinre
+requireClass ../common/MessageDispatcher
+requireClass ../common/Binding
 
-require ./InspectorBackendImpl
-require ./InspectorFrontendHostImpl
-require ./WeinreClientEventsImpl
-require ./RemotePanel
+requireClass ./InspectorBackendImpl
+requireClass ./InspectorFrontendHostImpl
+requireClass ./WeinreClientEventsImpl
+requireClass ./RemotePanel
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 class Client
     this.initialize()
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-static
+init
     var AutoConnect = true
     
     Weinre.showNotImplemented()
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-static method autoConnect(value)
-    if (arguments.length >= 1) {
-        AutoConnect = !!value
-        
-        if (Client.uiAvailable) {
-            WebInspector.panels.remote.autoConnect(AutoConnect)
-        }
-    }
-
-    return AutoConnect
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-method autoConnect(value)
-    if (arguments.length >= 1) {
-        return Client.autoConnect(value)
-    }
-    else {
-        return Client.autoConnect()
-    }
-
-//-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method initialize
 
     // validate InspectorFrontendHost against IDL
-    IDLTools.validateAgainstIDL(InspectorFrontendHostImpl, 'InspectorFrontendHost')
+    // IDLTools.validateAgainstIDL(InspectorFrontendHostImpl, 'InspectorFrontendHost')
 
     // add a load handler for the window
     window.addEventListener("load", Binding(this, "onLoaded"), false)
 
     // create the socket
-    var webSocket = new Socket("../ws/client")
-    Weinre.webSocket = webSocket
+    var messageDispatcher = new MessageDispatcher("../ws/client")
+    Weinre.messageDispatcher = messageDispatcher
 
     // finish setting up InspectorBackend
     InspectorBackendImpl.setupProxies()
 
     // create the client commands proxy
-    Weinre.WeinreClientCommands = webSocket.createProxy("WeinreClientCommands")
+    Weinre.WeinreClientCommands = messageDispatcher.createProxy("WeinreClientCommands")
 
     // register WebInspector interface
-    webSocket.registerInterface("WebInspector", WebInspector, false)
+    messageDispatcher.registerInterface("WebInspector", WebInspector, false)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method uiAvailable
     return WebInspector.panels && WebInspector.panels.remote
     
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
-method _installRemotePanelEventually
-    var self = this
-    
-    setTimeout(function() {
-        var wait = false
-        if (!WebInspector.applicationSettings) wait = true
-        
-        if (wait) {
-            self._installRemotePanelEventually()
-            return
-        }
-        
-        self._installRemotePanel()
-    }, 10)
+method autoConnect(value)
+    if (arguments.length >= 1) {
+        AutoConnect = !!value
+    }
 
+    return AutoConnect
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method _installRemotePanel
-
     WebInspector.panels.remote = new RemotePanel();
     
     var panel   = WebInspector.panels.remote;
-    panel.autoConnect(Client.autoConnect())
     
     var toolbar = document.getElementById("toolbar")
     WebInspector.addPanelToolbarIcon(toolbar, panel, toolbar.childNodes[1])
@@ -131,23 +83,19 @@ method _installRemotePanel
     if (button) button.style.display = "none"
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method onLoaded
 
     this._installRemotePanel()
 
-    var webSocket = Weinre.webSocket
+    var messageDispatcher = Weinre.messageDispatcher
     
 //  Weinre.Socket.verbose(true)
     
-    webSocket.registerInterface("WeinreClientEvents",    new WeinreClientEventsImpl(this), true)
-    webSocket.registerInterface("InspectorFrontendHost", InspectorFrontendHost, true)
+    messageDispatcher.registerInterface("WeinreClientEvents",    new WeinreClientEventsImpl(this), false)
+    messageDispatcher.registerInterface("InspectorFrontendHost", InspectorFrontendHost, false)
 
     Weinre.WeinreClientCommands.registerClient(Binding(this, this.cb_registerClient))
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method cb_registerClient(clientId)
     Weinre.clientId = clientId
@@ -159,10 +107,8 @@ method cb_registerClient(clientId)
         WebInspector.panels.remote.afterInitialConnection()
     }
     
-    Weinre.webSocket.getWebSocket().addEventListener("close", Binding(this, this.cb_webSocketClosed))
+    Weinre.messageDispatcher.getWebSocket().addEventListener("close", Binding(this, this.cb_webSocketClosed))
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method cb_webSocketClosed
     
@@ -173,8 +119,6 @@ method cb_webSocketClosed
         WebInspector.currentPanel = WebInspector.panels.remote 
     }, 1000)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static method main
     Weinre.client = new Client()

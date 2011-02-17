@@ -6,14 +6,12 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ../common/Binding
-require ../common/Weinre
+requireClass ../common/Binding
+requireClass ../common/Weinre
 
-require ./ConnectorList
-require ./DOMTemplates as dt
+requireClass ./ConnectorList
+requireClass ./DOMTemplates as dt
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 class RemotePanel < WebInspector.Panel
     super("remote")
@@ -21,20 +19,7 @@ class RemotePanel < WebInspector.Panel
     this.initialize()
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-method autoConnect(value)
-    if (arguments.length >= 1) {
-        this._autoConnect = !!value
-    }
-
-    return this._autoConnect
-
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method initialize()
-    this.autoConnect(false)
     
     // main div
     var div = dt.DIV()
@@ -73,8 +58,6 @@ method initialize()
     this.reset();
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method addClient(client) 
     this.clientList.add(client)
     
@@ -100,19 +83,13 @@ method setTargetState(id, state)
     this.targetList.setState(id, state)
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method getNewestTargetId(ignoring)
     return this.targetList.getNewestConnectorId(ignoring)
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method afterInitialConnection
     this.clientList.afterInitialConnection()
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method reset
     this.clientList.removeAll()
@@ -122,21 +99,17 @@ method reset
     Weinre.WeinreClientCommands.getClients(Binding(this, "cb_getClients"))
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method connectionClosed
     this.clientList.removeAll()
     this.targetList.removeAll()
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method cb_getTargets(targets)
     targets.forEach(function(target) {
         this.addTarget(target)
     }, this)
    
-    if (!this.autoConnect()) return
+    if (!Weinre.client.autoConnect()) return
     
     var newestTargetId = this.getNewestTargetId()
     if (!newestTargetId) return
@@ -145,51 +118,35 @@ method cb_getTargets(targets)
     
     
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method cb_getClients(clients)
     clients.forEach(function(client) {
         this.addClient(client)
     }, this)
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 getter toolbarItemClass
     return "remote"
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 getter toolbarItemLabel
     return "Remote"
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 getter statusBarItems
     return []
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 getter defaultFocusedElement
     return this.contentElement
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method show
     super()
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method hide()
     super()
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method setServerProperties(properties)
     var table = "<table>"
@@ -220,13 +177,9 @@ method setServerProperties(properties)
 //=============================================================================
     
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 class TargetList < ConnectorList
     super("Targets")
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method getListItem(target)
     var self = this
@@ -247,8 +200,6 @@ method getListItem(target)
     return item
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method connectToTarget(targetId, event)
     if (event) {
         event.preventDefault()
@@ -267,22 +218,16 @@ method connectToTarget(targetId, event)
 //=============================================================================
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 class ClientList < ConnectorList
     super("Clients")
 
     this.noneItem.innerHTML = "Waiting for connection..."
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method afterInitialConnection()
     this.noneItem.innerHTML = "Connection lost, reload this page to reconnect."
     this.noneItem.addStyleClass("error")
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method getListItem(client)
     var text = client.hostName + " [id: " + client.id + "]"

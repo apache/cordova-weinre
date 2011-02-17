@@ -6,15 +6,15 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ../common/Ex
-require ../common/IDLTools
-require ../common/Socket
-require ../common/Weinre
+requireClass ../common/Ex
+requireClass ../common/IDLTools
+requireClass ../common/MessageDispatcher
+requireClass ../common/Weinre
 
 //-----------------------------------------------------------------------------
 class InspectorBackendImpl
     this.registeredDomainDispatchers = {}
-    Socket.setInspectorBackend(this)
+    MessageDispatcher.setInspectorBackend(this)
 
 //-----------------------------------------------------------------------------
 static method setupProxies
@@ -36,16 +36,22 @@ static method setupProxies
     ]
 
     intfNames.forEach(function(intfName) {
-        var proxy = Weinre.webSocket.createProxy(intfName)
+        var proxy = Weinre.messageDispatcher.createProxy(intfName)
+        if (window[intfName]) {
+            throw new Ex(arguments, "backend interface '" + intfName + "' already created")
+        }
         
         var intf = IDLTools.getIDL(intfName)
         if (!intf) {
             throw new Ex(arguments, "interface not registered: '" + intfName + "'")
         }
+
+        window[intfName] = {}
         
         intf.methods.forEach(function(method) {
             var proxyMethod = InspectorBackendImpl.getProxyMethod(proxy, method)
             InspectorBackendImpl.prototype[method.name] = proxyMethod
+            window[intfName][method.name] = proxyMethod
         })
     })
     

@@ -6,27 +6,21 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ./Ex
-require ./Weinre
-require ./EventListeners
+requireClass ./Ex
+requireClass ./Weinre
+requireClass ./EventListeners
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 class WebSocketXhr(url)
     this.initialize(url)
     
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-static
+init
     WebSocketXhr.CONNECTING = 0
     WebSocketXhr.OPEN       = 1
     WebSocketXhr.CLOSING    = 2
     WebSocketXhr.CLOSED     = 3
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method initialize(url)
     this.readyState      = WebSocketXhr.CONNECTING 
@@ -45,13 +39,9 @@ method initialize(url)
     this._getChannel()
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method _getChannel
     this._xhr(this._url, "POST", "", this._handleXhrResponseGetChannel)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method _handleXhrResponseGetChannel(xhr)
     if (xhr.status != 200) return this._handleXhrResponseError(xhr)
@@ -84,16 +74,12 @@ method _handleXhrResponseGetChannel(xhr)
     this._readLoop()
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method _readLoop
     if (this.readyState == WebSocketXhr.CLOSED) return
     if (this.readyState == WebSocketXhr.CLOSING) return
     
     this._xhr(this._urlChannel, "GET", "", this._handleXhrResponseGet)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method _handleXhrResponseGet(xhr)
     var self = this
@@ -119,8 +105,6 @@ method _handleXhrResponseGet(xhr)
     })
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method send(data)
     if (typeof data != "string") throw new Ex(arguments, this.constructor.name + "." + this.caller)
 
@@ -129,8 +113,6 @@ method send(data)
     if (this._sendInProgress) return
     this._sendQueued();
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method _sendQueued
     if (this._queuedSends.length == 0) return
@@ -145,8 +127,6 @@ method _sendQueued
     this._xhr(this._urlChannel, "POST", datum, this._handleXhrResponseSend)
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method _handleXhrResponseSend(xhr)
     var httpSocket = this
     
@@ -155,8 +135,6 @@ method _handleXhrResponseSend(xhr)
     this._sendInProgress = false
     window.setTimeout(function() {httpSocket._sendQueued()}, 0)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method close
     this._sendInProgress = true
@@ -168,19 +146,13 @@ method close
     this.readyState = WebSocketXhr.CLOSED
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method addEventListener(type, listener, useCapture)
     this._getListeners(type).add(listener, useCapture)
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method removeEventListener(type, listener, useCapture)
     this._getListeners(type).remove(listener, useCapture)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method _fireEventListeners(type, event)
     if (this.readyState == WebSocketXhr.CLOSED) return
@@ -189,16 +161,12 @@ method _fireEventListeners(type, event)
     this._getListeners(type).fire(event)
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method _getListeners(type)
     var listeners = this._listeners[type]
     if (null == listeners) throw new Ex(arguments, "invalid event listener type: '" + type + "'")
     
     return listeners
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method _handleXhrResponseError(xhr)
     if (xhr.status == 404) {
@@ -215,8 +183,6 @@ method _handleXhrResponseError(xhr)
     console.log("error from XHR invocation: " + xhr.status + ": " + xhr.statusText)
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method _xhr(url, method, data, handler)
     if (null == handler) throw new Ex(arguments, "handler must not be null")
     
@@ -230,8 +196,6 @@ method _xhr(url, method, data, handler)
     xhr.setRequestHeader("Content-Type", "text/plain")
     xhr.send(data)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function _xhrEventHandler(event)
     var xhr = event.target

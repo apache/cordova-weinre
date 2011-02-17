@@ -7,7 +7,7 @@
  */
 
 //-----------------------------------------------------------------------------
-// creates functions of the form _H1_, _H2_, etc, that create a new element
+// creates functions of the form H1, H2, etc, as static methods that create a new element
 // of the specified name.  The function can take a variable number of arguments,
 // which are either child elements, strings, attributes, or properties of the element.
 //
@@ -19,19 +19,11 @@
 //      (the resulting property name doesn't include "$")
 //-----------------------------------------------------------------------------
 
-require ../common/Ex
+requireClass ../common/Ex
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 class DOMTemplates
 
-static 
-    var ElementNames = "H1 H2 H3 H4 H5 H6 UL OL DL LI DT DD SPAN DIV A B I TT P HR BR PRE IMG CANVAS TABLE TR TD FORM INPUT BUTTON SELECT OPTGROUP OPTION TEXTAREA"
-    ElementNames = ElementNames.split(" ")
-
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function getElementFunction(elementName)
     return function() {
@@ -49,19 +41,13 @@ function getElementFunction(elementName)
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function addToElement_String(element, aString)
     addToElement_Node(element, document.createTextNode(aString))
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 function addToElement_Node(element, anElement)
     element.appendChild(anElement)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 function addToElement_Object(element, anObject)
     for (var key in anObject) {
@@ -79,9 +65,10 @@ function addToElement_Object(element, anObject)
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-static 
-    ElementNames.forEach(function(elementName) {
+init 
+    var elementNames = "H1 H2 H3 H4 H5 H6 UL OL DL LI DT DD SPAN DIV A B I TT P HR BR PRE IMG CANVAS TABLE TR TD FORM INPUT BUTTON SELECT OPTGROUP OPTION TEXTAREA"
+    elementNames = elementNames.split(" ")
+    
+    elementNames.forEach(function(elementName) {
         DOMTemplates[elementName] = getElementFunction(elementName)
     })

@@ -6,7 +6,7 @@
  * Copyright (c) 2011 IBM Corporation
  */
 
-require ../common/Weinre
+requireClass ../common/Weinre
 
 //-----------------------------------------------------------------------------
 class WiDOMImpl
@@ -73,12 +73,10 @@ method getEventListenersForNode(/*int*/ nodeId, callback)
     // callback: function(/*int*/ outNodeId, /*any[]*/ listenersArray)
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method copyNode(/*int*/ nodeId, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method removeNode(/*int*/ nodeId, callback)
@@ -145,18 +143,15 @@ method performSearch(/*string*/ query, /*boolean*/ runSynchronously, callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method searchCanceled(callback)
     // callback: function()
     Weinre.notImplemented(arguments.callee.signature)
 
-
 //-----------------------------------------------------------------------------
 method pushNodeByPathToFrontend(/*string*/ path, callback)
     // callback: function(/*int*/ nodeId)
     Weinre.notImplemented(arguments.callee.signature)
-
 
 //-----------------------------------------------------------------------------
 method resolveNode(/*int*/ nodeId, callback)
