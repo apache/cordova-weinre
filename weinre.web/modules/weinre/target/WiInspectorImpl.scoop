@@ -13,8 +13,11 @@ class WiInspectorImpl
 
 //-----------------------------------------------------------------------------
 method reloadPage(callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
+
+    window.location.reload()
 
 //-----------------------------------------------------------------------------
 method highlightDOMNode(/*int*/ nodeId, callback)

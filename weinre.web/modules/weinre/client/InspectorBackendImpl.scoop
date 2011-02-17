@@ -37,15 +37,21 @@ static method setupProxies
 
     intfNames.forEach(function(intfName) {
         var proxy = Weinre.messageDispatcher.createProxy(intfName)
+        if (window[intfName]) {
+            throw new Ex(arguments, "backend interface '" + intfName + "' already created")
+        }
         
         var intf = IDLTools.getIDL(intfName)
         if (!intf) {
             throw new Ex(arguments, "interface not registered: '" + intfName + "'")
         }
+
+        window[intfName] = {}
         
         intf.methods.forEach(function(method) {
             var proxyMethod = InspectorBackendImpl.getProxyMethod(proxy, method)
             InspectorBackendImpl.prototype[method.name] = proxyMethod
+            window[intfName][method.name] = proxyMethod
         })
     })
     

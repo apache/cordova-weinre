@@ -25,6 +25,8 @@ method connectionCreated(/*string*/ clientId, /*string*/ targetId)
         console.log(message)
     }
     
+    Weinre.showNotImplemented()
+
     Weinre.target.setDocument()
 
 //-----------------------------------------------------------------------------

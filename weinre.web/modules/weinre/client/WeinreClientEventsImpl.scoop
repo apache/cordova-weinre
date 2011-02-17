@@ -25,7 +25,7 @@ method targetRegistered(targetDescription)
         WebInspector.panels.remote.addTarget(targetDescription)
     }
     
-    if (!this.client.autoConnect()) return
+    if (!Weinre.client.autoConnect()) return
     
     Weinre.WeinreClientCommands.connectTarget(Weinre.clientId, targetDescription.id)
 
@@ -63,7 +63,7 @@ method connectionDestroyed(/*int*/ clientId, /*int*/ targetId)
     
     Weinre.targetId = null
     
-    if (!this.client.autoConnect()) return
+    if (!Weinre.client.autoConnect()) return
     if (!this.client.uiAvailable()) return
     
     var nextTargetId = WebInspector.panels.remote.getNewestTargetId(targetId)

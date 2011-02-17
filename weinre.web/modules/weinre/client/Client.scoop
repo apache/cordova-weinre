@@ -28,27 +28,6 @@ init
     Weinre.showNotImplemented()
 
 //-----------------------------------------------------------------------------
-static method autoConnect(value)
-    if (arguments.length >= 1) {
-        AutoConnect = !!value
-        
-        if (Client.uiAvailable) {
-            WebInspector.panels.remote.autoConnect(AutoConnect)
-        }
-    }
-
-    return AutoConnect
-
-//-----------------------------------------------------------------------------
-method autoConnect(value)
-    if (arguments.length >= 1) {
-        return Client.autoConnect(value)
-    }
-    else {
-        return Client.autoConnect()
-    }
-
-//-----------------------------------------------------------------------------
 method initialize
 
     // validate InspectorFrontendHost against IDL
@@ -75,29 +54,18 @@ method uiAvailable
     return WebInspector.panels && WebInspector.panels.remote
     
 //-----------------------------------------------------------------------------
-method _installRemotePanelEventually
-    var self = this
-    
-    setTimeout(function() {
-        var wait = false
-        if (!WebInspector.applicationSettings) wait = true
-        
-        if (wait) {
-            self._installRemotePanelEventually()
-            return
-        }
-        
-        self._installRemotePanel()
-    }, 10)
+method autoConnect(value)
+    if (arguments.length >= 1) {
+        AutoConnect = !!value
+    }
 
+    return AutoConnect
 
 //-----------------------------------------------------------------------------
 method _installRemotePanel
-
     WebInspector.panels.remote = new RemotePanel();
     
     var panel   = WebInspector.panels.remote;
-    panel.autoConnect(Client.autoConnect())
     
     var toolbar = document.getElementById("toolbar")
     WebInspector.addPanelToolbarIcon(toolbar, panel, toolbar.childNodes[1])

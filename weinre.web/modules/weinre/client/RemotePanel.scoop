@@ -19,16 +19,7 @@ class RemotePanel < WebInspector.Panel
     this.initialize()
 
 //-----------------------------------------------------------------------------
-method autoConnect(value)
-    if (arguments.length >= 1) {
-        this._autoConnect = !!value
-    }
-
-    return this._autoConnect
-
-//-----------------------------------------------------------------------------
 method initialize()
-    this.autoConnect(false)
     
     // main div
     var div = dt.DIV()
@@ -118,7 +109,7 @@ method cb_getTargets(targets)
         this.addTarget(target)
     }, this)
    
-    if (!this.autoConnect()) return
+    if (!Weinre.client.autoConnect()) return
     
     var newestTargetId = this.getNewestTargetId()
     if (!newestTargetId) return

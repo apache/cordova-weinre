@@ -33,7 +33,7 @@ method add(connector)
         this.noneItem.style.display = "none"
     }
     
-    li.addStyleClass("fadeable")
+    li.addStyleClass("weinre-fadeable")
     
     var insertionPoint = this.getConnectorInsertionPoint(connector)
     if (!insertionPoint) {
@@ -86,7 +86,7 @@ method remove(id, fast)
 
     else {
         this.setState(element, "closed")
-        element.addStyleClass("fade")
+        element.addStyleClass("weinre-fade")
 
         window.setTimeout(function() {
             self._remove(element)

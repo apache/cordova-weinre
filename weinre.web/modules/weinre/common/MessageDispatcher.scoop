@@ -42,10 +42,6 @@ static method verbose(value)
     return Verbose
 
 //-----------------------------------------------------------------------------
-method open
-    Weinre.deprecated()
-
-//-----------------------------------------------------------------------------
 method _open
     if (this._opened || this._opening) return
     if (this._closed) throw new Ex(arguments, "socket has already been closed")
@@ -165,16 +161,24 @@ method _handleMessage(message)
         intf = InspectorBackend.getRegisteredDomainDispatcher(intfName.substr(0,intfName.length-6))
     }
     
-    if (!intf) throw new Ex(arguments, "request for non-registered interface:" + methodSignature)
+    if (!intf) {
+        console.log("weinre: request for non-registered interface:" + methodSignature)
+        return
+    }
+    
+    methodSignature = intf.constructor.name + "." + methodName + "()"
     
     var method = intf[methodName]
-    if (typeof method != "function") throw new Ex(arguments, "request for unknown method on interface: " + methodSignature)
+    if (typeof method != "function") {
+        Weinre.notImplemented(methodSignature)
+        return
+    }
     
     try {
         method.apply(intf, args)
     }
     catch (e) {
-        console.log("Weinre.Socket._handleMessage() invocation exception on " + methodSignature + ": " + e)
+        console.log("weinre: invocation exception on " + methodSignature + ": " + e)
     }
     
     if (Verbose) {

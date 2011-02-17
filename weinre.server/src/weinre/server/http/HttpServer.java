@@ -50,11 +50,8 @@ public class HttpServer {
         Server server = new Server();
         server.setConnectors(new Connector[] { connector });
         server.addLifeCycleListener(new LifeCycle.Listener() {
-            public void lifeCycleStarting(LifeCycle event) {
-                main.serverStarted();
-            }
-
-            public void lifeCycleStarted(LifeCycle event) {}
+            public void lifeCycleStarting(LifeCycle event) {}
+            public void lifeCycleStarted(LifeCycle event) { main.serverStarted(); }
             public void lifeCycleFailure(LifeCycle event, Throwable cause) {}
             public void lifeCycleStopping(LifeCycle event) {}
             public void lifeCycleStopped(LifeCycle event) {}

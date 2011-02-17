@@ -13,13 +13,9 @@ class InjectedScriptHostImpl
 
 //-----------------------------------------------------------------------------
 method clearConsoleMessages(callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method copyText(/*string*/ text, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
 
 //-----------------------------------------------------------------------------
 method nodeForId(/*int*/ nodeId, callback)
@@ -41,36 +37,6 @@ method inspectedNode(/*int*/ num, callback)
     // callback: function()
     var nodeId = Weinre.nodeStore.getInspectedNode(num)
     return nodeId
-
-//-----------------------------------------------------------------------------
-method currentCallFrame(callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method selectDatabase(/*any*/ database, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method selectDOMStorage(/*any*/ storage, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method didCreateWorker(/*int*/ id, /*string*/ url, /*boolean*/ isFakeWorker, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method didDestroyWorker(/*int*/ id, callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method nextWorkerId(callback)
-    // callback: function()
-    Weinre.notImplemented(arguments.callee.signature)
 
 //-----------------------------------------------------------------------------
 method internalConstructorName(object)

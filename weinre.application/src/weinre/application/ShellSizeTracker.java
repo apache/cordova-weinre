@@ -27,9 +27,15 @@ public class ShellSizeTracker {
     private Point          lastSize;
     private Point          lastLocation;
     private long           lastChange;
+    private boolean        stop;
 
     //---------------------------------------------------------------
-    static public String getMonitorSetupKey(final Display display) {
+    static public String getBoundsKey(Shell shell, String name) {
+        return "bounds-" + name + "-" + ShellSizeTracker.getMonitorSetupKey(shell.getDisplay());        
+    }
+    
+    //---------------------------------------------------------------
+    static private String getMonitorSetupKey(final Display display) {
         StringBuffer keyBuffer = new StringBuffer();
 
         Monitor[] monitors = display.getMonitors();
@@ -65,16 +71,25 @@ public class ShellSizeTracker {
         this.dirty        = false;
         this.lastSize     = new Point(0,0);
         this.lastLocation = new Point(0,0);
+        this.stop         = false;
         
         shell.addControlListener(new ControlListener() {
             public void controlMoved(ControlEvent e)   {shellMoved();}
             public void controlResized(ControlEvent e) {shellMoved();}
         });
         
-        System.out.println("monitor key: " + getMonitorSetupKey(shell.getDisplay()));
-        startWaiterThread();
     }
 
+    //---------------------------------------------------------------
+    public void start() {
+        startWaiterThread();
+    }
+    
+    //---------------------------------------------------------------
+    public void stop() {
+        
+    }
+    
     //---------------------------------------------------------------
     private void shellMoved() {
         dirty        = true;
@@ -101,13 +116,10 @@ public class ShellSizeTracker {
         }
         
         String key;
-        String val;
-        key = preferences.getBoundsKey(shell, name);
-        val = valueJSON.toString();
+        key = ShellSizeTracker.getBoundsKey(shell, name);
         
-        preferences.setPreference(key, val);
-        preferences.saveToFile();
-        
+        preferences.setPreference(key, valueJSON);
+
         dirty = false;
     }
 
@@ -119,6 +131,7 @@ public class ShellSizeTracker {
                 while (true) {
                     try { Thread.sleep(1000); } catch(InterruptedException e) { return; }
                     
+                    if (stop) return;
                     if (shell.isDisposed()) return;
                     
                     shell.getDisplay().asyncExec(new Runnable() {

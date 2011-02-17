@@ -7,88 +7,31 @@
 
 package weinre.application;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
-import org.eclipse.swt.widgets.Shell;
 
-import weinre.server.Main;
+import weinre.server.Utility;
 
 
 //-------------------------------------------------------------------
 public class GUIPreferences {
+    static final private String PROPERTIES_FILE_NAME = "ui.properties";
+    
     private Properties properties;
-    private String     fileName;
     
     //---------------------------------------------------------------
     public GUIPreferences() {
         super();
 
-        properties = new Properties();
-        fileName   = null;
-        
-        String userHome = System.getProperty("user.home");
-        if (null == userHome) {
-            Main.warn("System property user.home not set!");
-            return;
-        }
-        
-        File dir = new File(userHome, ".weinre");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        
-        File file = new File(dir, "ui.properties");
-        fileName = file.getAbsolutePath();
-        
-        if (!file.exists()) return;
-        
-        loadFromFile();
-    }
-
-    //---------------------------------------------------------------
-    public String getBoundsKey(Shell shell, String name) {
-        return "bounds-" + name + "-" + ShellSizeTracker.getMonitorSetupKey(shell.getDisplay());        
+        properties = Utility.readPropertiesFile(PROPERTIES_FILE_NAME);
     }
     
     //---------------------------------------------------------------
-    public void loadFromFile() {
-        properties.clear();
-        
-        try {
-            properties.load(new FileReader(fileName));
-        }
-        catch (IOException e) {
-            Main.warn("IOException reading '" + fileName + "': " + e);
-        }
-    }
-
-    //---------------------------------------------------------------
-    public void saveToFile() {
-        if (null == fileName) return;
-        
-        try {
-            properties.store(new FileWriter(fileName), "ui settings");
-        }
-        catch (IOException e) {
-            Main.warn("IOException writing '" + fileName + "': " + e);
-        }
-    }
-    
-    //---------------------------------------------------------------
-    public String getPreference(String key) {
-        if (null == properties) loadFromFile();
-        return properties.getProperty(key);
-    }
-    
-    //---------------------------------------------------------------
-    public JSONObject getPreferenceFromJSON(String key) throws IOException {
-        String val = getPreference(key);
+    public JSONObject getPreference(String key) throws IOException {
+        String val = properties.getProperty(key);
         if (null == val) return null;
 
         try {
@@ -99,15 +42,11 @@ public class GUIPreferences {
     }
     
     //---------------------------------------------------------------
-    public void setPreference(String key, String val) {
-        properties.setProperty(key, val);
-    }
-
-    //---------------------------------------------------------------
-    public void setPreference(String key, JSONObject json) throws IOException {
+    public void setPreference(String key, JSONObject json) {
         String val = json.toString();
         
         properties.setProperty(key, val);
+        Utility.writePropertiesFile(PROPERTIES_FILE_NAME, properties);
     }
 
 }

@@ -43,11 +43,11 @@ static method notImplemented(thing)
     _notImplemented[thing] = true
     
     if (!_showNotImplemented) return
-    console.log(thing + " not implemented")
+    console.log("weinre: " + thing + " not implemented")
 
 //-----------------------------------------------------------------------------
 static method showNotImplemented()
     _showNotImplemented = true
     for (var key in _notImplemented) {
-        console.log(key + " not implemented")
+        console.log("weinre: " + key + " not implemented")
     }
