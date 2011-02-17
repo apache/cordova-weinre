@@ -16,43 +16,6 @@ class InspectorFrontendHostImpl
 
 //-----------------------------------------------------------------------------
 method loaded
-    // WebInspector.Settings.initialize()
-    
-//-----------------------------------------------------------------------------
-method closeWindow
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method disconnectFromBackend
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method bringToFront
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method inspectedURLChanged(newURL)
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method requestAttachWindow
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method requestDetachWindow
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method setAttachedWindowHeight(height)
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method moveWindowBy(x, y)
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
-method setExtensionAPI(script)
-    Weinre.notImplemented(arguments.callee.signature)
 
 //-----------------------------------------------------------------------------
 method localizedStringsURL
@@ -64,20 +27,12 @@ method hiddenPanels
 //    return "audits,profiles,resources,scripts,timeline,network"
 
 //-----------------------------------------------------------------------------
-method copyText(text)
-    Weinre.notImplemented(arguments.callee.signature)
-
-//-----------------------------------------------------------------------------
 method platform
     return "weinre"
 
 //-----------------------------------------------------------------------------
 method port
     return "weinre"
-
-//-----------------------------------------------------------------------------
-method showContextMenu(event, items)
-    Weinre.notImplemented(arguments.callee.signature)
 
 //-----------------------------------------------------------------------------
 method sendMessageToBackend(message)

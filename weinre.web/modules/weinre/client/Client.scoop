@@ -52,7 +52,7 @@ method autoConnect(value)
 method initialize
 
     // validate InspectorFrontendHost against IDL
-    IDLTools.validateAgainstIDL(InspectorFrontendHostImpl, 'InspectorFrontendHost')
+    // IDLTools.validateAgainstIDL(InspectorFrontendHostImpl, 'InspectorFrontendHost')
 
     // add a load handler for the window
     window.addEventListener("load", Binding(this, "onLoaded"), false)
@@ -123,8 +123,8 @@ method onLoaded
     
 //  Weinre.Socket.verbose(true)
     
-    messageDispatcher.registerInterface("WeinreClientEvents",    new WeinreClientEventsImpl(this), true)
-    messageDispatcher.registerInterface("InspectorFrontendHost", InspectorFrontendHost, true)
+    messageDispatcher.registerInterface("WeinreClientEvents",    new WeinreClientEventsImpl(this), false)
+    messageDispatcher.registerInterface("InspectorFrontendHost", InspectorFrontendHost, false)
 
     Weinre.WeinreClientCommands.registerClient(Binding(this, this.cb_registerClient))
 

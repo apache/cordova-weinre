@@ -19,26 +19,12 @@ requireClass ./InjectedScriptHostImpl
 
 requireClass ./WeinreTargetEventsImpl
 
-// require ./WebInspectorApplicationCacheHandlerImpl
-// require ./WebInspectorBackendHandlerImpl
-// require ./WebInspectorControllerHandlerImpl
-// require ./WebInspectorDOMHandlerImpl   
-// require ./WebInspectorDebugHandlerImpl
-// require ./WebInspectorProfilerHandlerImpl
-// require ./WebInspectorResourceHandlerImpl
-
-requireClass ./WiApplicationCacheImpl
-requireClass ./WiBrowserDebuggerImpl
-requireClass ./WiCSSImpl
 requireClass ./WiConsoleImpl
+requireClass ./WiCSSImpl
+requireClass ./WiDatabaseImpl
 requireClass ./WiDOMImpl
 requireClass ./WiDOMStorageImpl
-requireClass ./WiDatabaseImpl
-requireClass ./WiDebuggerImpl
-requireClass ./WiInjectedScriptImpl
 requireClass ./WiInspectorImpl
-requireClass ./WiNetworkImpl
-requireClass ./WiProfilerImpl
 requireClass ./WiRuntimeImpl
 
 //-----------------------------------------------------------------------------
@@ -97,33 +83,21 @@ method initialize()
 
     Weinre.wi = {}
     
-    Weinre.wi.ApplicationCache = new WiApplicationCacheImpl()
-    Weinre.wi.BrowserDebugger  = new WiBrowserDebuggerImpl()
     Weinre.wi.Console          = new WiConsoleImpl()
     Weinre.wi.CSS              = new WiCSSImpl()
     Weinre.wi.Database         = new WiDatabaseImpl()
-    Weinre.wi.Debugger         = new WiDebuggerImpl()
     Weinre.wi.DOM              = new WiDOMImpl()
     Weinre.wi.DOMStorage       = new WiDOMStorageImpl()
-    Weinre.wi.InjectedScript   = new WiInjectedScriptImpl()
     Weinre.wi.Inspector        = new WiInspectorImpl()
-    Weinre.wi.Network          = new WiNetworkImpl()
-    Weinre.wi.Profiler         = new WiProfilerImpl()
     Weinre.wi.Runtime          = new WiRuntimeImpl()
     
-    messageDispatcher.registerInterface("ApplicationCache", Weinre.wi.ApplicationCache , true)
-    messageDispatcher.registerInterface("BrowserDebugger" , Weinre.wi.BrowserDebugger  , true)
-    messageDispatcher.registerInterface("Console",          Weinre.wi.Console          , true)
-    messageDispatcher.registerInterface("CSS",              Weinre.wi.CSS              , true)
-    messageDispatcher.registerInterface("Database",         Weinre.wi.Database         , true)
-    messageDispatcher.registerInterface("Debugger",         Weinre.wi.Debugger         , true)
-    messageDispatcher.registerInterface("DOM",              Weinre.wi.DOM              , true)
-    messageDispatcher.registerInterface("DOMStorage",       Weinre.wi.DOMStorage       , true)
-    messageDispatcher.registerInterface("InjectedScript",   Weinre.wi.InjectedScript   , true)
-    messageDispatcher.registerInterface("Inspector",        Weinre.wi.Inspector        , true)
-    messageDispatcher.registerInterface("Network",          Weinre.wi.Network          , true)
-    messageDispatcher.registerInterface("Profiler",         Weinre.wi.Profiler         , true)
-    messageDispatcher.registerInterface("Runtime",          Weinre.wi.Runtime          , true)
+    messageDispatcher.registerInterface("Console",          Weinre.wi.Console          , false)
+    messageDispatcher.registerInterface("CSS",              Weinre.wi.CSS              , false)
+    messageDispatcher.registerInterface("Database",         Weinre.wi.Database         , false)
+    messageDispatcher.registerInterface("DOM",              Weinre.wi.DOM              , false)
+    messageDispatcher.registerInterface("DOMStorage",       Weinre.wi.DOMStorage       , false)
+    messageDispatcher.registerInterface("Inspector",        Weinre.wi.Inspector        , false)
+    messageDispatcher.registerInterface("Runtime",          Weinre.wi.Runtime          , false)
     
     messageDispatcher.registerInterface("WeinreTargetEvents", new WeinreTargetEventsImpl(), true)
 
@@ -132,10 +106,7 @@ method initialize()
     Weinre.wi.DOMNotify              = messageDispatcher.createProxy("DOMNotify")
     Weinre.wi.DOMStorageNotify       = messageDispatcher.createProxy("DOMStorageNotify")
     Weinre.wi.DatabaseNotify         = messageDispatcher.createProxy("DatabaseNotify")
-    Weinre.wi.DebuggerNotify         = messageDispatcher.createProxy("DebuggerNotify")
     Weinre.wi.InspectorNotify        = messageDispatcher.createProxy("InspectorNotify")
-    Weinre.wi.NetworkNotify          = messageDispatcher.createProxy("NetworkNotify")
-    Weinre.wi.ProfilerNotify         = messageDispatcher.createProxy("ProfilerNotify")
     Weinre.wi.TimelineNotify         = messageDispatcher.createProxy("TimelineNotify")
     
     Weinre.WeinreTargetCommands  = messageDispatcher.createProxy("WeinreTargetCommands")

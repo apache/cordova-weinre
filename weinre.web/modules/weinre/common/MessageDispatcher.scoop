@@ -13,7 +13,7 @@ requireClass ./Binding
 requireClass ./Ex
 
 //-----------------------------------------------------------------------------
-class Socket(url)
+class MessageDispatcher(url)
     this._url        = url
     
     this.error       = null
