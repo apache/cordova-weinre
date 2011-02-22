@@ -1,0 +1,257 @@
+
+/*
+ * weinre is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2011 IBM Corporation
+ */
+
+requireClass ../common/Ex
+requireClass ../common/Weinre
+
+requireClass ../common/Native
+
+//-----------------------------------------------------------------------------
+class Timeline
+
+//-----------------------------------------------------------------------------
+static method start
+    Running = true
+
+//-----------------------------------------------------------------------------
+static method stop
+    Running = false
+
+//-----------------------------------------------------------------------------
+static method isRunning
+    return Running
+
+//-----------------------------------------------------------------------------
+static method addRecord_Mark(message)
+    if (!Timeline.isRunning()) return
+    
+    var record = {}
+
+    record.type      = TimelineRecordType.Mark
+    record.category  = { name: "scripting" }
+    record.startTime = Date.now()
+    record.data      = { message: message }
+    
+    Weinre.wi.TimelineNotify.addRecordToTimeline(record)
+
+//-----------------------------------------------------------------------------
+static method addRecord_EventDispatch(event, name, category)
+    if (!Timeline.isRunning()) return
+    
+    if (!category) category = "scripting"
+    var record = {}
+
+    record.type      = TimelineRecordType.EventDispatch
+    record.category  = { name: category }
+    record.startTime = Date.now()
+    record.data      = { type: event.type }
+    
+    Weinre.wi.TimelineNotify.addRecordToTimeline(record)
+
+//-----------------------------------------------------------------------------
+static method addRecord_TimerInstall(id, timeout, singleShot)
+    if (!Timeline.isRunning()) return
+    
+    var record = {}
+
+    record.type      = TimelineRecordType.TimerInstall
+    record.category  = { name: "scripting" }
+    record.startTime = Date.now()
+    record.data      = { timerId: id, timeout: timeout, singleShot: singleShot }
+    
+    Weinre.wi.TimelineNotify.addRecordToTimeline(record)
+
+//-----------------------------------------------------------------------------
+static method addRecord_TimerRemove(id, timeout, singleShot)
+    if (!Timeline.isRunning()) return
+
+    var record = {}
+
+    record.type      = TimelineRecordType.TimerRemove
+    record.category  = { name: "scripting" }
+    record.startTime = Date.now()
+    record.data      = { timerId: id, timeout: timeout, singleShot: singleShot }
+    
+    Weinre.wi.TimelineNotify.addRecordToTimeline(record)
+
+//-----------------------------------------------------------------------------
+static method addRecord_XHRReadyStateChange(url, readyState)
+    if (!Timeline.isRunning()) return
+
+    var record = {}
+
+    record.type      = TimelineRecordType.XHRReadyStateChange
+    record.category  = { name: "scripting" }
+    record.startTime = Date.now()
+    record.data      = { url: url, readyState: readyState }
+    
+    Weinre.wi.TimelineNotify.addRecordToTimeline(record)
+
+//-----------------------------------------------------------------------------
+static method addRecord_TimerFire(id, timeout, singleShot)
+    
+//-----------------------------------------------------------------------------
+static method installGlobalListeners
+    if (applicationCache) {
+        applicationCache.addEventListener("checking",    function(e) {Timeline.addRecord_EventDispatch(e, "applicationCache.checking",    "loading")}, false)
+        applicationCache.addEventListener("error",       function(e) {Timeline.addRecord_EventDispatch(e, "applicationCache.error",       "loading")}, false)
+        applicationCache.addEventListener("noupdate",    function(e) {Timeline.addRecord_EventDispatch(e, "applicationCache.noupdate",    "loading")}, false)
+        applicationCache.addEventListener("downloading", function(e) {Timeline.addRecord_EventDispatch(e, "applicationCache.downloading", "loading")}, false)
+        applicationCache.addEventListener("progress",    function(e) {Timeline.addRecord_EventDispatch(e, "applicationCache.progress",    "loading")}, false)
+        applicationCache.addEventListener("updateready", function(e) {Timeline.addRecord_EventDispatch(e, "applicationCache.updateready", "loading")}, false)
+        applicationCache.addEventListener("cached",      function(e) {Timeline.addRecord_EventDispatch(e, "applicationCache.cached",      "loading")}, false)
+        applicationCache.addEventListener("obsolete",    function(e) {Timeline.addRecord_EventDispatch(e, "applicationCache.obsolete",    "loading")}, false)
+    }
+    
+    // window.addEventListener("deviceorientation", function(e) {Timeline.addRecord_EventDispatch("window.deviceorientation")}, false)
+    window.addEventListener("error",             function(e) {Timeline.addRecord_EventDispatch(e, "window.error")},             false)
+    window.addEventListener("hashchange",        function(e) {Timeline.addRecord_EventDispatch(e, "window.hashchange")},        false)
+    window.addEventListener("message",           function(e) {Timeline.addRecord_EventDispatch(e, "window.message")},           false)
+    window.addEventListener("offline",           function(e) {Timeline.addRecord_EventDispatch(e, "window.offline")},           false)
+    window.addEventListener("online",            function(e) {Timeline.addRecord_EventDispatch(e, "window.online")},            false)
+    window.addEventListener("scroll",            function(e) {Timeline.addRecord_EventDispatch(e, "window.scroll")},            false)
+    
+//-----------------------------------------------------------------------------
+static method installFunctionWrappers
+    window.clearInterval  = wrapped_clearInterval
+    window.clearTimeout   = wrapped_clearTimeout
+    window.setTimeout     = wrapped_setTimeout
+    window.setInterval    = wrapped_setInterval
+    
+    window.XMLHttpRequest.prototype.open = wrapped_XMLHttpRequest_open
+    window.XMLHttpRequest                = wrapped_XMLHttpRequest
+        
+
+//-----------------------------------------------------------------------------
+function wrapped_setInterval(code, interval)
+    var code = instrumentedTimerCode(code, interval, false)
+    var id = Native.setInterval(code, interval)
+    
+    code.__timerId = id
+    
+    addTimer(id, interval, false)
+
+    return id
+
+//-----------------------------------------------------------------------------
+function wrapped_setTimeout(code, delay)
+    var code = instrumentedTimerCode(code, delay, true)
+    var id   = Native.setTimeout(code, delay)
+
+    code.__timerId = id
+    
+    addTimer(id, delay, true)
+
+    return id
+
+//-----------------------------------------------------------------------------
+function wrapped_clearInterval(id)
+    var result = Native.clearInterval(id)
+    
+    removeTimer(id, false)
+    return result
+
+//-----------------------------------------------------------------------------
+function wrapped_clearTimeout(id)
+    var result = Native.clearTimeout(id)
+    
+    removeTimer(id, true)
+    return result
+
+//-----------------------------------------------------------------------------
+function addTimer(id, timeout, singleShot)
+    var timerSet = singleShot ? TimerTimeouts : TimerIntervals
+    
+    timerSet[id] = {
+         id:          id,
+         timeout:     timeout,
+         singleShot: singleShot
+    }
+    
+    Timeline.addRecord_TimerInstall(id, timeout, singleShot)
+    
+//-----------------------------------------------------------------------------
+function removeTimer(id, singleShot)
+    var timerSet = singleShot ? TimerTimeouts : TimerIntervals
+    var timer = timerSet[id]
+    
+    if (!timer) return
+    
+    Timeline.addRecord_TimerRemove(id, timer.timeout, singleShot)
+    
+    delete timerSet[id]
+    
+//-----------------------------------------------------------------------------
+function instrumentedTimerCode(code, timeout, singleShot)
+    if (typeof(code) != "function") return code
+    
+    var instrumentedCode = function() {
+        var result = code()
+        var id     = arguments.callee.__timerId
+
+        Timeline.addRecord_TimerFire(id, timeout, singleShot)
+
+        return result
+    }
+    
+    return instrumentedCode 
+
+//-----------------------------------------------------------------------------
+function wrapped_XMLHttpRequest
+    var xhr = new Native.XMLHttpRequest()
+    xhr.addEventListener("readystatechange", getXhrEventHandler(xhr), false)
+    return xhr
+
+//-----------------------------------------------------------------------------
+function wrapped_XMLHttpRequest_open()
+    var xhr    = this
+    var result = Native.XMLHttpRequest_open.apply(xhr, [].slice.call(arguments))
+    xhr.__weinre_url  = arguments[1]
+    return result
+
+    
+//-----------------------------------------------------------------------------
+function getXhrEventHandler(xhr)
+    return function(event) {
+        Timeline.addRecord_XHRReadyStateChange(xhr.__weinre_url, xhr.readyState)
+    }
+    
+//-----------------------------------------------------------------------------
+init 
+    var Running = false
+    
+    var TimerTimeouts  = {}
+    var TimerIntervals = {}
+
+    var TimelineRecordType = {
+            EventDispatch:            0,
+            Layout:                   1,
+            RecalculateStyles:        2,
+            Paint:                    3,
+            ParseHTML:                4,
+            TimerInstall:             5,
+            TimerRemove:              6,
+            TimerFire:                7,
+            XHRReadyStateChange:      8,
+            XHRLoad:                  9,
+            EvaluateScript:          10,
+            Mark:                    11,
+            ResourceSendRequest:     12,
+            ResourceReceiveResponse: 13,
+            ResourceFinish:          14,
+            FunctionCall:            15,
+            ReceiveResourceData:     16,
+            GCEvent:                 17,
+            MarkDOMContent:          18,
+            MarkLoad:                19,
+            ScheduleResourceRequest: 20
+    }
+
+    Timeline.installGlobalListeners()
+    Timeline.installFunctionWrappers()
+    

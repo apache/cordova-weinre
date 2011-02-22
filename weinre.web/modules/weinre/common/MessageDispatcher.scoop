@@ -156,7 +156,8 @@ method _handleMessage(message)
 
     var methodSignature = intfName + "." + methodName + "()"
     
-    var intf = this._interfaces[intfName]
+    var intf = this._interfaces.hasOwnProperty(intfName) && this._interfaces[intfName]
+    
     if (!intf && InspectorBackend && intfName.match(/.*Notify/)) {
         intf = InspectorBackend.getRegisteredDomainDispatcher(intfName.substr(0,intfName.length-6))
     }

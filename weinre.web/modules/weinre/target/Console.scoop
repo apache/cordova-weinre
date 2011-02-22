@@ -7,6 +7,7 @@
  */
 
 requireClass ../common/Weinre
+requireClass ../target/Timeline
 
 //-----------------------------------------------------------------------------
 class Console
@@ -121,8 +122,8 @@ method count
     Weinre.notImplemented(arguments.callee.signature)
     
 //-----------------------------------------------------------------------------
-method markTimeline
-    Weinre.notImplemented(arguments.callee.signature)
+method markTimeline(message)
+    Timeline.addRecord_Mark(message)
     
 //-----------------------------------------------------------------------------
 method lastWMLErrorMessage

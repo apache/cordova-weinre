@@ -65,7 +65,9 @@ static method getProxyMethod(proxy, method)
 //-----------------------------------------------------------------------------
 method registerDomainDispatcher(name, intf)
     this.registeredDomainDispatchers[name] = intf
-
+    
 //-----------------------------------------------------------------------------
 method getRegisteredDomainDispatcher(name)
+    if (!this.registeredDomainDispatchers.hasOwnProperty(name)) return null
+    
     return this.registeredDomainDispatchers[name]

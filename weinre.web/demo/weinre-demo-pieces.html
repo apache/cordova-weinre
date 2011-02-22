@@ -20,6 +20,8 @@
 <script src="/weinre/common/Binding.transportd.js"></script>
 <script src="/weinre/common/Callback.transportd.js"></script>
 <script src="/weinre/common/EventListeners.transportd.js"></script>
+<script src="/weinre/common/Native.transportd.js"></script>
+<script src="/weinre/common/IDGenerator.transportd.js"></script>
 <script src="/weinre/target/Console.transportd.js"></script>
 <script src="/add-css-properties.js"></script>
 <script src="/weinre/target/WiConsoleImpl.transportd.js"></script>
@@ -36,11 +38,52 @@
 <script src="/weinre/target/Target.transportd.js"></script>
 <script src="/weinre/target/ElementHighlighter.transportd.js"></script>
 <script src="/weinre/target/InjectedScript.js"></script>
+<script src="/weinre/target/Timeline.transportd.js"></script>
 <script src="/interfaces/all-json-idls.js"></script>
 
 <script type="text/javascript">
     require("weinre/common/Weinre").showNotImplemented()
     require("weinre/target/Target").main()
+</script>
+
+<script>
+var started = false
+var button
+
+function onLoad() {
+    if (!button) button = document.getElementById("button")
+    
+    button.addEventListener("click", function() {
+        if (!started) {
+            button.value = "stop stuff"
+            startStuff()
+        }
+        else {
+            button.value = "start stuff"
+            stopStuff()      
+        }
+        started = !started
+    })
+}
+
+var interval
+
+function startStuff() {
+    interval = setInterval(intervalStuff, 1000)
+}
+
+function stopStuff() {
+    clearInterval(interval)
+}
+
+function intervalStuff() {
+    setTimeout(function() { console.log("doing interval stuff")}, 333)
+    
+    var xhr = new XMLHttpRequest()
+    xhr.open("GET", "../target/target-script.js", true)
+    xhr.send()
+}
+
 </script>
 
 <style>
@@ -57,10 +100,16 @@ h1 {
     border:   0.2em solid;
     padding:  3em;
 }
+
+#button {
+    font-size: 150%;
+}
 </style>
 </head>
 
-<body>
+<body onload="onLoad()">
+<input id="button" type="button" value="start stuff">
+
 <h1>this is a green h1 element</h1>
 <h1 class="blue">this is a blue h1 element</h1>
 <h1 style="color:red">this is a red h1 element</h1>

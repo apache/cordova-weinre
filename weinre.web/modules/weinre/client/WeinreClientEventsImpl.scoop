@@ -51,6 +51,9 @@ method connectionCreated(/*int*/ clientId, /*int*/ targetId)
     if (clientId != Weinre.clientId) return
 
     Weinre.targetId = targetId
+    
+    WebInspector.panels.elements.reset()
+    WebInspector.panels.timeline._clearPanel()
 
 //-----------------------------------------------------------------------------
 method connectionDestroyed(/*int*/ clientId, /*int*/ targetId)
