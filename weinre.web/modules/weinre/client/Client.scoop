@@ -6,6 +6,8 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+requireClass ../common/Native
+
 requireClass ../common/IDLTools
 requireClass ../common/Callback
 requireClass ../common/Weinre
@@ -48,6 +50,10 @@ method initialize
 
     // register WebInspector interface
     messageDispatcher.registerInterface("WebInspector", WebInspector, false)
+    
+    // hack
+    WebInspector.mainResource = {}
+    WebInspector.mainResource.url = location.href
 
 //-----------------------------------------------------------------------------
 method uiAvailable
@@ -74,8 +80,8 @@ method _installRemotePanel
     
     var toolButtonsToHide = ["scripts"]
     toolButtonsToHide.forEach(function(toolButtonToHide){
-        if (!WebInspector.panels[toolButtonToHide]) continue
-        if (!WebInspector.panels[toolButtonToHide].toolbarItem) continue
+        if (!WebInspector.panels[toolButtonToHide]) return
+        if (!WebInspector.panels[toolButtonToHide].toolbarItem) return
         WebInspector.panels[toolButtonToHide].toolbarItem.style.display = "none"
     })
     
@@ -114,7 +120,7 @@ method cb_webSocketClosed
     
     // use a delay, otherwise reloading will cause this stuff to flash
     // before page is actually reloaded
-    setTimeout(function() {
+    Native.setTimeout(function() {
         WebInspector.panels.remote.connectionClosed()
         WebInspector.currentPanel = WebInspector.panels.remote 
     }, 1000)

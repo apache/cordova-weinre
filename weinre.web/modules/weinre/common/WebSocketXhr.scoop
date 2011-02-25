@@ -9,6 +9,7 @@
 requireClass ./Ex
 requireClass ./Weinre
 requireClass ./EventListeners
+requireClass ./Native
 
 //-----------------------------------------------------------------------------
 class WebSocketXhr(url)
@@ -16,6 +17,8 @@ class WebSocketXhr(url)
     
 //-----------------------------------------------------------------------------
 init
+    var XMLHttpRequest = Native.XMLHttpRequest
+    
     WebSocketXhr.CONNECTING = 0
     WebSocketXhr.OPEN       = 1
     WebSocketXhr.CLOSING    = 2
@@ -98,7 +101,7 @@ method _handleXhrResponseGet(xhr)
         return
     }
     
-    window.setTimeout(function() {self._readLoop()}, 0)
+    Native.setTimeout(function() {self._readLoop()}, 0)
 
     datum.forEach(function(data) {
         self._fireEventListeners("message", {data: data})
@@ -133,7 +136,7 @@ method _handleXhrResponseSend(xhr)
     if (xhr.status != 200) return this._handleXhrResponseError(xhr)
     
     this._sendInProgress = false
-    window.setTimeout(function() {httpSocket._sendQueued()}, 0)
+    Native.setTimeout(function() {httpSocket._sendQueued()}, 0)
 
 //-----------------------------------------------------------------------------
 method close

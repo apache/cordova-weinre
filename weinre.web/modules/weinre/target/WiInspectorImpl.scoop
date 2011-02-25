@@ -7,6 +7,7 @@
  */
 
 requireClass ../common/Weinre
+requireClass ../target/Timeline
 
 //-----------------------------------------------------------------------------
 class WiInspectorImpl
@@ -37,6 +38,27 @@ method highlightDOMNode(/*int*/ nodeId, callback)
 method hideDOMNodeHighlight(callback)
     Weinre.elementHighlighter.off()
     
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
+
+//-----------------------------------------------------------------------------
+method startTimelineProfiler(callback)
+    Timeline.start()
+    
+    Weinre.wi.TimelineNotify.timelineProfilerWasStarted()
+
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback)
+    }
+
+
+//-----------------------------------------------------------------------------
+method stopTimelineProfiler(callback)
+    Timeline.stop()
+    
+    Weinre.wi.TimelineNotify.timelineProfilerWasStopped()
+
     if (callback) {
         Weinre.WeinreTargetCommands.sendClientCallback(callback)
     }
