@@ -67,39 +67,38 @@ static method useRemote(value)
     return oldValue
 
 //-----------------------------------------------------------------------------
-method log
-    var messageParts = []
-    
-    for (var i=0; i<arguments.length; i++) {
-        messageParts.push(arguments[i].toString())
-    }
+method _generic(level, messageParts)
     
     var message = messageParts.join(" ")
     
     var payload = {
         source:      MessageSource.JS,
         type:        MessageType.Log,
-        level:       MessageLevel.Log,
+        level:       level,
         message:     message
     }
     
     Weinre.wi.ConsoleNotify.addConsoleMessage(payload)
 
 //-----------------------------------------------------------------------------
+method log
+    this._generic(MessageLevel.Log, [].slice.call(arguments)) 
+
+//-----------------------------------------------------------------------------
 method debug
-    Weinre.notImplemented(arguments.callee.signature)
+    this._generic(MessageLevel.Debug, [].slice.call(arguments)) 
 
 //-----------------------------------------------------------------------------
 method error
-    Weinre.notImplemented(arguments.callee.signature)
+    this._generic(MessageLevel.Error, [].slice.call(arguments)) 
 
 //-----------------------------------------------------------------------------
 method info
-    Weinre.notImplemented(arguments.callee.signature)
+    this._generic(MessageLevel.Log, [].slice.call(arguments)) 
 
 //-----------------------------------------------------------------------------
 method warn
-    Weinre.notImplemented(arguments.callee.signature)
+    this._generic(MessageLevel.Warning, [].slice.call(arguments)) 
 
 //-----------------------------------------------------------------------------
 method dir

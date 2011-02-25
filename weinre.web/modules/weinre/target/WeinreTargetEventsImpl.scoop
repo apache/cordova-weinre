@@ -25,9 +25,10 @@ method connectionCreated(/*string*/ clientId, /*string*/ targetId)
         console.log(message)
     }
     
-    Weinre.showNotImplemented()
+    // Weinre.showNotImplemented()
 
     Weinre.target.setDocument()
+    Weinre.wi.TimelineNotify.timelineProfilerWasStopped()
 
 //-----------------------------------------------------------------------------
 method connectionDestroyed(/*string*/ clientId, /*string*/ targetId)

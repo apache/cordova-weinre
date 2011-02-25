@@ -8,6 +8,8 @@
 
 requireClass ../common/Ex
 requireClass ../common/Weinre
+requireClass ../common/IDGenerator
+requireClass ../common/StackTrace
 
 requireClass ../common/Native
 
@@ -37,6 +39,8 @@ static method addRecord_Mark(message)
     record.startTime = Date.now()
     record.data      = { message: message }
     
+    addStackTrace(record, 3)
+    
     Weinre.wi.TimelineNotify.addRecordToTimeline(record)
 
 //-----------------------------------------------------------------------------
@@ -52,7 +56,7 @@ static method addRecord_EventDispatch(event, name, category)
     record.data      = { type: event.type }
     
     Weinre.wi.TimelineNotify.addRecordToTimeline(record)
-
+    
 //-----------------------------------------------------------------------------
 static method addRecord_TimerInstall(id, timeout, singleShot)
     if (!Timeline.isRunning()) return
@@ -63,6 +67,8 @@ static method addRecord_TimerInstall(id, timeout, singleShot)
     record.category  = { name: "scripting" }
     record.startTime = Date.now()
     record.data      = { timerId: id, timeout: timeout, singleShot: singleShot }
+    
+    addStackTrace(record, 4)
     
     Weinre.wi.TimelineNotify.addRecordToTimeline(record)
 
@@ -76,25 +82,63 @@ static method addRecord_TimerRemove(id, timeout, singleShot)
     record.category  = { name: "scripting" }
     record.startTime = Date.now()
     record.data      = { timerId: id, timeout: timeout, singleShot: singleShot }
-    
-    Weinre.wi.TimelineNotify.addRecordToTimeline(record)
 
-//-----------------------------------------------------------------------------
-static method addRecord_XHRReadyStateChange(url, readyState)
-    if (!Timeline.isRunning()) return
-
-    var record = {}
-
-    record.type      = TimelineRecordType.XHRReadyStateChange
-    record.category  = { name: "scripting" }
-    record.startTime = Date.now()
-    record.data      = { url: url, readyState: readyState }
+    addStackTrace(record, 4)
     
     Weinre.wi.TimelineNotify.addRecordToTimeline(record)
 
 //-----------------------------------------------------------------------------
 static method addRecord_TimerFire(id, timeout, singleShot)
+    if (!Timeline.isRunning()) return
+
+    var record = {}
+
+    record.type      = TimelineRecordType.TimerFire
+    record.category  = { name: "scripting" }
+    record.startTime = Date.now()
+    record.data      = { timerId: id, timeout: timeout, singleShot: singleShot }
     
+    Weinre.wi.TimelineNotify.addRecordToTimeline(record)
+
+//-----------------------------------------------------------------------------
+static method addRecord_XHRReadyStateChange(method, url, id, xhr)
+    if (!Timeline.isRunning()) return
+
+    var record
+    
+    if (xhr.readyState == XMLHttpRequest.OPENED) {
+        record = {
+            type:      TimelineRecordType.ResourceSendRequest,
+            category:  { name: "loading" },
+            startTime: Date.now(),
+            data: { 
+                identifier:     id,
+                url:            url,
+                requestMethod:  method
+            }
+        }
+    }
+    
+    else if (xhr.readyState == XMLHttpRequest.DONE) {
+        record = {
+            type:      TimelineRecordType.ResourceReceiveResponse,
+            category:  { name: "loading" },
+            startTime: Date.now(),
+            data: {
+                identifier:            id,
+                statusCode:            xhr.status,
+                mimeType:              xhr.getResponseHeader("Content-Type"),
+                expectedContentLength: xhr.getResponseHeader("Content-Length"),
+                url:                   url
+            }
+        }
+    }
+    
+    else 
+        return
+    
+    Weinre.wi.TimelineNotify.addRecordToTimeline(record)
+
 //-----------------------------------------------------------------------------
 static method installGlobalListeners
     if (applicationCache) {
@@ -122,11 +166,26 @@ static method installFunctionWrappers
     window.clearTimeout   = wrapped_clearTimeout
     window.setTimeout     = wrapped_setTimeout
     window.setInterval    = wrapped_setInterval
-    
+
     window.XMLHttpRequest.prototype.open = wrapped_XMLHttpRequest_open
     window.XMLHttpRequest                = wrapped_XMLHttpRequest
-        
 
+//-----------------------------------------------------------------------------
+function addStackTrace(record, skip)
+    if (!skip) skip = 1
+    
+    var trace = new StackTrace(arguments).trace
+    
+    record.stackTrace = []
+    
+    for (var i=skip; i<trace.length; i++) {
+        record.stackTrace.push({
+            functionName: trace[i],
+            scriptName:   "",
+            lineNumber:   ""
+        })
+    }
+    
 //-----------------------------------------------------------------------------
 function wrapped_setInterval(code, interval)
     var code = instrumentedTimerCode(code, interval, false)
@@ -204,21 +263,31 @@ function instrumentedTimerCode(code, timeout, singleShot)
 //-----------------------------------------------------------------------------
 function wrapped_XMLHttpRequest
     var xhr = new Native.XMLHttpRequest()
+    xhr.__weinre_id = IDGenerator.next()
     xhr.addEventListener("readystatechange", getXhrEventHandler(xhr), false)
     return xhr
 
+init
+    wrapped_XMLHttpRequest.UNSENT           = 0
+    wrapped_XMLHttpRequest.OPENED           = 1
+    wrapped_XMLHttpRequest.HEADERS_RECEIVED = 2
+    wrapped_XMLHttpRequest.LOADING          = 3
+    wrapped_XMLHttpRequest.DONE             = 4    
+
 //-----------------------------------------------------------------------------
 function wrapped_XMLHttpRequest_open()
-    var xhr    = this
+    var xhr = this
+    xhr.__weinre_method  = arguments[0]
+    xhr.__weinre_url     = arguments[1]
+    
     var result = Native.XMLHttpRequest_open.apply(xhr, [].slice.call(arguments))
-    xhr.__weinre_url  = arguments[1]
     return result
 
     
 //-----------------------------------------------------------------------------
 function getXhrEventHandler(xhr)
     return function(event) {
-        Timeline.addRecord_XHRReadyStateChange(xhr.__weinre_url, xhr.readyState)
+        Timeline.addRecord_XHRReadyStateChange(xhr.__weinre_method, xhr.__weinre_url, xhr.__weinre_id, xhr)
     }
     
 //-----------------------------------------------------------------------------

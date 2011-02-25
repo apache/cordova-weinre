@@ -50,6 +50,10 @@ method initialize
 
     // register WebInspector interface
     messageDispatcher.registerInterface("WebInspector", WebInspector, false)
+    
+    // hack
+    WebInspector.mainResource = {}
+    WebInspector.mainResource.url = location.href
 
 //-----------------------------------------------------------------------------
 method uiAvailable

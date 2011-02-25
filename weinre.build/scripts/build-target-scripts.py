@@ -47,6 +47,7 @@ def main():
         
         baseScriptFile = match.group(1)
         scriptFile = os.path.join(srcDirName, baseScriptFile)
+        if scriptFile == "weinre-demo.js": continue
         if not os.path.exists(scriptFile):   error("script file not found: '" + scriptFile + "'")
         
         scripts.append(scriptFile)

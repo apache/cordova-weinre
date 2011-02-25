@@ -117,6 +117,17 @@ method initialize()
     
     Weinre.nodeStore = new NodeStore()
     Weinre.cssStore  = new CSSStore()
+    
+    window.addEventListener("error", function(e) {Target.handleError(e)}, false)
+    
+    
+//-----------------------------------------------------------------------------
+static method handleError(event)
+    var filename = event.filename || "[unknown filename]"
+    var lineno   = event.lineno   || "[unknown lineno]"
+    var message  = event.message  || "[unknown message]"
+
+    console.error("error occurred: " + filename + ":" + lineno + ": " + message)
 
 //-----------------------------------------------------------------------------
 method cb_webSocketOpened()
