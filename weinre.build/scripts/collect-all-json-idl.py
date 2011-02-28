@@ -18,8 +18,15 @@ def main():
     if len(sys.argv) < 3:
         error("expecting parameters outputFile inputDir")
         
-    oFileName = sys.argv[1]
-    iDirName  = sys.argv[2]
+    min = False
+    if sys.argv[1] == "-min":
+        min = True
+        oFileName = sys.argv[2]
+        iDirName  = sys.argv[3]
+        
+    else:
+        oFileName = sys.argv[1]
+        iDirName  = sys.argv[2]
     
     entries  = os.listdir(iDirName)
     if 0 == len(entries): error("no files found in '" + iDirName + "'")
@@ -38,7 +45,13 @@ def main():
         
         result.append(json.loads(contents))
         
-    jsonString = json.dumps(result, indent=4)
+    if min:
+        result = minimize(result)
+        jsonString = json.dumps(result)
+    
+    else:
+        jsonString = json.dumps(result, indent=4)
+        
     jsString = "require('weinre/common/Weinre').addIDLs(%s)" % jsonString
 
     oFile = open(oFileName, "w")
@@ -46,6 +59,29 @@ def main():
     oFile.close()
     
     log("generated collected json idls in: " + oFileName)
+
+#--------------------------------------------------------------------
+def minimize(idl):
+    for module in idl:
+        for interface in module["interfaces"]:
+            if "extendedAttributes" in interface:
+                del interface["extendedAttributes"]
+            
+            if "methods" in interface:
+                for method in interface["methods"]:
+                    if "returns" in method:
+                        del method["returns"]
+                    if "callbackParameters" in method:
+                        del method["callbackParameters"]
+                    if "extendedAttributes" in method:
+                        del method["extendedAttributes"]
+                        
+                    if "parameters" in method:
+                        for parameter in method["parameters"]:
+                            if "type" in parameter:
+                                del parameter["type"]
+        
+    return idl
 
 #--------------------------------------------------------------------
 def log(message):

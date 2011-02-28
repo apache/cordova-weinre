@@ -305,6 +305,13 @@
             <arg file="${CACHED}/json-idl"/>
         </exec>
 
+        <exec executable="python" failonerror="true" failifexecutionfails="true">
+            <arg file="scripts/collect-all-json-idl.py"/>
+            <arg value="-min"/>
+            <arg file="${CACHED}/json-idl/all-json-idls-min.js"/>
+            <arg file="${CACHED}/json-idl"/>
+        </exec>
+
     </target>
 
     <!-- ============================================================
