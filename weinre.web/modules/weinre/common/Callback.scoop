@@ -20,7 +20,7 @@ init
 
 //-----------------------------------------------------------------------------
 static method setConnectorId(connectorId)
-    ConnectorId = connectorId
+    ConnectorId = ""  + connectorId
 
 //-----------------------------------------------------------------------------
 static method register(callback)

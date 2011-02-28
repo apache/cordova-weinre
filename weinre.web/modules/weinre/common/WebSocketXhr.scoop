@@ -64,7 +64,7 @@ method _handleXhrResponseGetChannel(xhr)
         return
     }
     
-    Weinre.connectorId = object.channel
+    Weinre.connectorId = "" + object.channel
     
     this._urlChannel = this._url + "/" + object.channel
     this.readyState = WebSocketXhr.OPEN
