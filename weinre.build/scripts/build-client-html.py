@@ -66,7 +66,7 @@ def createIndexFile(iFileName, oFileName, moduleDir):
         elif pattern_head_end.match(line):
             foundEnd = True
             newLines.append("<!-- ========== weinre additions: starting ========== -->\n")
-            newLines.append('<script type="text/javascript" src="../interfaces/all-json-idls.js"></script>\n')
+            newLines.append('<script type="text/javascript" src="../interfaces/all-json-idls-min.js"></script>\n')
             newLines.append('<script type="text/javascript">require("weinre/client/Client").main()</script>\n')
             newLines.append("<!-- ========== weinre additions: done ========== -->\n")
             newLines.append(line)
