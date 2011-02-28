@@ -114,7 +114,7 @@ method cb_getTargets(targets)
     var newestTargetId = this.getNewestTargetId()
     if (!newestTargetId) return
     
-    Weinre.WeinreClientCommands.connectTarget(Weinre.clientId, newestTargetId)
+    Weinre.WeinreClientCommands.connectTarget(Weinre.connectorId, newestTargetId)
     
     
 //-----------------------------------------------------------------------------
