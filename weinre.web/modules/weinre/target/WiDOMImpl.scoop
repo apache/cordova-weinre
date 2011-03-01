@@ -15,7 +15,7 @@ class WiDOMImpl
 method getChildNodes(/*int*/ nodeId, callback)
     var node = Weinre.nodeStore.getNode(nodeId)
     if (!node) {
-        console.log(arguments.callee.signature  + " passed an invalid nodeId: " + nodeId)
+        Weinre.logWarning(arguments.callee.signature  + " passed an invalid nodeId: " + nodeId)
         return
     }
 
@@ -30,7 +30,7 @@ method getChildNodes(/*int*/ nodeId, callback)
 method setAttribute(/*int*/ elementId, /*string*/ name, /*string*/ value, callback)
     var element = Weinre.nodeStore.getNode(elementId)
     if (!element) {
-        console.log(arguments.callee.signature + " passed an invalid elementId: " + elementId)
+        Weinre.logWarning(arguments.callee.signature + " passed an invalid elementId: " + elementId)
         return
     }
 
@@ -44,7 +44,7 @@ method setAttribute(/*int*/ elementId, /*string*/ name, /*string*/ value, callba
 method removeAttribute(/*int*/ elementId, /*string*/ name, callback)
     var element = Weinre.nodeStore.getNode(elementId)
     if (!element) {
-        console.log(arguments.callee.signature + " passed an invalid elementId: " + elementId)
+        Weinre.logWarning(arguments.callee.signature + " passed an invalid elementId: " + elementId)
         return
     }
 
@@ -58,7 +58,7 @@ method removeAttribute(/*int*/ elementId, /*string*/ name, callback)
 method setTextNodeValue(/*int*/ nodeId, /*string*/ value, callback)
     var node = Weinre.nodeStore.getNode(nodeId)
     if (!node) {
-        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        Weinre.logWarning(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
         return
     }
 
@@ -82,12 +82,12 @@ method copyNode(/*int*/ nodeId, callback)
 method removeNode(/*int*/ nodeId, callback)
     var node = Weinre.nodeStore.getNode(nodeId)
     if (!node) {
-        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        Weinre.logWarning(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
         return
     }
 
     if (!node.parentNode) {
-        console.log(arguments.callee.signature + " passed a parentless node: " + node)
+        Weinre.logWarning(arguments.callee.signature + " passed a parentless node: " + node)
         return
     }
 
@@ -106,7 +106,7 @@ method changeTagName(/*int*/ nodeId, /*string*/ newTagName, callback)
 method getOuterHTML(/*int*/ nodeId, callback)
     var node = Weinre.nodeStore.getNode(nodeId)
     if (!node) {
-        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        Weinre.logWarning(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
         return
     }
 
@@ -120,7 +120,7 @@ method getOuterHTML(/*int*/ nodeId, callback)
 method setOuterHTML(/*int*/ nodeId, /*string*/ outerHTML, callback)
     var node = Weinre.nodeStore.getNode(nodeId)
     if (!node) {
-        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        Weinre.logWarning(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
         return
     }
 

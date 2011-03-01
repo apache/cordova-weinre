@@ -62,7 +62,7 @@ static method invoke(index, args)
     catch (e) {
         var funcName = func.name
         if (!funcName) funcName = "<unnamed>"
-        console.log(arguments.callee.signature + " exception invoking callback: " + funcName + "(" + args.join(",") + "): " + e)
+        require("./Weinre").logError(arguments.callee.signature + " exception invoking callback: " + funcName + "(" + args.join(",") + "): " + e)
     }
     finally {
         Callback.deregister(index)

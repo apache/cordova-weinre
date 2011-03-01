@@ -183,7 +183,7 @@ method _handleXhrResponseError(xhr)
         message: "error from XHR invocation: " + xhr.statusText
     })
     
-    console.log("error from XHR invocation: " + xhr.status + ": " + xhr.statusText)
+    Weinre.logError("error from XHR invocation: " + xhr.status + ": " + xhr.statusText)
 
 //-----------------------------------------------------------------------------
 method _xhr(url, method, data, handler)

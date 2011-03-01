@@ -21,7 +21,6 @@ requireClass ./RemotePanel
 
 //-----------------------------------------------------------------------------
 class Client
-    this.initialize()
 
 //-----------------------------------------------------------------------------
 init
@@ -128,3 +127,4 @@ method cb_webSocketClosed
 //-----------------------------------------------------------------------------
 static method main
     Weinre.client = new Client()
+    Weinre.client.initialize()

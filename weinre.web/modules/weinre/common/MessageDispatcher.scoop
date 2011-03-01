@@ -107,7 +107,7 @@ method _sendMethodInvocation(intfName, methodName, args)
     this._socket.send(data)
     
     if (Verbose) {
-        console.log(this.constructor.name + "[" + this._url + "]: send " + intfName + "." + methodName + "(" + JSON.stringify(args) + ")")
+        Weinre.logDebug(this.constructor.name + "[" + this._url + "]: send " + intfName + "." + methodName + "(" + JSON.stringify(args) + ")")
     }
 
 //-----------------------------------------------------------------------------
@@ -127,7 +127,7 @@ method _handleOpen
     this._opened  = true
     
     if (Verbose) {
-        console.log(this.constructor.name + "[" + this._url + "]: opened")
+        Weinre.logDebug(this.constructor.name + "[" + this._url + "]: opened")
     }
 
 //-----------------------------------------------------------------------------
@@ -136,7 +136,7 @@ method _handleError(message)
     this.close()
 
     if (Verbose) {
-        console.log(this.constructor.name + "[" + this._url + "]: error: " + message)
+        Weinre.logDebug(this.constructor.name + "[" + this._url + "]: error: " + message)
     }
 
 //-----------------------------------------------------------------------------
@@ -163,7 +163,7 @@ method _handleMessage(message)
     }
     
     if (!intf) {
-        console.log("weinre: request for non-registered interface:" + methodSignature)
+        Weinre.logWarning("weinre: request for non-registered interface:" + methodSignature)
         return
     }
     
@@ -179,11 +179,11 @@ method _handleMessage(message)
         method.apply(intf, args)
     }
     catch (e) {
-        console.log("weinre: invocation exception on " + methodSignature + ": " + e)
+        Weinre.logError("weinre: invocation exception on " + methodSignature + ": " + e)
     }
     
     if (Verbose) {
-        console.log(this.constructor.name + "[" + this._url + "]: recv " + intfName + "." + methodName + "(" + JSON.stringify(args) + ")")
+        Weinre.logDebug(this.constructor.name + "[" + this._url + "]: recv " + intfName + "." + methodName + "(" + JSON.stringify(args) + ")")
     }
 
 //-----------------------------------------------------------------------------
@@ -191,5 +191,5 @@ method _handleClose
     this._reallyClosed = true
     
     if (Verbose) {
-        console.log(this.constructor.name + "[" + this._url + "]: closed")
+        Weinre.logDebug(this.constructor.name + "[" + this._url + "]: closed")
     }

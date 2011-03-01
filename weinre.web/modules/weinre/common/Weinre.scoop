@@ -19,6 +19,7 @@ init
     var _notImplemented     = {}
     var _showNotImplemented = false
     var CSSProperties       = []
+    var logger              = null
 
 //-----------------------------------------------------------------------------
 static method addIDLs(idls)
@@ -43,11 +44,37 @@ static method notImplemented(thing)
     _notImplemented[thing] = true
     
     if (!_showNotImplemented) return
-    console.log("weinre: " + thing + " not implemented")
+    Weinre.logWarning(thing + " not implemented")
 
 //-----------------------------------------------------------------------------
 static method showNotImplemented()
     _showNotImplemented = true
     for (var key in _notImplemented) {
-        console.log("weinre: " + key + " not implemented")
+        Weinre.logWarning(key + " not implemented")
     }
+    
+//-----------------------------------------------------------------------------
+static method logError(message)
+    getLogger().logError(message)
+
+//-----------------------------------------------------------------------------
+static method logWarning(message)
+    getLogger().logWarning(message)
+
+//-----------------------------------------------------------------------------
+static method logInfo(message)
+    getLogger().logInfo(message)
+
+//-----------------------------------------------------------------------------
+static method logDebug(message)
+    getLogger().logDebug(message)
+
+//-----------------------------------------------------------------------------
+function getLogger()
+    if (logger) return logger
+    
+    if      (Weinre.client) logger = Weinre.WeinreClientCommands
+    else if (Weinre.target) logger = Weinre.WeinreTargetCommands
+    
+    return logger
+    

@@ -75,4 +75,24 @@ public class WeinreClientCommands {
         ConnectionManager.$.disconnect(client, target);
     }
     
+    //---------------------------------------------------------------
+    public void logDebug(Channel channel, String message, String callbackId) {
+        Main.debug("client " + channel.getName() + ": " + message);
+    }
+
+    //---------------------------------------------------------------
+    public void logInfo(Channel channel, String message, String callbackId) {
+        Main.info("client " + channel.getName() + ": " + message);
+    }
+
+    //---------------------------------------------------------------
+    public void logWarning(Channel channel, String message, String callbackId) {
+        Main.warn("client " + channel.getName() + ": " + message);
+    }
+
+    //---------------------------------------------------------------
+    public void logError(Channel channel, String message, String callbackId) {
+        Main.error("client " + channel.getName() + ": " + message);
+    }
+
 }

@@ -52,8 +52,29 @@ public class WeinreTargetCommands {
     }
     
     //---------------------------------------------------------------
+    public void logDebug(Channel channel, String message, String callbackId) {
+        Main.debug("target " + channel.getName() + ": " + message);
+    }
+
+    //---------------------------------------------------------------
+    public void logInfo(Channel channel, String message, String callbackId) {
+        Main.info("target " + channel.getName() + ": " + message);
+    }
+
+    //---------------------------------------------------------------
+    public void logWarning(Channel channel, String message, String callbackId) {
+        Main.warn("target " + channel.getName() + ": " + message);
+    }
+
+    //---------------------------------------------------------------
+    public void logError(Channel channel, String message, String callbackId) {
+        Main.error("target " + channel.getName() + ": " + message);
+    }
+
+    //---------------------------------------------------------------
     private String getCallbackConnectorId(String callbackId) {
         int index = callbackId.indexOf("::");
         return callbackId.substring(0, index);
     }
+    
 }

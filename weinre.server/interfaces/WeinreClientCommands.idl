@@ -5,6 +5,8 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+// messages from the client to the server
+
 module weinre {
     interface WeinreClientCommands {
     
@@ -15,6 +17,11 @@ module weinre {
         
         void connectTarget(in string clientId, in string targetId);
         void disconnectTarget(in string clientId);
+        
+        void logDebug(   in string message );
+        void logInfo(    in string message );
+        void logWarning( in string message );
+        void logError(   in string message );
     };
 }
 
