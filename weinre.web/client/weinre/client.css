@@ -9,8 +9,13 @@
     background-image: url(../../images/weinre-icon-32x32.png);
 }
 
-body.platform-weinre .monospace, body.platform-weinre .source-code {
-     font-size:   12px;
+.monospace {
+     font-size:   12px !important;
+     font-family: Monaco, Consolas, Lucida Console, dejavu sans mono, monospace;
+}
+
+.source-code {
+     font-size:   12px !important;
      font-family: Monaco, Consolas, Lucida Console, dejavu sans mono, monospace;
 }
 
