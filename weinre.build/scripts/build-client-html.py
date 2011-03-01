@@ -50,7 +50,6 @@ def createIndexFile(iFileName, oFileName, moduleDir):
                 '<meta http-equiv="X-UA-Compatible" content="chrome=1">\n'
                 '<link rel="shortcut icon" href="../images/weinre-icon-64x64.png">\n',
                 '<title>weinre</title>\n',
-                '<link rel="stylesheet" type="text/css" href="weinre/client.css">\n',
                 '<script type="text/javascript" src="weinre/check-for-webkit.js"></script>\n',
                 '<script type="text/javascript" src="weinre/hacks.js"></script>\n',
                 '<script type="text/javascript" src="../modjewel-require.js"></script>\n',
@@ -66,6 +65,7 @@ def createIndexFile(iFileName, oFileName, moduleDir):
         elif pattern_head_end.match(line):
             foundEnd = True
             newLines.append("<!-- ========== weinre additions: starting ========== -->\n")
+            newLines.append('<link rel="stylesheet" type="text/css" href="weinre/client.css">\n')
             newLines.append('<script type="text/javascript" src="../interfaces/all-json-idls-min.js"></script>\n')
             newLines.append('<script type="text/javascript">require("weinre/client/Client").main()</script>\n')
             newLines.append("<!-- ========== weinre additions: done ========== -->\n")
