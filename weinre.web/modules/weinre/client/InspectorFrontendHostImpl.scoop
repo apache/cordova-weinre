@@ -40,7 +40,7 @@ method sendMessageToBackend(message)
     if (object[0] == "setInjectedScriptSource") {
         object[1] = "<long script elided>"
     }
-    console.log(arguments.callee.signature + "(" + JSON.stringify(object,null,4) + ")")
+    Weinre.logInfo(arguments.callee.signature + "(" + JSON.stringify(object,null,4) + ")")
 
 //-----------------------------------------------------------------------------
 method _getPlatformAndPort

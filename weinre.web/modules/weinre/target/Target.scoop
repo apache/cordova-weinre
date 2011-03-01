@@ -31,11 +31,11 @@ requireClass ./WiRuntimeImpl
 
 //-----------------------------------------------------------------------------
 class Target
-    this.initialize()
 
 //-----------------------------------------------------------------------------
 static method main
     Weinre.target = new Target()
+    Weinre.target.initialize()
     
     Weinre.addCSSProperties = function addCSSProperties(properties) {
         CSSStore.addCSSProperties(properties)
@@ -127,7 +127,7 @@ static method handleError(event)
     var lineno   = event.lineno   || "[unknown lineno]"
     var message  = event.message  || "[unknown message]"
 
-    console.error("error occurred: " + filename + ":" + lineno + ": " + message)
+    Weinre.logError("error occurred: " + filename + ":" + lineno + ": " + message)
 
 //-----------------------------------------------------------------------------
 method cb_webSocketOpened()

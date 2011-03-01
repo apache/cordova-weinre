@@ -5,6 +5,8 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+// messages from the server to the target
+
 module weinre {
     interface WeinreTargetEvents {
     

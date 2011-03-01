@@ -18,12 +18,8 @@ class WeinreTargetEventsImpl
 method connectionCreated(/*string*/ clientId, /*string*/ targetId)
     var message = "weinre: target " + targetId + " connected to client " + clientId
     
-    console.log(message)
+    Weinre.logInfo(message)
     var oldValue = Console.useRemote(true)
-    
-    if (!oldValue) {
-        console.log(message)
-    }
     
     // Weinre.showNotImplemented()
 
@@ -34,13 +30,9 @@ method connectionCreated(/*string*/ clientId, /*string*/ targetId)
 method connectionDestroyed(/*string*/ clientId, /*string*/ targetId)
     var message = "weinre: target " + targetId + " disconnected from client " + clientId
     
-    console.log(message)
+    Weinre.logInfo(message)
     var oldValue = Console.useRemote(false)
     
-    if (oldValue) {
-        console.log(message)
-    }
-
 //-----------------------------------------------------------------------------
 method sendCallback(/*int*/ callbackId, /*any*/ result)
     Callback.invoke(callbackId, result)

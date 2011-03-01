@@ -17,7 +17,7 @@ method getStylesForNode(/*int*/ nodeId, callback)
     
     var node = Weinre.nodeStore.getNode(nodeId)
     if (!node) {
-        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        Weinre.logWarning(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
         return
     }
     
@@ -50,7 +50,7 @@ method getStylesForNode(/*int*/ nodeId, callback)
 method getComputedStyleForNode(/*int*/ nodeId, callback)
     var node = Weinre.nodeStore.getNode(nodeId)
     if (!node) {
-        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        Weinre.logWarning(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
         return
     }
 
@@ -65,7 +65,7 @@ method getComputedStyleForNode(/*int*/ nodeId, callback)
 method getInlineStyleForNode(/*int*/ nodeId, callback)
     var node = Weinre.nodeStore.getNode(nodeId)
     if (!node) {
-        console.log(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
+        Weinre.logWarning(arguments.callee.signature + " passed an invalid nodeId: " + nodeId)
         return
     }
 

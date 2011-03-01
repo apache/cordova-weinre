@@ -7,6 +7,7 @@
  */
 
 requireClass ./Ex
+requireClass ./Weinre
 
 //-----------------------------------------------------------------------------
 class EventListeners
@@ -37,7 +38,7 @@ method fire(event)
                 listener.call(null, event)
             }
             catch(e) {
-                console.log(arguments.callee.signature + " invocation exception: " + e)
+                Weinre.logError(arguments.callee.signature + " invocation exception: " + e)
             }
             return
         }
@@ -50,6 +51,6 @@ method fire(event)
             listener.handleEvent.call(listener, event)
         }
         catch(e) {
-            console.log(arguments.callee.signature + " invocation exception: " + e)
+            Weinre.logError(arguments.callee.signature + " invocation exception: " + e)
         }
     })

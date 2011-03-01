@@ -73,7 +73,7 @@ method connectionDestroyed(/*int*/ clientId, /*int*/ targetId)
     if (!nextTargetId) return
     
     Weinre.WeinreClientCommands.connectTarget(Weinre.clientId, nextTargetId)
-    console.log("autoconnecting to " + nextTargetId)
+    Weinre.logInfo("autoconnecting to " + nextTargetId)
 
 //-----------------------------------------------------------------------------
 method sendCallback(/*int*/ callbackId, /*any*/ result)

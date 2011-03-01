@@ -47,6 +47,7 @@ public class Main {
     static public void warn(  String message ) { Logger.warn(message);  }
     static public void info(  String message ) { Logger.info(message);  }
     static public void debug( String message ) { Logger.debug(message); }
+    static public void error( String message ) { Logger.warn(message);  }
 
     //---------------------------------------------------------------
     public Main(String[] args) {

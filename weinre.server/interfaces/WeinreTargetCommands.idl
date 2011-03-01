@@ -5,6 +5,8 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+// messages from the target to the server
+
 module weinre {
     interface WeinreTargetCommands {
     
@@ -12,6 +14,10 @@ module weinre {
 
         void sendClientCallback(string callbackId, Object args);
 
+        void logDebug(   in string message );
+        void logInfo(    in string message );
+        void logWarning( in string message );
+        void logError(   in string message );
     };
 }
 
