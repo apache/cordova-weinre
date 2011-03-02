@@ -12,8 +12,24 @@
 <title>weinre - Building</title>
 <link rel="stylesheet" href="css/main.css" type="text/css">
 <script src="scripts/main.js"></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-736164-7']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </head>
+
 <body>
+
+<a href="https://github.com/pmuellr/weinre"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://assets0.github.com/img/5d21241b64dc708fcbb701f68f72f41e9f1fadd6?repo=&url=http%3A%2F%2Fs3.amazonaws.com%2Fgithub%2Fribbons%2Fforkme_left_red_aa0000.png&path=" alt="Fork me on GitHub"></a>
 
 <!-- ======================================================================= -->
 <h1 class="page-title">weinre - Building</h1>
@@ -41,7 +57,11 @@
 <p>The source repository for weinre is maintained at 
 <a href="https://github.com/pmuellr/weinre">GitHub</a>.
 
-<p>To build the current version of <span class="weinre">weinre</span>, you need to be using Eclipse.
+<p>To build the current version of <span class="weinre">weinre</span>, you will 
+probably want to use Eclipse.  If that's not an option, there is some 
+experimental support in the main ant build script to compile the Java code 
+outside of Eclipse.  Explore the <tt>build.xml</tt> file to see how that's
+done.
 
 <p>At development time, <span class="weinre">weinre</span> consists of 5 Eclipse
 projects.  See the file <tt>README.md</tt> in the

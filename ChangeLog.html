@@ -12,8 +12,24 @@
 <title>weinre - ChangeLog</title>
 <link rel="stylesheet" href="css/main.css" type="text/css">
 <script src="scripts/main.js"></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-736164-7']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </head>
+
 <body>
+
+<a href="https://github.com/pmuellr/weinre"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://assets0.github.com/img/5d21241b64dc708fcbb701f68f72f41e9f1fadd6?repo=&url=http%3A%2F%2Fs3.amazonaws.com%2Fgithub%2Fribbons%2Fforkme_left_red_aa0000.png&path=" alt="Fork me on GitHub"></a>
 
 <!-- ======================================================================= -->
 <h1 class="page-title">weinre - ChangeLog</h1>
@@ -37,6 +53,32 @@
  * 
  * Copyright (c) 2011 IBM Corporation
 -->
+
+<h2>2011/03/02 - version 1.1.0</h2>
+<ul>
+<li>added Timeline panel; tracks timers, intervals, XHRs, some other events, and
+    <tt>console.markTimeline(<i>string</i>)</tt>
+<li>now showing matching style rules in Elements panel
+<li>no more diagnostic messages in the user's console; they are now written
+    to the server console
+<li>caught up to a more recent version of Web Inspector
+<li>refactoring, technical debt paydown
+</ul>
+
+<p>issues closed:
+<ul>
+<li><a href='https://github.com/pmuellr/weinre/issues/10'>issue 10</a> enable Timeline panel, and provide some events
+<li><a href='https://github.com/pmuellr/weinre/issues/20'>issue 20</a> catch up to latest Web Inspector code base
+<li><a href='https://github.com/pmuellr/weinre/issues/23'>issue 23</a> mac app's web pages can't connect to server
+<li><a href='https://github.com/pmuellr/weinre/issues/24'>issue 24</a> weinre server runs slowly on windows
+<li><a href='https://github.com/pmuellr/weinre/issues/25'>issue 25</a> pay down technical debt
+<li><a href='https://github.com/pmuellr/weinre/issues/28'>issue 28</a> create a standalone Java launch
+<li><a href='https://github.com/pmuellr/weinre/issues/29'>issue 29</a> autoconnect does not always work
+<li><a href='https://github.com/pmuellr/weinre/issues/30'>issue 30</a> all-json-idls.js is a pig
+<li><a href='https://github.com/pmuellr/weinre/issues/31'>issue 31</a> redirect error/warn/info/debug messages from client and target to server
+<li><a href='https://github.com/pmuellr/weinre/issues/32'>issue 32</a> monospace font too small everywhere
+<li><a href='https://github.com/pmuellr/weinre/issues/33'>issue 33</a> update doc
+</ul>
 
 <h2>2011/01/25 - version 1.0.0</h2>
 <ul>
