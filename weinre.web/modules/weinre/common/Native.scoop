@@ -1,0 +1,29 @@
+
+/*
+ * weinre is available under *either* the terms of the modified BSD license *or* the
+ * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
+ * 
+ * Copyright (c) 2011 IBM Corporation
+ */
+
+//-----------------------------------------------------------------------------
+class Native
+
+//-----------------------------------------------------------------------------
+init
+    Native.original = {}
+
+    Native.original.clearInterval       = window.clearInterval
+    Native.original.clearTimeout        = window.clearTimeout
+    Native.original.setTimeout          = window.setTimeout
+    Native.original.setInterval         = window.setInterval
+    Native.original.XMLHttpRequest      = window.XMLHttpRequest
+    Native.original.XMLHttpRequest_open = window.XMLHttpRequest.prototype.open
+
+    Native.clearInterval       = function() { return Native.original.clearInterval.apply( window, [].slice.call(arguments))}
+    Native.clearTimeout        = function() { return Native.original.clearTimeout.apply(  window, [].slice.call(arguments))}
+    Native.setInterval         = function() { return Native.original.setInterval.apply(   window, [].slice.call(arguments))}
+    Native.setTimeout          = function() { return Native.original.setTimeout.apply(    window, [].slice.call(arguments))}
+    Native.XMLHttpRequest      = function() { return new Native.original.XMLHttpRequest()}
+    Native.XMLHttpRequest_open = function() { return Native.original.XMLHttpRequest_open.apply(this, [].slice.call(arguments))}
+    

@@ -6,10 +6,8 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ./DOMTemplates as dt
+requireClass ./DOMTemplates as dt
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 class ConnectorList(title)
     this.connectors   = {}
@@ -20,13 +18,9 @@ class ConnectorList(title)
     this.noneItem.addStyleClass("weinre-connector-item")
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getElement
     return this.div
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method add(connector)
     if (this.connectors[connector.id]) return
@@ -39,7 +33,7 @@ method add(connector)
         this.noneItem.style.display = "none"
     }
     
-    li.addStyleClass("fadeable")
+    li.addStyleClass("weinre-fadeable")
     
     var insertionPoint = this.getConnectorInsertionPoint(connector)
     if (!insertionPoint) {
@@ -49,8 +43,6 @@ method add(connector)
         this.ulConnectors.insertBefore(li, insertionPoint)
     }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method getNewestConnectorId(ignoring)
     var newest = 0
@@ -64,8 +56,6 @@ method getNewestConnectorId(ignoring)
     return newest
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getConnectorInsertionPoint(connector)
     for (var i=0; i<this.ulConnectors.childNodes.length; i++) {
         var childNode = this.ulConnectors.childNodes[i]
@@ -77,8 +67,6 @@ method getConnectorInsertionPoint(connector)
     
     return null
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method remove(id, fast)
     var self = this
@@ -98,15 +86,13 @@ method remove(id, fast)
 
     else {
         this.setState(element, "closed")
-        element.addStyleClass("fade")
+        element.addStyleClass("weinre-fade")
 
         window.setTimeout(function() {
             self._remove(element)
         }, 5000)
     }
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method _remove(element)
     this.ulConnectors.removeChild(element)
@@ -115,15 +101,11 @@ method _remove(element)
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method removeAll()
     this.getConnectors().forEach(function(connector) {
         this.remove(connector.id, true)
     }, this)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method getConnectors()
     var result = []
@@ -136,16 +118,12 @@ method getConnectors()
     return result
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getConnectorElement(id)
     var connector = this.connectors[id]
     if (!connector) return null
     
     return connector.element
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method setCurrent(id)
     this.getConnectors().forEach(function(connector) {
@@ -157,8 +135,6 @@ method setCurrent(id)
     
     element.addStyleClass("current")
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method setState(id, state)
     if (typeof id == "string") {

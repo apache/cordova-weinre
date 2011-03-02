@@ -6,29 +6,37 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ./IDLTools
+requireClass ./Ex
+requireClass ./IDLTools
+requireClass ./StackTrace
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 class Weinre
-    throw new Error("this class is not intended to be instantiated")
+    throw new Ex(arguments, "this class is not intended to be instantiated")
 
 //-----------------------------------------------------------------------------
-//
+init 
+    var _notImplemented     = {}
+    var _showNotImplemented = false
+    var CSSProperties       = []
+    var logger              = null
+
 //-----------------------------------------------------------------------------
 static method addIDLs(idls)
     IDLTools.addIDLs(idls)
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-static 
-    var _notImplemented     = {}
-    var _showNotImplemented = false
+static method addCSSProperties(cssProperties)
+    CSSProperties = cssProperties
 
 //-----------------------------------------------------------------------------
-//
+static method getCSSProperties
+    return CSSProperties
+
+//-----------------------------------------------------------------------------
+static method deprecated()
+    StackTrace.dump(arguments)
+    
 //-----------------------------------------------------------------------------
 static method notImplemented(thing)
     if (_notImplemented[thing]) return
@@ -36,13 +44,37 @@ static method notImplemented(thing)
     _notImplemented[thing] = true
     
     if (!_showNotImplemented) return
-    console.log(thing + " not implemented")
+    Weinre.logWarning(thing + " not implemented")
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static method showNotImplemented()
     _showNotImplemented = true
     for (var key in _notImplemented) {
-        console.log(key + " not implemented")
+        Weinre.logWarning(key + " not implemented")
     }
+    
+//-----------------------------------------------------------------------------
+static method logError(message)
+    getLogger().logError(message)
+
+//-----------------------------------------------------------------------------
+static method logWarning(message)
+    getLogger().logWarning(message)
+
+//-----------------------------------------------------------------------------
+static method logInfo(message)
+    getLogger().logInfo(message)
+
+//-----------------------------------------------------------------------------
+static method logDebug(message)
+    getLogger().logDebug(message)
+
+//-----------------------------------------------------------------------------
+function getLogger()
+    if (logger) return logger
+    
+    if      (Weinre.client) logger = Weinre.WeinreClientCommands
+    else if (Weinre.target) logger = Weinre.WeinreTargetCommands
+    
+    return logger
+    

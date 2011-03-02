@@ -7,21 +7,28 @@
  */
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 class NodeStore
-    this.__nodeMap     = {}
-    this.__nodeDataMap = {}
-    this.__nextId      = 0
+    this.__nodeMap      = {}
+    this.__nodeDataMap  = {}
+    this.__nextId       = 0
+    this.inspectedNodes = []
+
 
 //-----------------------------------------------------------------------------
-//
+method addInspectedNode(nodeId)
+    this.inspectedNodes.unshift(nodeId)
+    if (this.inspectedNodes.length > 5) {
+        this.inspectedNodes = this.inspectedNodes.slice(0,5)
+    }
+
+//-----------------------------------------------------------------------------
+method getInspectedNode(index)
+    return this.inspectedNodes[index]
+
 //-----------------------------------------------------------------------------
 method getNode(nodeId)
     return this.__nodeMap[nodeId]
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method getNodeId(node)
     if (node.__weinre_id) { 
@@ -34,22 +41,16 @@ method getNodeId(node)
     return node.__weinre_id
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method getNodeData(nodeId, depth)
     return this.serializeNode(this.getNode(nodeId), depth)
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method nextNodeId()
     return "" + (++this.__nextId)
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method serializeNode(node, depth)
-    var nodeName  = null
+    var nodeName  = ""
     var nodeValue = null
     var localName = null
     var id = this.getNodeId(node) 
@@ -115,8 +116,6 @@ method serializeNode(node, depth)
     return nodeData
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method serializeNodeChildren(node, depth)
     var result   = []
     var childIds = this.childNodeIds(node)
@@ -139,13 +138,9 @@ method serializeNodeChildren(node, depth)
     return result
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method childNodeCount(node)
     return this.childNodeIds(node).length
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method childNodeIds(node)
     var ids = []
@@ -157,8 +152,6 @@ method childNodeIds(node)
     
     return ids
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method isToBeSkipped(node)
     if (!node) return true

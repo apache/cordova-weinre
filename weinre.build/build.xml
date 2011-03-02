@@ -13,6 +13,7 @@
     
     <property file="personal.properties" />
     <property file="build.properties" />
+    <property file="vendor.properties" />
 
     <!-- hint: override in your personal.properties -->
     <property name="BUILDER" value="The Unknown Builder"/>
@@ -73,8 +74,8 @@
         
         <echo file="${OUT}/build-info.txt" message="${build-info-text}"/>
         
-        <antcall target="compile-java"/>
         <antcall target="build-vendor"/>
+        <antcall target="compile-java"/>
         <antcall target="build-web"/>
         <antcall target="build-doc"/>
         <antcall target="build-json-idl"/>
@@ -153,7 +154,6 @@
         <echo message="compiling scoop modules"/>
         <exec executable="python" failonerror="true" failifexecutionfails="true">
             <arg  file="vendor/scooj/scoopc.py"/>
-            <arg value="--quiet"/>
             <arg value="--out"/>
             <arg  file="${TMP}/modules"/>
             <arg  file="../${PROJECT_WEB}/modules"/>
@@ -188,6 +188,19 @@
             </fileset>
         </copy>
 
+        <echo message="building InjectedScript.js"/>
+        <echo 
+            file    = "${WEB}/weinre/target/InjectedScript.js"
+            message = "var injectedScriptConstructor = ${line.separator}"
+        />
+        <concat 
+            destfile = "${WEB}/weinre/target/InjectedScript.js"
+            append   = "true"
+        >
+            <fileset file="${VENDOR}/webkit/WebCore/inspector/InjectedScriptSource.js"/>
+        </concat>
+            
+        <echo message="building versions.js"/>
         <copy todir="${WEB}">
             <fileset dir="../${PROJECT_WEB}">
                 <include name="versions.js"/>
@@ -208,6 +221,13 @@
                 <filter token="JAVAX_SERVLET_VERSION_IMPL" value="${JAVAX_SERVLET_VERSION_IMPL}"/>
             </filterset>
         </copy>
+
+        <echo message="building add-css-properties.js"/>
+        <exec executable="python" failonerror="true" failifexecutionfails="true">
+            <arg  file="scripts/build-css-properties.py"/>
+            <arg value="vendor/webkit/WebCore/CSSPropertyNames.in"/>
+            <arg value="${WEB}/add-css-properties.js"/>
+        </exec>
         
     </target>
 
@@ -285,6 +305,13 @@
             <arg file="${CACHED}/json-idl"/>
         </exec>
 
+        <exec executable="python" failonerror="true" failifexecutionfails="true">
+            <arg file="scripts/collect-all-json-idl.py"/>
+            <arg value="-min"/>
+            <arg file="${CACHED}/json-idl/all-json-idls-min.js"/>
+            <arg file="${CACHED}/json-idl"/>
+        </exec>
+
     </target>
 
     <!-- ============================================================
@@ -334,7 +361,7 @@
         <jar destfile="${OUT}/weinre.jar">
             <manifest>
                 <attribute name="Built-By" value="${ant.file.basename} - ${ant.project.name}"/>
-                <attribute name="Main-Class" value="com.phonegap.weinre.server.Main"/>
+                <attribute name="Main-Class" value="weinre.server.Main"/>
             </manifest>
             
             <fileset file="${OUT}/build-info.txt"/>
@@ -378,7 +405,7 @@
         <jar destfile="${OUT}/weinre-ui.jar">
             <manifest>
                 <attribute name="Built-By" value="${ant.file.basename} - ${ant.project.name}"/>
-                <attribute name="Main-Class" value="com.phonegap.weinre.application.GUIMain"/>
+                <attribute name="Main-Class" value="weinre.application.GUIMain"/>
             </manifest>
             
             <fileset file="${OUT}/build-info.txt"/>

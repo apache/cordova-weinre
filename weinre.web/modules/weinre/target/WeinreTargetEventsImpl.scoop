@@ -6,46 +6,33 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ../common/Weinre
-require ../common/Callback
+requireClass ../common/Weinre
+requireClass ../common/Callback
 
-require ./Console
+requireClass ./Console
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 class WeinreTargetEventsImpl
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method connectionCreated(/*string*/ clientId, /*string*/ targetId)
     var message = "weinre: target " + targetId + " connected to client " + clientId
     
-    console.log(message)
+    Weinre.logInfo(message)
     var oldValue = Console.useRemote(true)
     
-    if (!oldValue) {
-        console.log(message)
-    }
-    
-    Weinre.target.setDocument()
+    // Weinre.showNotImplemented()
 
-//-----------------------------------------------------------------------------
-//
+    Weinre.target.setDocument()
+    Weinre.wi.TimelineNotify.timelineProfilerWasStopped()
+
 //-----------------------------------------------------------------------------
 method connectionDestroyed(/*string*/ clientId, /*string*/ targetId)
     var message = "weinre: target " + targetId + " disconnected from client " + clientId
     
-    console.log(message)
+    Weinre.logInfo(message)
     var oldValue = Console.useRemote(false)
     
-    if (oldValue) {
-        console.log(message)
-    }
-
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method sendCallback(/*int*/ callbackId, /*any*/ result)
     Callback.invoke(callbackId, result)

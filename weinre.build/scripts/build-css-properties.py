@@ -36,7 +36,7 @@ def main():
     properties.sort()
         
     jsonString = json.dumps(properties, indent=4)
-    jsString = "Weinre.addCSSProperties(%s)" % jsonString
+    jsString = 'require("weinre/common/Weinre").addCSSProperties(%s)' % jsonString
 
     oFile = open(oFileName, "w")
     oFile.write(jsString)
@@ -45,21 +45,15 @@ def main():
     log("generated css properties in: " + oFileName)
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def log(message):
     message = "%s: %s" % (PROGRAM_NAME, message)
     print >>sys.stderr, message
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def error(message):
     log(message)
     sys.exit(-1)
 
-#--------------------------------------------------------------------
-#
 #--------------------------------------------------------------------
 PROGRAM_NAME = os.path.basename(sys.argv[0])
 

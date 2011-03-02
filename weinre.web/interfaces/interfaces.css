@@ -44,7 +44,7 @@
     white-space: pre;
 }
  
-.attributeName, .methodName {
+.attributeName, .methodName, .interfaceName {
     font-weight: bold;
 }
 

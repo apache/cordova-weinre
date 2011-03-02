@@ -6,17 +6,14 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ../common/Weinre
+requireClass ../common/Weinre
+requireClass ../target/Timeline
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 class Console
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
-static
+init
     var UsingRemote = false
     
     var RemoteConsole   = new Console()
@@ -54,9 +51,6 @@ static
         Debug: 4
     }
 
-
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 static method useRemote(value)
     if (arguments.length == 0) return UsingRemote
@@ -73,130 +67,91 @@ static method useRemote(value)
     return oldValue
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
-method log
-    var messageParts = []
-    
-    for (var i=0; i<arguments.length; i++) {
-        messageParts.push(arguments[i].toString())
-    }
+method _generic(level, messageParts)
     
     var message = messageParts.join(" ")
     
     var payload = {
         source:      MessageSource.JS,
         type:        MessageType.Log,
-        level:       MessageLevel.Log,
+        level:       level,
         message:     message
     }
     
-    WebInspector.addConsoleMessage(payload)
+    Weinre.wi.ConsoleNotify.addConsoleMessage(payload)
 
 //-----------------------------------------------------------------------------
-// 
+method log
+    this._generic(MessageLevel.Log, [].slice.call(arguments)) 
+
 //-----------------------------------------------------------------------------
 method debug
-    Weinre.notImplemented(arguments.callee.signature)
+    this._generic(MessageLevel.Debug, [].slice.call(arguments)) 
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method error
-    Weinre.notImplemented(arguments.callee.signature)
+    this._generic(MessageLevel.Error, [].slice.call(arguments)) 
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method info
-    Weinre.notImplemented(arguments.callee.signature)
+    this._generic(MessageLevel.Log, [].slice.call(arguments)) 
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method warn
-    Weinre.notImplemented(arguments.callee.signature)
+    this._generic(MessageLevel.Warning, [].slice.call(arguments)) 
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method dir
     Weinre.notImplemented(arguments.callee.signature)
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method dirxml
     Weinre.notImplemented(arguments.callee.signature)
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method trace
     Weinre.notImplemented(arguments.callee.signature)
     
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method assert(condition)
     Weinre.notImplemented(arguments.callee.signature)
     
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method count
     Weinre.notImplemented(arguments.callee.signature)
     
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
-method markTimeline
-    Weinre.notImplemented(arguments.callee.signature)
+method markTimeline(message)
+    Timeline.addRecord_Mark(message)
     
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method lastWMLErrorMessage
     Weinre.notImplemented(arguments.callee.signature)
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method profile(title)
     Weinre.notImplemented(arguments.callee.signature)
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method profileEnd(title)
     Weinre.notImplemented(arguments.callee.signature)
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method time(title)
     Weinre.notImplemented(arguments.callee.signature)
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method timeEnd(title)
     Weinre.notImplemented(arguments.callee.signature)
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method group
     Weinre.notImplemented(arguments.callee.signature)
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method groupCollapsed
     Weinre.notImplemented(arguments.callee.signature)
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method groupEnd
     Weinre.notImplemented(arguments.callee.signature)

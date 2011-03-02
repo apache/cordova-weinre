@@ -6,42 +6,41 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-require ../common/Binding
-require ../common/Callback
-require ../common/Socket
-require ../common/Weinre
+requireClass ../common/Native
 
-require ./NodeStore
-require ./CSSStore
-require ./ElementHighlighter
-require ./InjectedScriptHostImpl
-require ./WebInspectorApplicationCacheHandlerImpl
-require ./WebInspectorBackendHandlerImpl
-require ./WebInspectorControllerHandlerImpl
-require ./WebInspectorDOMHandlerImpl   
-require ./WebInspectorDebugHandlerImpl
-require ./WebInspectorProfilerHandlerImpl
-require ./WebInspectorResourceHandlerImpl
-require ./WeinreTargetEventsImpl
+requireClass ../common/Ex
+requireClass ../common/Binding
+requireClass ../common/Callback
+requireClass ../common/MessageDispatcher
+requireClass ../common/Weinre
 
-//-----------------------------------------------------------------------------
-// 
+requireClass ./NodeStore
+requireClass ./CSSStore
+requireClass ./ElementHighlighter
+requireClass ./InjectedScriptHostImpl
+
+requireClass ./WeinreTargetEventsImpl
+
+requireClass ./WiConsoleImpl
+requireClass ./WiCSSImpl
+requireClass ./WiDatabaseImpl
+requireClass ./WiDOMImpl
+requireClass ./WiDOMStorageImpl
+requireClass ./WiInspectorImpl
+requireClass ./WiRuntimeImpl
+
 //-----------------------------------------------------------------------------
 class Target
-    this.initialize()
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 static method main
     Weinre.target = new Target()
+    Weinre.target.initialize()
     
     Weinre.addCSSProperties = function addCSSProperties(properties) {
         CSSStore.addCSSProperties(properties)
     }
     
-//------------------------------------------------------------------------------
-//
 //------------------------------------------------------------------------------
 method setWeinreServerURLFromScriptSrc()
     if (window.WeinreServerURL) return
@@ -66,10 +65,8 @@ method setWeinreServerURLFromScriptSrc()
     
     var message = "unable to calculate the weinre server url; explicity set the variable window.WeinreServerURL instead" 
     alert(message)
-    throw new Error(message)
+    throw new Ex(arguments, message)
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method initialize()
     this.setWeinreServerURLFromScriptSrc()
@@ -83,45 +80,59 @@ method initialize()
     
     window.addEventListener("load", Binding(this, "onLoaded"), false)
 
-    var webSocket = new Socket(window.WeinreServerURL + "ws/target")
-    Weinre.webSocket = webSocket
+    var messageDispatcher = new MessageDispatcher(window.WeinreServerURL + "ws/target")
+    Weinre.messageDispatcher = messageDispatcher
 
-    Weinre.WebInspectorApplicationCacheHandler = new WebInspectorApplicationCacheHandlerImpl()
-    Weinre.WebInspectorBackendHandler          = new WebInspectorBackendHandlerImpl()  
-    Weinre.WebInspectorControllerHandler       = new WebInspectorControllerHandlerImpl()
-    Weinre.WebInspectorDOMHandler              = new WebInspectorDOMHandlerImpl()        
-    Weinre.WebInspectorDebugHandler            = new WebInspectorDebugHandlerImpl()
-    Weinre.WebInspectorProfilerHandler         = new WebInspectorProfilerHandlerImpl()
-    Weinre.WebInspectorResourceHandler         = new WebInspectorResourceHandlerImpl()
-
-    webSocket.registerInterface("WebInspectorApplicationCacheHandler", Weinre.WebInspectorApplicationCacheHandler, true)
-    webSocket.registerInterface("WebInspectorBackendHandler",          Weinre.WebInspectorBackendHandler,          true)
-    webSocket.registerInterface("WebInspectorControllerHandler",       Weinre.WebInspectorControllerHandler,       true)
-    webSocket.registerInterface("WebInspectorDOMHandler",              Weinre.WebInspectorDOMHandler,              true)
-    webSocket.registerInterface("WebInspectorDebugHandler",            Weinre.WebInspectorDebugHandler,            true)
-    webSocket.registerInterface("WebInspectorProfilerHandler",         Weinre.WebInspectorProfilerHandler,         true)
-    webSocket.registerInterface("WebInspectorResourceHandler",         Weinre.WebInspectorResourceHandler,         true)
+    Weinre.wi = {}
     
-    webSocket.registerInterface("WeinreTargetEvents", new WeinreTargetEventsImpl(), true)
+    Weinre.wi.Console          = new WiConsoleImpl()
+    Weinre.wi.CSS              = new WiCSSImpl()
+    Weinre.wi.Database         = new WiDatabaseImpl()
+    Weinre.wi.DOM              = new WiDOMImpl()
+    Weinre.wi.DOMStorage       = new WiDOMStorageImpl()
+    Weinre.wi.Inspector        = new WiInspectorImpl()
+    Weinre.wi.Runtime          = new WiRuntimeImpl()
+    
+    messageDispatcher.registerInterface("Console",          Weinre.wi.Console          , false)
+    messageDispatcher.registerInterface("CSS",              Weinre.wi.CSS              , false)
+    messageDispatcher.registerInterface("Database",         Weinre.wi.Database         , false)
+    messageDispatcher.registerInterface("DOM",              Weinre.wi.DOM              , false)
+    messageDispatcher.registerInterface("DOMStorage",       Weinre.wi.DOMStorage       , false)
+    messageDispatcher.registerInterface("Inspector",        Weinre.wi.Inspector        , false)
+    messageDispatcher.registerInterface("Runtime",          Weinre.wi.Runtime          , false)
+    
+    messageDispatcher.registerInterface("WeinreTargetEvents", new WeinreTargetEventsImpl(), true)
 
-    Weinre.WeinreTargetCommands  = webSocket.createProxy("WeinreTargetCommands")
-    window.WebInspector          = webSocket.createProxy("WebInspector")
+    Weinre.wi.ApplicationCacheNotify = messageDispatcher.createProxy("ApplicationCacheNotify")
+    Weinre.wi.ConsoleNotify          = messageDispatcher.createProxy("ConsoleNotify")
+    Weinre.wi.DOMNotify              = messageDispatcher.createProxy("DOMNotify")
+    Weinre.wi.DOMStorageNotify       = messageDispatcher.createProxy("DOMStorageNotify")
+    Weinre.wi.DatabaseNotify         = messageDispatcher.createProxy("DatabaseNotify")
+    Weinre.wi.InspectorNotify        = messageDispatcher.createProxy("InspectorNotify")
+    Weinre.wi.TimelineNotify         = messageDispatcher.createProxy("TimelineNotify")
+    
+    Weinre.WeinreTargetCommands  = messageDispatcher.createProxy("WeinreTargetCommands")
 
-//  Weinre.Socket.verbose(true)
-    webSocket.open()
-    webSocket._socket.addEventListener("open", Binding(this, this.cb_webSocketOpened))
+    messageDispatcher.getWebSocket().addEventListener("open", Binding(this, this.cb_webSocketOpened))
     
     Weinre.nodeStore = new NodeStore()
     Weinre.cssStore  = new CSSStore()
-
+    
+    window.addEventListener("error", function(e) {Target.handleError(e)}, false)
+    
+    
 //-----------------------------------------------------------------------------
-// 
+static method handleError(event)
+    var filename = event.filename || "[unknown filename]"
+    var lineno   = event.lineno   || "[unknown lineno]"
+    var message  = event.message  || "[unknown message]"
+
+    Weinre.logError("error occurred: " + filename + ":" + lineno + ": " + message)
+
 //-----------------------------------------------------------------------------
 method cb_webSocketOpened()
     Weinre.WeinreTargetCommands.registerTarget(window.location.href, Binding(this, this.cb_registerTarget))
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method cb_registerTarget(targetId)
     Weinre.targetId    = targetId
@@ -130,12 +141,8 @@ method cb_registerTarget(targetId)
     Callback.setConnectorId(targetId)
 
 //-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
 method onLoaded()
 
-//-----------------------------------------------------------------------------
-// 
 //-----------------------------------------------------------------------------
 method setDocument()
     Weinre.elementHighlighter = new ElementHighlighter()
@@ -143,4 +150,4 @@ method setDocument()
     var nodeId = Weinre.nodeStore.getNodeId(document)
     var nodeData = Weinre.nodeStore.getNodeData(nodeId, 2)
 
-    WebInspector.setDocument(nodeData)
+    Weinre.wi.DOMNotify.setDocument(nodeData)

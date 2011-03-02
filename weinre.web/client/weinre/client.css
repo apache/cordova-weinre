@@ -9,6 +9,16 @@
     background-image: url(../../images/weinre-icon-32x32.png);
 }
 
+.monospace {
+     font-size:   12px !important;
+     font-family: Monaco, Consolas, Lucida Console, dejavu sans mono, monospace;
+}
+
+.source-code {
+     font-size:   12px !important;
+     font-family: Monaco, Consolas, Lucida Console, dejavu sans mono, monospace;
+}
+
 .weinre-connector-item {
     font-size: 140%;
 }
@@ -40,36 +50,20 @@
     font-size: 200%
 }
 
-.weinreConsole {
-    margin-left: 2em;
-}
-
 .weinreServerProperties {
     margin-left: 2em;
-}
-
-.console_stdout {
-    color: #000;
-}
-
-.console_stderr {
-    color: #F00;
 }
 
 .weinre-normal-text-size {
     font-size: 140%;
 }
 
-body.platform-weinre .monospace, body.platform-weinre .source-code {
-     font-size:   12px;
-     font-family: Monaco, Consolas, Lucida Console, dejavu sans mono, monospace;
-}
-
-.fadeable {
+.weinre-fadeable {
   opacity: 1;
   -webkit-transition: opacity 5s linear;
 }
 
-.fade {
+.weinre-fade {
   opacity: 0;
 }
+

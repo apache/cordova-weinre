@@ -14,8 +14,6 @@ import json
 import optparse
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def main():
     if len(sys.argv) < 2:
         error("expecting parameters [web directory]")
@@ -32,8 +30,6 @@ def main():
     
     createIndexFile(iFileName, oFileName, moduleDir)
 
-#--------------------------------------------------------------------
-#
 #--------------------------------------------------------------------
 def createIndexFile(iFileName, oFileName, moduleDir):
     with open(iFileName) as iFile: lines = iFile.readlines()
@@ -54,7 +50,6 @@ def createIndexFile(iFileName, oFileName, moduleDir):
                 '<meta http-equiv="X-UA-Compatible" content="chrome=1">\n'
                 '<link rel="shortcut icon" href="../images/weinre-icon-64x64.png">\n',
                 '<title>weinre</title>\n',
-                '<link rel="stylesheet" type="text/css" href="weinre/client.css">\n',
                 '<script type="text/javascript" src="weinre/check-for-webkit.js"></script>\n',
                 '<script type="text/javascript" src="weinre/hacks.js"></script>\n',
                 '<script type="text/javascript" src="../modjewel-require.js"></script>\n',
@@ -70,7 +65,8 @@ def createIndexFile(iFileName, oFileName, moduleDir):
         elif pattern_head_end.match(line):
             foundEnd = True
             newLines.append("<!-- ========== weinre additions: starting ========== -->\n")
-            newLines.append('<script type="text/javascript" src="../interfaces/all-json-idls.js"></script>\n')
+            newLines.append('<link rel="stylesheet" type="text/css" href="weinre/client.css">\n')
+            newLines.append('<script type="text/javascript" src="../interfaces/all-json-idls-min.js"></script>\n')
             newLines.append('<script type="text/javascript">require("weinre/client/Client").main()</script>\n')
             newLines.append("<!-- ========== weinre additions: done ========== -->\n")
             newLines.append(line)
@@ -86,8 +82,6 @@ def createIndexFile(iFileName, oFileName, moduleDir):
     log("created %s" % oFileName)
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def getModules(moduleDir):
     modules = []
     
@@ -98,24 +92,17 @@ def getModules(moduleDir):
         modules.append("weinre/client/%s" % module)
 
     return modules
-    
         
-#--------------------------------------------------------------------
-#
 #--------------------------------------------------------------------
 def log(message):
     message = "%s: %s" % (PROGRAM_NAME, message)
     print >>sys.stderr, message
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def error(message):
     log(message)
     sys.exit(-1)
 
-#--------------------------------------------------------------------
-#
 #--------------------------------------------------------------------
 PROGRAM_NAME = os.path.basename(sys.argv[0])
 

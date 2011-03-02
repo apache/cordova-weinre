@@ -6,20 +6,17 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
-//-----------------------------------------------------------------------------
-//
+requireClass ./Ex
+requireClass ./Weinre
+
 //-----------------------------------------------------------------------------
 class EventListeners
     this._listeners = []
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method add(listener, useCapture)
     this._listeners.push([listener, useCapture])
 
-//-----------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------
 method remove(listener, useCapture)
     for (var i=0; i<this._listeners.length; i++) {
@@ -32,8 +29,6 @@ method remove(listener, useCapture)
     }
 
 //-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
 method fire(event)
     this._listeners.slice().forEach(function(listener) {
         var listener = listener[0]
@@ -43,19 +38,19 @@ method fire(event)
                 listener.call(null, event)
             }
             catch(e) {
-                console.log(arguments.callee.signature + " invocation exception: " + e)
+                Weinre.logError(arguments.callee.signature + " invocation exception: " + e)
             }
             return
         }
         
         if (typeof listener.handleEvent != "function") {
-            throw new Error("listener does not implement the handleEvent() method")
+            throw new Ex(arguments, "listener does not implement the handleEvent() method")
         }
         
         try {
             listener.handleEvent.call(listener, event)
         }
         catch(e) {
-            console.log(arguments.callee.signature + " invocation exception: " + e)
+            Weinre.logError(arguments.callee.signature + " invocation exception: " + e)
         }
     })

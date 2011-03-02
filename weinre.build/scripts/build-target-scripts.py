@@ -14,12 +14,8 @@ import json
 import optparse
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def main():
     
-    #----------------------------------------------------------------
-    # parse args    
     #----------------------------------------------------------------
     if len(sys.argv) < 4:
         error("expecting parameters piecesHtmlFile srcDir outputDir")
@@ -35,13 +31,9 @@ def main():
     if not os.path.isdir(oDirName):     error("output directory not a directory: '" + oDirName + "'")
     
     #----------------------------------------------------------------
-    # read the "pieces" file
-    #----------------------------------------------------------------
     with open(iFileName, "r") as iFile:
         lines = iFile.readlines()
         
-    #----------------------------------------------------------------
-    # get the scripts from the pieces file
     #----------------------------------------------------------------
     scripts     = []
     scriptNames = {}
@@ -55,6 +47,7 @@ def main():
         
         baseScriptFile = match.group(1)
         scriptFile = os.path.join(srcDirName, baseScriptFile)
+        if scriptFile == "weinre-demo.js": continue
         if not os.path.exists(scriptFile):   error("script file not found: '" + scriptFile + "'")
         
         scripts.append(scriptFile)
@@ -68,19 +61,13 @@ def main():
         # log("read: %s" % scriptFile)
 
     #----------------------------------------------------------------
-    # write the target-script.js file
-    #----------------------------------------------------------------
     oFileName = os.path.join(oDirName, "target-script.js")
     writeMergedFile(oFileName, scripts, scriptNames, scriptSrc)
 
     #----------------------------------------------------------------
-    # write the target-script-min.js file
-    #----------------------------------------------------------------
     oFileName = os.path.join(oDirName, "target-script-min.js")
     writeMergedFile(oFileName, scripts, scriptNames, scriptMin)
 
-#--------------------------------------------------------------------
-#
 #--------------------------------------------------------------------
 def writeMergedFile(oFileName, scripts, scriptNames, srcs):
 
@@ -104,9 +91,6 @@ def writeMergedFile(oFileName, scripts, scriptNames, srcs):
     
     log("generated: %s" % oFileName)
 
-
-#--------------------------------------------------------------------
-#
 #--------------------------------------------------------------------
 def min(script):
     patternCommentC   = re.compile(r"/\*.*?\*/",     re.MULTILINE + re.DOTALL)
@@ -122,21 +106,15 @@ def min(script):
     return script
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def log(message):
     message = "%s: %s" % (PROGRAM_NAME, message)
     print >>sys.stderr, message
 
 #--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
 def error(message):
     log(message)
     sys.exit(-1)
 
-#--------------------------------------------------------------------
-#
 #--------------------------------------------------------------------
 PROGRAM_NAME = os.path.basename(sys.argv[0])
 
