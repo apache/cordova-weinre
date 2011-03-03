@@ -1,0 +1,1 @@
+"[\"{\\\"interface\\\":\\\"WeinreTargetCommands\\\",\\\"method\\\":\\\"registerTarget\\\",\\\"args\\\":\\\"[\\\\\\\"file:///Users/aktowns/Library/Application Support/iPhone Simulator/4.2/Applications/3A54251E-6728-4EC6-A019-14AC875FB8DA/Documents/issues/testfile/023-widg/L1-2.html\\\\\\\", \\\\\\\"???::1\\\\\\\"]\\\"}\"]"
