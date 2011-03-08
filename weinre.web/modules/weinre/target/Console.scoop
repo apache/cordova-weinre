@@ -73,13 +73,21 @@ static method useRemote(value)
 //-----------------------------------------------------------------------------
 method _generic(level, messageParts)
     
-    var message = messageParts.join(" ")
+    var message = messageParts[0]
+    
+    var parameters = []
+    for (var i=0; i<messageParts.length; i++) {
+        parameters.push(
+            Weinre.injectedScript.wrapObjectForConsole(messageParts[i], true)
+        )
+    }
     
     var payload = {
         source:      MessageSource.JS,
         type:        MessageType.Log,
         level:       level,
-        message:     message
+        message:     message,
+        parameters:  parameters
     }
     
     Weinre.wi.ConsoleNotify.addConsoleMessage(payload)
