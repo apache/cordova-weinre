@@ -52,6 +52,10 @@ init
     }
 
 //-----------------------------------------------------------------------------
+static getter original
+    return OriginalConsole
+
+//-----------------------------------------------------------------------------
 static method useRemote(value)
     if (arguments.length == 0) return UsingRemote
     

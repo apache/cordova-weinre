@@ -7,23 +7,33 @@
 
 //------------------------------------------------------------------------------
 var started = false
-var button
+
+var buttonStartStuff
+var buttonClearOutput
+var outputElement 
 
 //------------------------------------------------------------------------------
 function onLoad() {
-    if (!button) button = document.getElementById("button")
+    if (!buttonStartStuff)  buttonStartStuff  = document.getElementById("button-start-stuff")
+    if (!buttonClearOutput) buttonClearOutput = document.getElementById("button-clear-output")
+    if (!outputElement)     outputElement     = document.getElementById("output")
     
-    button.addEventListener("click", function() {
+    buttonStartStuff.addEventListener("click", function() {
         if (!started) {
-            button.value = "stop stuff"
+            buttonStartStuff.value = "stop stuff"
             startStuff()
         }
         else {
-            button.value = "start stuff"
+            buttonStartStuff.value = "start stuff"
             stopStuff()      
         }
         started = !started
     })
+    
+    buttonClearOutput.addEventListener("click", function() {
+        outputElement.innerHTML = ""
+    })
+    
 }
 
 //------------------------------------------------------------------------------
@@ -39,11 +49,17 @@ function stopStuff() {
 
 //------------------------------------------------------------------------------
 function intervalStuff() {
+
+    var message = "doing interval stuff at " + new Date()
+    
     // add a timeout
-    setTimeout(function() { console.log("doing interval stuff")}, 333)
+    setTimeout(function() { console.log(message)}, 333)
     
     // add a timeline marker
-    console.markTimeline("doing interval Stuff")
+    console.markTimeline(message)
+    
+    // write the message to the page
+    output(message)
     
     // do an XHR
     var xhr = new XMLHttpRequest()
@@ -55,6 +71,13 @@ function intervalStuff() {
     var empty = null
     empty.x = 1
     
+}
+
+//------------------------------------------------------------------------------
+function output(string) {
+    var element = document.createElement("div")
+    element.innerHTML = string
+    outputElement.appendChild(element)
 }
 
 //------------------------------------------------------------------------------
