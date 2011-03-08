@@ -9,4 +9,5 @@ java \
 	-agentlib:$DEBUG \
 	-Dfile.encoding=UTF-8 \
 	-classpath $CP \
-	weinre.server.Main
+	weinre.server.Main \
+	--verbose true

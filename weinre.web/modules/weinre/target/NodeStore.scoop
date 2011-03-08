@@ -6,13 +6,20 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+requireClass ../common/Weinre
+requireClass ../common/IDGenerator
+
 //-----------------------------------------------------------------------------
 class NodeStore
     this.__nodeMap      = {}
     this.__nodeDataMap  = {}
-    this.__nextId       = 0
     this.inspectedNodes = []
-
+    
+    document.addEventListener("DOMSubtreeModified",       handleDOMSubtreeModified, false)
+    document.addEventListener("DOMNodeInserted",          handleDOMNodeInserted, false)
+    document.addEventListener("DOMNodeRemoved",           handleDOMNodeRemoved, false)
+    document.addEventListener("DOMAttrModified",          handleDOMAttrModified, false)
+    document.addEventListener("DOMCharacterDataModified", handleDOMCharacterDataModified, false)
 
 //-----------------------------------------------------------------------------
 method addInspectedNode(nodeId)
@@ -30,6 +37,10 @@ method getNode(nodeId)
     return this.__nodeMap[nodeId]
 
 //-----------------------------------------------------------------------------
+method checkNodeId(node)
+    return node.__weinre_id
+
+//-----------------------------------------------------------------------------
 method getNodeId(node)
     if (node.__weinre_id) { 
         return node.__weinre_id
@@ -45,8 +56,20 @@ method getNodeData(nodeId, depth)
     return this.serializeNode(this.getNode(nodeId), depth)
 
 //-----------------------------------------------------------------------------
+method getPreviousSiblingId(node)
+    while (true) {
+        var sib = node.previousSibling
+        if (!sib) return 0
+        
+        var id = this.checkNodeId(sib)
+        if (id) return id
+        
+        node = sib
+    }
+
+//-----------------------------------------------------------------------------
 method nextNodeId()
-    return "" + (++this.__nextId)
+    return "" + IDGenerator.next()
 
 //-----------------------------------------------------------------------------
 method serializeNode(node, depth)
@@ -158,3 +181,57 @@ method isToBeSkipped(node)
     if (node.__weinreHighlighter) return true 
     if (node.nodeType != Node.TEXT_NODE) return false
     return !!node.nodeValue.match(/^\s*$/) 
+
+//-----------------------------------------------------------------------------
+function handleDOMSubtreeModified(event)
+    if (!event.attrChange) return
+    
+    NodeStore.handleDOMAttrModified(event)
+
+//-----------------------------------------------------------------------------
+function handleDOMNodeInserted(event)
+    var targetId = Weinre.nodeStore.checkNodeId(event.target)
+    var parentId = Weinre.nodeStore.checkNodeId(event.relatedNode)
+    
+    if (!parentId) return
+    
+    var child = Weinre.nodeStore.serializeNode(event.target, 0)
+    var previous = Weinre.nodeStore.getPreviousSiblingId(event.target)
+    Weinre.wi.DOMNotify.childNodeInserted(parentId, previous, child)
+
+//-----------------------------------------------------------------------------
+function handleDOMNodeRemoved(event)
+    var targetId = Weinre.nodeStore.checkNodeId(event.target)
+    var parentId = Weinre.nodeStore.checkNodeId(event.relatedNode)
+    
+    if (!parentId) return
+    
+    if (targetId) {
+        Weinre.wi.DOMNotify.childNodeRemoved(parentId, targetId)
+    }
+    else {
+        var childCount = Weinre.nodeStore.childNodeCount(event.relatedNode)
+        Weinre.wi.DOMNotify.childNodeCountUpdated(parentId, childCount)
+    }
+
+//-----------------------------------------------------------------------------
+// This event is not actually fired in WebKit, but DOMSubtreeModified may
+// be fired for attribute changes.  Doesn't seem to be at the moment.
+function handleDOMAttrModified(event)
+    var targetId = Weinre.nodeStore.checkNodeId(event.target)
+    if (!targetId) return
+    
+    attrs = []
+    for (var i=0; i<event.target.attributes.length; i++) {
+        attrs.push(event.target.attributes[i].name)
+        attrs.push(event.target.attributes[i].value)
+    }
+    
+    Weinre.wi.DOMNotify.attributesUpdated(targetId, attrs)
+
+//-----------------------------------------------------------------------------
+function handleDOMCharacterDataModified(event)
+    var targetId = Weinre.nodeStore.checkNodeId(event.target)
+    if (!targetId) return
+    
+    Weinre.wi.DOMNotify.characterDataModified(targetId, event.newValue)
