@@ -1,1 +1,1 @@
-weinre build 1.1.0build-2011-03-02--15-06-24 by Patrick Mueller
+weinre build 1.2.0build-2011-03-12--09-25-30 by Patrick Mueller
