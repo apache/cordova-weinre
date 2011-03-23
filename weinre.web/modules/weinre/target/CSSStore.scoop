@@ -6,10 +6,15 @@
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
+requireClass ../common/IDGenerator
+requireClass ../common/Weinre
+
 //-----------------------------------------------------------------------------
 class CSSStore
-    this.__styleMap    = {}
-    this.__nextId      = 0
+    this.styleSheetMap = {}
+    this.styleRuleMap  = {}
+    this.styleDeclMap  = {}
+    this.testElement = document.createElement("div")
 
 //-----------------------------------------------------------------------------
 init
@@ -20,23 +25,8 @@ static method addCSSProperties(properties)
     Properties = properties
 
 //-----------------------------------------------------------------------------
-method getStyle(styleId)
-    return this.__styleMap[styleId]
-
-//-----------------------------------------------------------------------------
-method getStyleId(style)
-    if (style.__weinre_id) { 
-        return style.__weinre_id
-    }
-    
-    style.__weinre_id = this._nextId()
-    this.__styleMap[style.__weinre_id] = style
-    
-    return style.__weinre_id
-
-//-----------------------------------------------------------------------------
 method getInlineStyle(node)
-    var styleObject = this.buildObjectForStyle(node.style, true)
+    var styleObject = this._buildObjectForStyle(node.style, true)
     for (var i=0; i<styleObject.cssProperties.length; i++) {
         styleObject.cssProperties[i].status = "style"
     }
@@ -47,7 +37,7 @@ method getComputedStyle(node)
     if (!node) return {}
     if (node.nodeType != Node.ELEMENT_NODE) return {}
     
-    var styleObject = this.buildObjectForStyle(window.getComputedStyle(node), false)
+    var styleObject = this._buildObjectForStyle(window.getComputedStyle(node), false)
     return styleObject
 
 //-----------------------------------------------------------------------------
@@ -55,20 +45,20 @@ method getMatchedCSSRules(node)
     var result = []
     
     for (var i=0; i<document.styleSheets.length; i++) {
-        var cssStyleSheet = document.styleSheets[i]
+        var styleSheet = document.styleSheets[i]
         
-        if (!cssStyleSheet.cssRules) continue
+        if (!styleSheet.cssRules) continue
         
-        for (var j=0; j<cssStyleSheet.cssRules.length; j++) {
-            var cssRule = cssStyleSheet.cssRules[j]
+        for (var j=0; j<styleSheet.cssRules.length; j++) {
+            var cssRule = styleSheet.cssRules[j]
             
-            if (!elementMatchesSelector(node, cssRule.selectorText)) continue
+            if (!_elementMatchesSelector(node, cssRule.selectorText)) continue
             
             var object = {}
             
-            object.ruleId = this.getStyleId(cssRule)
+            object.ruleId = this._getStyleRuleId(cssRule)
             object.selectorText = cssRule.selectorText
-            object.style = this.buildObjectForStyle(cssRule.style, true)
+            object.style = this._buildObjectForStyle(cssRule.style, true)
             result.push(object)
         }
     }
@@ -88,7 +78,7 @@ method getPseudoElements(node)
     return result
 
 //-----------------------------------------------------------------------------
-method buildObjectForStyle(style, bind)
+method _buildObjectForStyle(styleDecl, bind)
     var result = {
         width:         null,
         height:        null,
@@ -96,48 +86,42 @@ method buildObjectForStyle(style, bind)
         cssProperties: []
     }
     
-    if (!style) return result
+    if (!styleDecl) return result
     
     if (bind) {
-        var styleId = this.getStyleId(style)
-        result.id = styleId
-
-        /*
-        CSSStyleSheet* parentStyleSheet = InspectorCSSStore::getParentStyleSheet(style);
-        if (parentStyleSheet)
-            result->setNumber("parentStyleSheetId", cssStore()->bindStyleSheet(parentStyleSheet));
-
-        DisabledStyleDeclaration* disabledStyle = cssStore()->disabledStyleForId(styleId, false);
-        if (disabledStyle)
-            result->setArray("disabled", buildArrayForDisabledStyleProperties(disabledStyle));
-        */
+        result.styleId = this._getStyleDeclId(styleDecl)
     }
     
-    result.width  = style.getPropertyValue("width")
-    result.height = style.getPropertyValue("height")
+    result.width  = styleDecl.getPropertyValue("width")
+    result.height = styleDecl.getPropertyValue("height")
 
-    this.populateObjectWithStyleProperties(style, result)
+    this._populateObjectWithStyleDeclProperties(styleDecl, result)
     
     return result
 
 //-----------------------------------------------------------------------------
-method populateObjectWithStyleProperties(style, result)
+method _populateObjectWithStyleDeclProperties(styleDecl, result)
     var properties = []
     var shorthandValues = {}
 
-    if (style) {
-        var foundShorthands = {}
-        for (var i=0; i < style.length; i++) {
+    if (styleDecl) {
+        for (var i=0; i < styleDecl.length; i++) {
             var property = {}
-            var name = style.item(i)
+            var name = styleDecl.item(i)
 
-            property.name = name
-            property.priority = style.getPropertyPriority(name)
-            property.implicit = false // style.isPropertyImplicit(name)
-            property.shorthand = ""
-            property.status    = "active"
-            property.parsedOk  = true
-            property.value     = style.getPropertyValue(name)
+            property.name          = name
+            property.priority      = styleDecl.getPropertyPriority(name)
+            property.implicit      = styleDecl.isPropertyImplicit(name)
+            property.shorthandName = styleDecl.getPropertyShorthand(name)
+            property.status        = "active"
+            property.parsedOk      = true
+            property.value         = styleDecl.getPropertyValue(name)
+            
+            if (property.shorthandName) {
+                if (!shorthandValues[property.shorthandName]) {
+                    shorthandValues[property.shorthandName] = styleDecl.getPropertyValue(property.shorthandName)
+                }
+            }
 
             properties.push(property);
         }
@@ -147,27 +131,64 @@ method populateObjectWithStyleProperties(style, result)
     result.shorthandValues = shorthandValues
 
 //-----------------------------------------------------------------------------
-method _nextId
-    return "" + (++this.__nextId)
+method _getStyleSheet(id)
+    return _getMappableObject(id, this.styleSheetMap)
+
+//-----------------------------------------------------------------------------
+method _getStyleSheetId(styleSheet)
+    return _getMappableId(styleSheet, this.styleSheetMap)
+
+//-----------------------------------------------------------------------------
+method _getStyleRule(id)
+    return _getMappableObject(id, this.styleRuleMap)
+
+//-----------------------------------------------------------------------------
+method _getStyleRuleId(styleRule)
+    return _getMappableId(styleRule, this.styleRuleMap)
+
+//-----------------------------------------------------------------------------
+method _getStyleDecl(id)
+    return _getMappableObject(id, this.styleDeclMap)
+
+//-----------------------------------------------------------------------------
+method _getStyleDeclId(styleDecl)
+    var id = _getMappableId(styleDecl, this.styleDeclMap)
+    
+    this._buildShadowDecl(styleDecl)
+    
+    return id
+
+//-----------------------------------------------------------------------------
+method _buildShadowDecl(styleDecl)
+    
+
+//-----------------------------------------------------------------------------
+function _getMappableObject(id, map)
+    return map[id]
+
+//-----------------------------------------------------------------------------
+function _getMappableId(object, map)
+    return IDGenerator.getId(object, map)
     
 //-----------------------------------------------------------------------------
-function mozMatchesSelector(element, selector)
+function _mozMatchesSelector(element, selector)
     if (!element.mozMatchesSelector) return false
     return element.mozMatchesSelector(selector)
 
 //-----------------------------------------------------------------------------
-function webkitMatchesSelector(element, selector)
+function _webkitMatchesSelector(element, selector)
     if (!element.webkitMatchesSelector) return false
     return element.webkitMatchesSelector(selector)
 
 //-----------------------------------------------------------------------------
-function fallbackMatchesSelector(element, selector)
+function _fallbackMatchesSelector(element, selector)
     return false
+
     
 //-----------------------------------------------------------------------------
 init
-    var elementMatchesSelector
+    var _elementMatchesSelector
     
-    if      (Element.prototype.webkitMatchesSelector) elementMatchesSelector = webkitMatchesSelector 
-    else if (Element.prototype.mozMatchesSelector)    elementMatchesSelector = mozMatchesSelector
-    else                                              elementMatchesSelector = fallbackMatchesSelector
+    if      (Element.prototype.webkitMatchesSelector) _elementMatchesSelector = _webkitMatchesSelector 
+    else if (Element.prototype.mozMatchesSelector)    _elementMatchesSelector = _mozMatchesSelector
+    else                                              _elementMatchesSelector = _fallbackMatchesSelector
