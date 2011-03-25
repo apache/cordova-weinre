@@ -78,6 +78,53 @@ method getPseudoElements(node)
     return result
 
 //-----------------------------------------------------------------------------
+method setPropertyText(styleId, propertyIndex, text, overwrite)
+    var styleDecl = Weinre.cssStore._getStyleDecl(styleId)
+    
+    if (!styleDecl) {
+        Weinre.logWarning("requested style not available: " + styleId)
+        return null
+    }
+
+    styleDecl.cssText = styleDecl.cssText + text
+    
+    return this._buildObjectForStyle(styleDecl, true)
+
+//-----------------------------------------------------------------------------
+method toggleProperty(styleId, propertyIndex, disable)
+    var styleDecl = Weinre.cssStore._getStyleDecl(styleId)
+    
+    if (!styleDecl) {
+        Weinre.logWarning("requested style not available: " + styleId)
+        return null
+    }
+    
+    var cssProperty = styleDecl.__weinre__mirror.cssProperties[propertyIndex]
+    
+    if (disable) {
+        styleDecl.removeProperty(styleDecl.item(propertyIndex))
+        cssProperty.status = "inactive"
+    }
+    else {
+        var cssText = cssProperty.name + ": " + cssProperty.value
+        if (cssProperty.priority == "important") {
+            cssText += " !important"
+        }
+        styleDecl.cssText += cssText + ";"
+        
+        cssProperty.status = "active"
+    }
+
+    return styleDecl.__weinre__mirror
+
+//-----------------------------------------------------------------------------
+method _setStyleFromMirror(styleDecl)
+    var cssText = []
+    
+    var cssProperties = styleDecl.__weinre__mirror.cssProperties
+    
+
+//-----------------------------------------------------------------------------
 method _buildObjectForStyle(styleDecl, bind)
     var result = {
         width:         null,
@@ -90,6 +137,7 @@ method _buildObjectForStyle(styleDecl, bind)
     
     if (bind) {
         result.styleId = this._getStyleDeclId(styleDecl)
+        styleDecl.__weinre__mirror = result
     }
     
     result.width  = styleDecl.getPropertyValue("width")

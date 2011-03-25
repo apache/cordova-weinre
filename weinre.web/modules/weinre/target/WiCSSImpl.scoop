@@ -117,59 +117,21 @@ method setStyleSheetText(/*string*/ styleSheetId, /*string*/ text, callback)
 //-----------------------------------------------------------------------------
 method setPropertyText(/*any*/ styleId, /*int*/ propertyIndex, /*string*/ text, /*boolean*/ overwrite, callback)
     // callback: function(/*any*/ style)
-    var style = Weinre.cssStore.getStyle(styleId)
-    if (!style) {
-        Weinre.logWarning("requested style not available: " + styleId)
-        return
-    }
     
-    var newProperties = []
-    newPropertyLines = text.split(";")
-    for (var i=0; i<newPropertyLines.length; i++) {
-        var parts = newPropertyLines[i].split(":", 2)
-        if (parts[0] && parts[1]) {
-            newProperties.push([parts[0], parts[1]])
-        }
-    }
-    
-    var oldProperties = []
-    for (var i=0; i<style.length; i++) {
-        var name = style.item(i)
-        var value = style.getPropertyValue(name)
-        oldProperties.push([name, value])
-    }
-
-    for (var i=0; i<oldProperties.length; i++) {
-        style.removeProperty(oldProperties[i][0])
-    }
-        
-    for (var i=0; i<oldProperties.length; i++) {
-        if (i == propertyIndex) {
-            for (var j=0; j<newProperties.length; j++) {
-                style.setProperty(newProperties[j][0], newProperties[j][1])
-            }
-            continue
-        }
-        
-        style.setProperty(oldProperties[i][0], oldProperties[i][1])
-    }
-    
-    if (propertyIndex >= oldProperties.length) {
-        for (var j=0; j<newProperties.length; j++) {
-            style.setProperty(newProperties[j][0], newProperties[j][1])
-        }
-    }
+    var result = Weinre.cssStore.setPropertyText(styleId, propertyIndex, text, overwrite)
     
     if (callback) {
-        var result = Weinre.cssStore.buildObjectForStyle(style, true)
         Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
     }
-
+    
 //-----------------------------------------------------------------------------
 method toggleProperty(/*any*/ styleId, /*int*/ propertyIndex, /*boolean*/ disable, callback)
-    // callback: function(/*any*/ style)
-    Weinre.notImplemented(arguments.callee.signature)
 
+    var result = Weinre.cssStore.toggleProperty(styleId, propertyIndex, disable)
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [result])
+    }
 
 //-----------------------------------------------------------------------------
 method setRuleSelector(/*any*/ ruleId, /*string*/ selector, callback)
