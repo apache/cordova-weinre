@@ -99,12 +99,38 @@ method toggleProperty(styleId, propertyIndex, disable)
         return null
     }
     
-    var cssProperty = styleDecl.__weinre__mirror.cssProperties[propertyIndex]
+    var mirror = styleDecl.__weinre__mirror
+    if (!mirror) {
+        Weinre.logWarning("requested mirror not available: " + styleId)
+        return null
+    }
+    
+    var cssProperty = mirror.cssProperties[propertyIndex]
+    if (!cssProperty) {
+        Weinre.logWarning("requested property not available: " + styleId + ": " + propertyIndex)
+        return null
+    }
     
     if (disable) {
-        styleDecl.removeProperty(styleDecl.item(propertyIndex))
-        cssProperty.status = "inactive"
+        var properties = []
+        if (!mirror.shorthandValues[cssProperty.name]) {
+            properties.push(cssProperty.name)
+        }
+        else {
+            for (var i=0; i<mirror.cssProperties.length; i++) {
+                if (mirror.cssProperties[i].shorthandName == cssProperty.name) {
+                    properties.push(mirror.cssProperties[i].name)
+                }
+            }
+        }
+        
+        for (var i=0; i<properties.length; i++) {
+            styleDecl.removeProperty(properties[i])
+        }
+        
+        cssProperty.status = "disabled"
     }
+    
     else {
         var cssText = cssProperty.name + ": " + cssProperty.value
         if (cssProperty.priority == "important") {
@@ -166,8 +192,18 @@ method _populateObjectWithStyleDeclProperties(styleDecl, result)
             property.value         = styleDecl.getPropertyValue(name)
             
             if (property.shorthandName) {
+                property.status = "style"
                 if (!shorthandValues[property.shorthandName]) {
                     shorthandValues[property.shorthandName] = styleDecl.getPropertyValue(property.shorthandName)
+                    var shortProperty = {}
+                    shortProperty.name = property.shorthandName
+                    shortProperty.priority      = property.priority
+                    shortProperty.implicit      = false
+                    shortProperty.shorthandName = ""
+                    shortProperty.status        = "active"
+                    shortProperty.parsedOk      = true
+                    shortProperty.value         = property.value
+                    properties.push(shortProperty)
                 }
             }
 
