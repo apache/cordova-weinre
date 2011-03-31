@@ -26,7 +26,7 @@ static method addCSSProperties(properties)
 
 //-----------------------------------------------------------------------------
 method getInlineStyle(node)
-    var styleObject = this._buildObjectForStyle(node.style, true)
+    var styleObject = this._buildMirrorForStyle(node.style, true)
     for (var i=0; i<styleObject.cssProperties.length; i++) {
         styleObject.cssProperties[i].status = "style"
     }
@@ -37,7 +37,7 @@ method getComputedStyle(node)
     if (!node) return {}
     if (node.nodeType != Node.ELEMENT_NODE) return {}
     
-    var styleObject = this._buildObjectForStyle(window.getComputedStyle(node), false)
+    var styleObject = this._buildMirrorForStyle(window.getComputedStyle(node), false)
     return styleObject
 
 //-----------------------------------------------------------------------------
@@ -58,7 +58,7 @@ method getMatchedCSSRules(node)
             
             object.ruleId = this._getStyleRuleId(cssRule)
             object.selectorText = cssRule.selectorText
-            object.style = this._buildObjectForStyle(cssRule.style, true)
+            object.style = this._buildMirrorForStyle(cssRule.style, true)
             result.push(object)
         }
     }
@@ -91,29 +91,55 @@ method setPropertyText(styleId, propertyIndex, text, overwrite)
         Weinre.logWarning("requested mirror not available: " + styleId)
         return null
     }
-    
-    var cssProperty = mirror.cssProperties[propertyIndex]
-    if (!cssProperty) {
-        styleDecl.cssText += text
-        return this._buildObjectForStyle(styleDecl, true)
-    }
 
-    var parts = _parseProperty(text)
+    var properties = mirror.cssProperties
     
-    if (null == parts) {
-        styleDecl.removeProperty(cssProperty.name)
+    // build index by existing property name
+    var propertyIndices = {}
+    for (var i=0; i<properties.length; i++) {
+        propertyIndices[properties[i].name] = i
     }
     
+    // parse the css text
+    var propertyMirror = this._parseProperty(text)
+    
+    // remove property
+    if (null == propertyMirror) {
+        if (propertyIndex < properties.length) {
+            properties.splice(propertyIndex, 1)
+        }
+    }
+    
+    // add or replace property
     else {
-        var name      = parts[0]
-        var val       = parts[1]
-        var important = parts[2]
-        
-        styleDecl.setProperty(name, val, important)
+        // if replacing, remove the old one
+        if (propertyIndex < properties.length) {
+            properties.splice(propertyIndex, 1)
+        }
+
+        // add the new ones, or replacing ones    
+        for (var i=0; i<propertyMirror.cssProperties.length; i++) {
+            if (propertyIndices[propertyMirror.cssProperties[i].name] != null) {
+                // property already exists, just replace it
+                properties[propertyIndices[propertyMirror.cssProperties[i].name]] = propertyMirror.cssProperties[i]
+            }
+            else {
+                // new property, add it
+                properties.push(propertyMirror.cssProperties[i])
+            }
+        }
+    
     }
     
+    properties.sort(function(p1,p2) {
+        if      (p1.name < p2.name) return -1
+        else if (p1.name > p2.name) return  1
+        else return 0
+    })
     
-    return this._buildObjectForStyle(styleDecl, true)
+    this._setStyleFromMirror(styleDecl)
+    
+    return mirror
 
 //-----------------------------------------------------------------------------
 method toggleProperty(styleId, propertyIndex, disable)
@@ -137,35 +163,15 @@ method toggleProperty(styleId, propertyIndex, disable)
     }
     
     if (disable) {
-        var properties = []
-        if (!mirror.shorthandValues[cssProperty.name]) {
-            properties.push(cssProperty.name)
-        }
-        else {
-            for (var i=0; i<mirror.cssProperties.length; i++) {
-                if (mirror.cssProperties[i].shorthandName == cssProperty.name) {
-                    properties.push(mirror.cssProperties[i].name)
-                }
-            }
-        }
-        
-        for (var i=0; i<properties.length; i++) {
-            styleDecl.removeProperty(properties[i])
-        }
-        
         cssProperty.status = "disabled"
     }
     
     else {
-        var cssText = cssProperty.name + ": " + cssProperty.value
-        if (cssProperty.priority == "important") {
-            cssText += " !important"
-        }
-        styleDecl.cssText += cssText + ";"
-        
         cssProperty.status = "active"
     }
 
+    this._setStyleFromMirror(styleDecl)
+    
     return mirror
 
 //-----------------------------------------------------------------------------
@@ -174,9 +180,26 @@ method _setStyleFromMirror(styleDecl)
     
     var cssProperties = styleDecl.__weinre__mirror.cssProperties
     
+    var cssText = ""
+    for (var i=0; i<cssProperties.length; i++) {
+        var property = cssProperties[i]
+        
+        if (!property.parsedOk) continue
+        if (property.status == "disabled") continue
+        
+        cssText += property.name + ": " + property.value
+        if (property.priority == "important") {
+            cssText += " !important; "
+        }
+        else {
+            cssText += "; "
+        }
+    }
+    
+    styleDecl.cssText = cssText
 
 //-----------------------------------------------------------------------------
-method _buildObjectForStyle(styleDecl, bind)
+method _buildMirrorForStyle(styleDecl, bind)
     var result = {
         width:         null,
         height:        null,
@@ -194,14 +217,7 @@ method _buildObjectForStyle(styleDecl, bind)
     result.width  = styleDecl.getPropertyValue("width")
     result.height = styleDecl.getPropertyValue("height")
 
-    this._populateObjectWithStyleDeclProperties(styleDecl, result)
-    
-    return result
-
-//-----------------------------------------------------------------------------
-method _populateObjectWithStyleDeclProperties(styleDecl, result)
     var properties = []
-    var shorthandValues = {}
 
     if (styleDecl) {
         for (var i=0; i < styleDecl.length; i++) {
@@ -211,27 +227,11 @@ method _populateObjectWithStyleDeclProperties(styleDecl, result)
             property.name          = name
             property.priority      = styleDecl.getPropertyPriority(name)
             property.implicit      = styleDecl.isPropertyImplicit(name)
-            property.shorthandName = styleDecl.getPropertyShorthand(name)
+            property.shorthandName = ""
             property.status        = "active"
             property.parsedOk      = true
             property.value         = styleDecl.getPropertyValue(name)
             
-            if (property.shorthandName) {
-                property.status = "style"
-                if (!shorthandValues[property.shorthandName]) {
-                    shorthandValues[property.shorthandName] = styleDecl.getPropertyValue(property.shorthandName)
-                    var shortProperty = {}
-                    shortProperty.name = property.shorthandName
-                    shortProperty.priority      = property.priority
-                    shortProperty.implicit      = false
-                    shortProperty.shorthandName = ""
-                    shortProperty.status        = "active"
-                    shortProperty.parsedOk      = true
-                    shortProperty.value         = property.value
-                    properties.push(shortProperty)
-                }
-            }
-
             properties.push(property);
         }
     }
@@ -243,7 +243,48 @@ method _populateObjectWithStyleDeclProperties(styleDecl, result)
     })
     
     result.cssProperties   = properties
-    result.shorthandValues = shorthandValues
+    result.shorthandValues = {}
+
+    return result
+
+//-----------------------------------------------------------------------------
+method _parseProperty(string)
+    var testStyleDecl = this.testElement.style
+    
+    try {
+        testStyleDecl.cssText = string
+        
+        if (testStyleDecl.cssText != "") {
+            return this._buildMirrorForStyle(testStyleDecl, false)
+        }
+    }
+    catch(e) {
+    }
+
+    var propertyPattern = /\s*(.+)\s*:\s*(.+)\s*(!important)?\s*;/
+    var match = propertyPattern.exec(string)
+    if (!match) return null
+
+    match[3] = (match[3] == "!important") ? "important" : ""
+
+    var property = {}
+
+    property.name          = match[1]
+    property.priority      = match[3]
+    property.implicit      = true
+    property.shorthandName = ""
+    property.status        = "inactive"
+    property.parsedOk      = false
+    property.value         = match[2]
+
+    var result = {}
+    
+    result.width           = 0
+    result.height          = 0
+    result.shorthandValues = 0
+    result.cssProperties   = [ property ]
+
+    return result
 
 //-----------------------------------------------------------------------------
 method _getStyleSheet(id)
@@ -268,16 +309,6 @@ method _getStyleDecl(id)
 //-----------------------------------------------------------------------------
 method _getStyleDeclId(styleDecl)
     return _getMappableId(styleDecl, this.styleDeclMap)
-
-//-----------------------------------------------------------------------------
-function _parseProperty(string)
-    var propertyPattern = /\s*(.*?)\s*:\s*(.*?)\s*(!important)?\s*;/
-    var match = propertyPattern.exec(string)
-    if (!match) return null
-
-    match[3] = (match[3] == "!important") ? "important" : ""
-    
-    return [match[1], match[2], match[3]]
 
 //-----------------------------------------------------------------------------
 function _getMappableObject(id, map)
