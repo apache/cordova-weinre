@@ -233,9 +233,7 @@ method _setStyleFromMirror(styleDecl)
 //-----------------------------------------------------------------------------
 method _buildMirrorForStyle(styleDecl, bind)
     var result = {
-        width:         null,
-        height:        null,
-        properties:    [],
+        properties:    {},
         cssProperties: []
     }
     
@@ -246,8 +244,9 @@ method _buildMirrorForStyle(styleDecl, bind)
         styleDecl.__weinre__mirror = result
     }
     
-    result.width  = styleDecl.getPropertyValue("width")
-    result.height = styleDecl.getPropertyValue("height")
+    result.properties.width  = styleDecl.getPropertyValue("width")  || ""
+    result.properties.height = styleDecl.getPropertyValue("height") || ""
+    result.cssText           = styleDecl.cssText 
 
     result.shorthandValues = {}
 
@@ -261,7 +260,7 @@ method _buildMirrorForStyle(styleDecl, bind)
             property.name          = name
             property.priority      = styleDecl.getPropertyPriority(name)
             property.implicit      = styleDecl.isPropertyImplicit(name)
-            property.shorthandName = styleDecl.getPropertyShorthand(name)
+            property.shorthandName = styleDecl.getPropertyShorthand(name) || ""
             property.status        = property.shorthandName ? "style" : "active"
             property.parsedOk      = true
             property.value         = styleDecl.getPropertyValue(name)
