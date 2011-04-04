@@ -94,27 +94,25 @@ method setPropertyText(styleId, propertyIndex, text, overwrite)
 
     var properties = mirror.cssProperties
     
-    // build index by existing property name
-    var propertyIndices = {}
-    for (var i=0; i<properties.length; i++) {
-        propertyIndices[properties[i].name] = i
-    }
-    
     // parse the css text
     var propertyMirror = this._parseProperty(text)
     
     // remove property
     if (null == propertyMirror) {
-        if (propertyIndex < properties.length) {
-            properties.splice(propertyIndex, 1)
-        }
+        this._removePropertyFromMirror(mirror, propertyIndex)
+        properties = mirror.cssProperties
     }
     
     // add or replace property
     else {
         // if replacing, remove the old one
-        if (propertyIndex < properties.length) {
-            properties.splice(propertyIndex, 1)
+        this._removePropertyFromMirror(mirror, propertyIndex)
+        properties = mirror.cssProperties
+
+        // index properties by name
+        var propertyIndices = {}
+        for (var i=0; i<properties.length; i++) {
+            propertyIndices[properties[i].name] = i
         }
 
         // add the new ones, or replacing ones    
@@ -129,6 +127,9 @@ method setPropertyText(styleId, propertyIndex, text, overwrite)
             }
         }
     
+        for (var key in propertyMirror.shorthandValues) {
+            mirror.shorthandValues[key] = propertyMirror.shorthandValues[key]
+        }
     }
     
     properties.sort(function(p1,p2) {
@@ -140,6 +141,36 @@ method setPropertyText(styleId, propertyIndex, text, overwrite)
     this._setStyleFromMirror(styleDecl)
     
     return mirror
+
+//-----------------------------------------------------------------------------
+method _removePropertyFromMirror(mirror, index)
+    var properties = mirror.cssProperties
+    
+    if (index >= properties.length) return
+    
+    var property = properties[index]
+
+    properties[index] = null
+    
+    if (mirror.shorthandValues[property.name]) {
+        delete mirror.shorthandValues[property.name]
+        
+        for (var i=0; i<properties.length; i++) {
+            if (properties[i]) {
+                if (properties[i].shorthandName == property.name) {
+                    properties[i] = null
+                }
+            }
+        }
+    }
+    
+    var newProperties = []
+    
+    for (var i=0; i<properties.length; i++) {
+        if (properties[i]) newProperties.push(properties[i])
+    }
+    
+    mirror.cssProperties = newProperties
 
 //-----------------------------------------------------------------------------
 method toggleProperty(styleId, propertyIndex, disable)
@@ -186,6 +217,7 @@ method _setStyleFromMirror(styleDecl)
         
         if (!property.parsedOk) continue
         if (property.status == "disabled") continue
+        if (property.shorthandName) continue
         
         cssText += property.name + ": " + property.value
         if (property.priority == "important") {
@@ -217,8 +249,10 @@ method _buildMirrorForStyle(styleDecl, bind)
     result.width  = styleDecl.getPropertyValue("width")
     result.height = styleDecl.getPropertyValue("height")
 
-    var properties = []
+    result.shorthandValues = {}
 
+    var properties = []
+    
     if (styleDecl) {
         for (var i=0; i < styleDecl.length; i++) {
             var property = {}
@@ -227,12 +261,30 @@ method _buildMirrorForStyle(styleDecl, bind)
             property.name          = name
             property.priority      = styleDecl.getPropertyPriority(name)
             property.implicit      = styleDecl.isPropertyImplicit(name)
-            property.shorthandName = ""
-            property.status        = "active"
+            property.shorthandName = styleDecl.getPropertyShorthand(name)
+            property.status        = property.shorthandName ? "style" : "active"
             property.parsedOk      = true
             property.value         = styleDecl.getPropertyValue(name)
             
             properties.push(property);
+            
+            if (property.shorthandName) {
+                var shorthandName = property.shorthandName
+                if (!result.shorthandValues[shorthandName]) {
+                    result.shorthandValues[shorthandName] = styleDecl.getPropertyValue(shorthandName)
+                    
+                    property = {}
+                    property.name          = shorthandName
+                    property.priority      = styleDecl.getPropertyPriority(shorthandName)
+                    property.implicit      = styleDecl.isPropertyImplicit(shorthandName)
+                    property.shorthandName = ""
+                    property.status        = "active"
+                    property.parsedOk      = true
+                    property.value         = styleDecl.getPropertyValue(name)
+                    
+                    properties.push(property);
+                }
+            }
         }
     }
     
@@ -243,7 +295,6 @@ method _buildMirrorForStyle(styleDecl, bind)
     })
     
     result.cssProperties   = properties
-    result.shorthandValues = {}
 
     return result
 
