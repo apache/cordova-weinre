@@ -25,6 +25,7 @@ method connectionCreated(/*string*/ clientId, /*string*/ targetId)
 
     Weinre.target.setDocument()
     Weinre.wi.TimelineNotify.timelineProfilerWasStopped()
+    Weinre.wi.DOMStorage.initialize()
 
 //-----------------------------------------------------------------------------
 method connectionDestroyed(/*string*/ clientId, /*string*/ targetId)
