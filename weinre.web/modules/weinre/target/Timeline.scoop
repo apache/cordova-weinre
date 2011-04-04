@@ -263,7 +263,7 @@ function instrumentedTimerCode(code, timeout, singleShot)
 //-----------------------------------------------------------------------------
 function wrapped_XMLHttpRequest
     var xhr = new Native.XMLHttpRequest()
-    xhr.__weinre_id = IDGenerator.next()
+    IDGenerator.getId(xhr)
     xhr.addEventListener("readystatechange", getXhrEventHandler(xhr), false)
     return xhr
 
@@ -287,7 +287,7 @@ function wrapped_XMLHttpRequest_open()
 //-----------------------------------------------------------------------------
 function getXhrEventHandler(xhr)
     return function(event) {
-        Timeline.addRecord_XHRReadyStateChange(xhr.__weinre_method, xhr.__weinre_url, xhr.__weinre_id, xhr)
+        Timeline.addRecord_XHRReadyStateChange(xhr.__weinre_method, xhr.__weinre_url, IDGenerator.getId(xhr), xhr)
     }
     
 //-----------------------------------------------------------------------------
