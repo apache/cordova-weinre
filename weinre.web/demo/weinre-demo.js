@@ -11,6 +11,7 @@ var started = false
 var buttonStartStuff
 var buttonClearOutput
 var outputElement 
+var storageIndex = 0
 
 //------------------------------------------------------------------------------
 function onLoad() {
@@ -40,6 +41,11 @@ function onLoad() {
 var interval
 
 function startStuff() {
+    if (window.localStorage)   window.localStorage.clear()
+    if (window.sessionStorage) window.sessionStorage.clear()
+    
+    storageIndex = 0
+    
     interval = setInterval(intervalStuff, 1000)
 }
 
@@ -57,6 +63,18 @@ function intervalStuff() {
     
     // add a timeline marker
     console.markTimeline(message)
+    
+    // write to local- and sessionStorage
+    if (window.localStorage) {
+        var smessage = message + " (local)"
+        window.localStorage.setItem(  "item-" + storageIndex, smessage)
+    }
+    
+    if (window.sessionStorage) {
+        var smessage = message + " (session)"
+        window.sessionStorage.setItem("item-" + storageIndex, smessage)
+    }
+    storageIndex++
     
     // write the message to the page
     output(message)
