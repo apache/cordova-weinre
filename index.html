@@ -146,33 +146,38 @@ user interface only runs on WebKit-based browsers.  Sorry folks.
 how to use it, visit the <a href="TestDrive.html">Test Drive</a>.
 
 <!-- ======================================================== -->
-<h2>Supported Platforms</h2>
+<h2>Supported Libraries and Platforms</h2>
+
+<p>Generally version numbers listed here are the earliest
+versions of the relevant thing that have been tested.
+Later versions of those things are also hopefully supported,
+but let us know.
+
+<h3>Libraries not supported</h3>
+
+<ul>
+<li>versions of Prototype.js before version 1.7 are not supported,
+as they do not support the <tt>JSON.stringify()</tt> API correctly.  You
+will get an <tt>alert()</tt> in the web page you are debugging if you
+attempt to debug it with weinre and you are using an unsupported
+version of Prototype.js.
+</ul>
 
 <h3>Debug client - the browser where the debugger user interface runs</h3>
 
 <ul>
 <li>weinre Mac application - Mac OS X 10.6 64-bit
-<li>Google Chrome 8.x beta
+<li>Google Chrome 8.x
 <li>Apple Safari 5.x 
-<li>others? please set us know
 </ul>
 
 <h3>Debug target - the browser with the page you are debugging</h3>
 
 <ul>
-<li>Android 2.3 Browser application
-<li>Android 2.3 w/PhoneGap 0.9.2
 <li>Android 2.2 Browser application
 <li>Android 2.2 w/PhoneGap 0.9.2
 <li>iOS 4.2.x Mobile Safari application
 <li>BlackBerry v6.x simulator
-<li>others? please set us know
-</ul>
-
-<h3>Platforms that do not work</h3>
-
-<ul>
-<li>others? please set us know
 </ul>
 
 
