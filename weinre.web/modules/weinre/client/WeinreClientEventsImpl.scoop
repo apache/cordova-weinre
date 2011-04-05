@@ -54,6 +54,7 @@ method connectionCreated(/*int*/ clientId, /*int*/ targetId)
     
     WebInspector.panels.elements.reset()
     WebInspector.panels.timeline._clearPanel()
+    WebInspector.panels.resources.reset()
 
 //-----------------------------------------------------------------------------
 method connectionDestroyed(/*int*/ clientId, /*int*/ targetId)

@@ -6,7 +6,11 @@
  */
 
 h1 {
-    color: green;
+    color:         green;
+    margin:        0.5em;
+    margin-left:   1.0em;
+    padding:       0.4em;
+    padding-left : 0.8em;
 }
 
 .blue {

@@ -38,18 +38,16 @@ method getNode(nodeId)
 
 //-----------------------------------------------------------------------------
 method checkNodeId(node)
-    return node.__weinre_id
+    return IDGenerator.checkId(node)
 
 //-----------------------------------------------------------------------------
 method getNodeId(node)
-    if (node.__weinre_id) { 
-        return node.__weinre_id
+    var id = this.checkNodeId(node)
+    if (id) {
+        return id
     }
-    
-    node.__weinre_id = this.nextNodeId()
-    this.__nodeMap[node.__weinre_id]     = node
-    
-    return node.__weinre_id
+
+    return IDGenerator.getId(node, this.__nodeMap)    
 
 //-----------------------------------------------------------------------------
 method getNodeData(nodeId, depth)
