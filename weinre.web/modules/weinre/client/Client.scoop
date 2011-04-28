@@ -90,6 +90,8 @@ method _installRemotePanel
 //-----------------------------------------------------------------------------
 method onLoaded
 
+    Weinre.WeinreClientCommands.registerClient(Binding(this, this.cb_registerClient))
+
     this._installRemotePanel()
 
     var messageDispatcher = Weinre.messageDispatcher
@@ -99,16 +101,12 @@ method onLoaded
     messageDispatcher.registerInterface("WeinreClientEvents",    new WeinreClientEventsImpl(this), false)
     messageDispatcher.registerInterface("InspectorFrontendHost", InspectorFrontendHost, false)
 
-    Weinre.WeinreClientCommands.registerClient(Binding(this, this.cb_registerClient))
-
 //-----------------------------------------------------------------------------
-method cb_registerClient(clientId)
-    Weinre.clientId = clientId
-    Weinre.connectorId = clientId
-    Callback.setConnectorId(clientId)
+method cb_registerClient(clientDescription)
+    Weinre.clientDescription = clientDescription
     
     if (this.uiAvailable()) {
-        WebInspector.panels.remote.setCurrentClient(clientId)
+        WebInspector.panels.remote.setCurrentClient(clientDescription.channel)
         WebInspector.panels.remote.afterInitialConnection()
     }
     

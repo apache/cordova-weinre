@@ -65,7 +65,8 @@ public class Client extends Connector {
       JSONObject result = new JSONObject();
       
       try {
-          result.put("id",                 getChannel().getName());
+          result.put("channel",            getChannel().getName());
+          result.put("id",                 getChannel().getId());
           result.put("hostName",           getChannel().getRemoteHost());
           result.put("connectedTargetIds", new JSONArray());
       } 

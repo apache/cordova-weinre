@@ -137,11 +137,8 @@ method cb_webSocketOpened()
     Weinre.WeinreTargetCommands.registerTarget(window.location.href, Binding(this, this.cb_registerTarget))
 
 //-----------------------------------------------------------------------------
-method cb_registerTarget(targetId)
-    Weinre.targetId    = targetId
-    Weinre.connectorId = targetId
-    
-    Callback.setConnectorId(targetId)
+method cb_registerTarget(targetDescription)
+    Weinre.targetDescription    = targetDescription
 
 //-----------------------------------------------------------------------------
 method onLoaded()

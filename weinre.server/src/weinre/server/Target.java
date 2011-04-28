@@ -93,7 +93,8 @@ public class Target extends Connector {
         JSONObject result = new JSONObject();
         
         try {
-            result.put("id",                 getChannel().getName());
+            result.put("channel",            getChannel().getName());
+            result.put("id",                 getChannel().getId());
             result.put("hostName",           getChannel().getRemoteHost());
             result.put("url",                this.url);
             result.put("connectedClientIds", new JSONArray());

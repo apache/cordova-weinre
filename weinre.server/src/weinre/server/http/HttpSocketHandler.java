@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.wink.json4j.JSONArray;
 import org.apache.wink.json4j.JSONException;
+import org.apache.wink.json4j.JSONObject;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
@@ -138,14 +140,54 @@ public class HttpSocketHandler extends AbstractHandler {
     //---------------------------------------------------------------
     public void handleCreate(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String channelName = "" + Utility.getNextSequenceNumber();
+        String id;
+
+        if (0 == baseRequest.getContentLength()) {
+            id = Channel.AnonymousId;
+        }
         
-        ChannelManager.$.registerChannel(pathPrefix, channelName, request.getRemoteHost(), request.getRemoteAddr());
+        else {
+            try {
+                String json = readRequestBody(request.getInputStream());
+                JSONObject obj = new JSONObject(json);
+                if (!obj.has("id")) {
+                    id = Channel.AnonymousId;
+                }
+                else {
+                    id = obj.getString("id");
+                    if (id.isEmpty()) {
+                        id = Channel.AnonymousId;
+                    }
+                }
+            }
+            catch (IOException e) {
+                response.setStatus(400);
+                return;
+            }
+            catch (JSONException e) {
+                response.setStatus(400);
+                return;
+            }
+        }
+        
+        ChannelManager.$.registerChannel(pathPrefix, channelName, id, request.getRemoteHost(), request.getRemoteAddr());
         
         response.setStatus(200);
         response.setContentType("application/json");
         
         ServletOutputStream oStream = response.getOutputStream();
-        oStream.print("{\"channel\": " + channelName + "}");
+        JSONObject obj = new JSONObject();
+        
+        try {
+            obj.put("channel", channelName);
+            obj.put("id", id);
+        }
+        catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        
+        String result = obj.toString();
+        oStream.print(result);
         oStream.close();
     }
 

@@ -26,55 +26,52 @@ method targetRegistered(targetDescription)
     }
     
     if (!Weinre.client.autoConnect()) return
+    if (!Weinre.messageDispatcher) return
     
-    Weinre.WeinreClientCommands.connectTarget(Weinre.clientId, targetDescription.id)
+    Weinre.WeinreClientCommands.connectTarget(Weinre.messageDispatcher.channel, targetDescription.channel)
 
 //-----------------------------------------------------------------------------
-method clientUnregistered(/*int*/ clientId)
+method clientUnregistered(/*int*/ clientChannel)
     if (this.client.uiAvailable()) {
-        WebInspector.panels.remote.removeClient(clientId)
+        WebInspector.panels.remote.removeClient(clientChannel)
     }
 
 //-----------------------------------------------------------------------------
-method targetUnregistered(/*int*/ targetId)
+method targetUnregistered(/*int*/ targetChannel)
     if (this.client.uiAvailable()) {
-        WebInspector.panels.remote.removeTarget(targetId)
+        WebInspector.panels.remote.removeTarget(targetChannel)
     }
 
 //-----------------------------------------------------------------------------
-method connectionCreated(/*int*/ clientId, /*int*/ targetId)
+method connectionCreated(/*int*/ clientChannel, /*int*/ targetChannel)
     if (this.client.uiAvailable()) {
-        WebInspector.panels.remote.setClientState(clientId, "connected") 
-        WebInspector.panels.remote.setTargetState(targetId, "connected")
+        WebInspector.panels.remote.setClientState(clientChannel, "connected") 
+        WebInspector.panels.remote.setTargetState(targetChannel, "connected")
     }
     
-    if (clientId != Weinre.clientId) return
+    if (clientChannel != Weinre.messageDispatcher.channel) return
 
-    Weinre.targetId = targetId
-    
     WebInspector.panels.elements.reset()
     WebInspector.panels.timeline._clearPanel()
     WebInspector.panels.resources.reset()
 
 //-----------------------------------------------------------------------------
-method connectionDestroyed(/*int*/ clientId, /*int*/ targetId)
+method connectionDestroyed(/*int*/ clientChannel, /*int*/ targetChannel)
     if (this.client.uiAvailable()) {
-        WebInspector.panels.remote.setClientState(clientId, "not-connected") 
-        WebInspector.panels.remote.setTargetState(targetId, "not-connected")
+        WebInspector.panels.remote.setClientState(clientChannel, "not-connected") 
+        WebInspector.panels.remote.setTargetState(targetChannel, "not-connected")
     }
     
-    if (clientId != Weinre.clientId) return
-    
-    Weinre.targetId = null
+    if (clientChannel != Weinre.messageDispatcher.channel) return
     
     if (!Weinre.client.autoConnect()) return
     if (!this.client.uiAvailable()) return
     
-    var nextTargetId = WebInspector.panels.remote.getNewestTargetId(targetId)
-    if (!nextTargetId) return
+    var nextTargetChannel = WebInspector.panels.remote.getNewestTargetChannel(targetChannel)
+    if (!nextTargetChannel) return
     
-    Weinre.WeinreClientCommands.connectTarget(Weinre.clientId, nextTargetId)
-    Weinre.logInfo("autoconnecting to " + nextTargetId)
+    Weinre.WeinreClientCommands.connectTarget(Weinre.messageDispatcher.channel, nextTargetChannel)
+    Weinre.logInfo("autoconnecting to " + nextTargetChannel)
 
 //-----------------------------------------------------------------------------
 method sendCallback(/*int*/ callbackId, /*any*/ result)

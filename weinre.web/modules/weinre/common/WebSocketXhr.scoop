@@ -64,12 +64,10 @@ method _handleXhrResponseGetChannel(xhr)
         return
     }
     
-    Weinre.connectorId = "" + object.channel
-    
     this._urlChannel = this._url + "/" + object.channel
     this.readyState = WebSocketXhr.OPEN
 
-    this._fireEventListeners("open", { message: "open" })
+    this._fireEventListeners("open", { message: "open", channel: object.channel })
     
     this._sendInProgress = false
     this._sendQueued()

@@ -15,8 +15,8 @@ requireClass ./Console
 class WeinreTargetEventsImpl
 
 //-----------------------------------------------------------------------------
-method connectionCreated(/*string*/ clientId, /*string*/ targetId)
-    var message = "weinre: target " + targetId + " connected to client " + clientId
+method connectionCreated(/*string*/ clientChannel, /*string*/ targetChannel)
+    var message = "weinre: target " + targetChannel + " connected to client " + clientChannel
     
     Weinre.logInfo(message)
     var oldValue = Console.useRemote(true)
@@ -28,8 +28,8 @@ method connectionCreated(/*string*/ clientId, /*string*/ targetId)
     Weinre.wi.DOMStorage.initialize()
 
 //-----------------------------------------------------------------------------
-method connectionDestroyed(/*string*/ clientId, /*string*/ targetId)
-    var message = "weinre: target " + targetId + " disconnected from client " + clientId
+method connectionDestroyed(/*string*/ clientChannel, /*string*/ targetChannel)
+    var message = "weinre: target " + targetChannel + " disconnected from client " + clientChannel
     
     Weinre.logInfo(message)
     var oldValue = Console.useRemote(false)

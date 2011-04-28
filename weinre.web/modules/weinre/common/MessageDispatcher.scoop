@@ -11,6 +11,7 @@ requireClass ./WebSocketXhr
 requireClass ./IDLTools
 requireClass ./Binding
 requireClass ./Ex
+requireClass ./Callback
 
 //-----------------------------------------------------------------------------
 class MessageDispatcher(url)
@@ -122,9 +123,12 @@ method isOpen
     return this._opened == true
 
 //-----------------------------------------------------------------------------
-method _handleOpen
+method _handleOpen(event)
     this._opening = false
     this._opened  = true
+    this.channel  = event.channel
+    
+    Callback.setConnectorChannel(this.channel)
     
     if (Verbose) {
         Weinre.logDebug(this.constructor.name + "[" + this._url + "]: opened")
