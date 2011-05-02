@@ -12,8 +12,8 @@ requireClass ./EventListeners
 requireClass ./Native
 
 //-----------------------------------------------------------------------------
-class WebSocketXhr(url)
-    this.initialize(url)
+class WebSocketXhr(url, id)
+    this.initialize(url, id)
     
 //-----------------------------------------------------------------------------
 init
@@ -25,9 +25,14 @@ init
     WebSocketXhr.CLOSED     = 3
 
 //-----------------------------------------------------------------------------
-method initialize(url)
+method initialize(url, id)
+    if (!id) {
+        id = "anonymous"
+    }
+    
     this.readyState      = WebSocketXhr.CONNECTING 
     this._url            = url
+    this._id             = id
     this._urlChannel     = null
     this._queuedSends    = []
     this._sendInProgress = true
@@ -43,7 +48,8 @@ method initialize(url)
 
 //-----------------------------------------------------------------------------
 method _getChannel
-    this._xhr(this._url, "POST", "", this._handleXhrResponseGetChannel)
+    var body = JSON.stringify({ id: this._id})
+    this._xhr(this._url, "POST", body, this._handleXhrResponseGetChannel)
 
 //-----------------------------------------------------------------------------
 method _handleXhrResponseGetChannel(xhr)

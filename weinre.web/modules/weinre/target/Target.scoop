@@ -47,7 +47,34 @@ static method main
 //------------------------------------------------------------------------------
 method setWeinreServerURLFromScriptSrc()
     if (window.WeinreServerURL) return
+
+    var element = this.getTargetScriptElement()
+    var pattern = /(http:\/\/(.*?)\/)/
+    var match   = pattern.exec(element.src)
+    if (match) {
+        window.WeinreServerURL = match[1]
+        return 
+    }
     
+    var message = "unable to calculate the weinre server url; explicity set the variable window.WeinreServerURL instead" 
+    alert(message)
+    throw new Ex(arguments, message)
+
+
+//-----------------------------------------------------------------------------
+method setWeinreServerIdFromScriptSrc()
+    if (window.WeinreServerId) return
+
+    var element = this.getTargetScriptElement()
+
+    var hash = element.src.split("#")[1]
+    if (!hash) hash = "anonymous"
+    
+    window.WeinreServerId = hash
+
+//-----------------------------------------------------------------------------
+method getTargetScriptElement
+
     var elements = document.getElementsByTagName("script")
 
     var scripts = ["Target.", "target-script.", "target-script-min."]
@@ -56,23 +83,15 @@ method setWeinreServerURLFromScriptSrc()
         
         for (j=0; j<scripts.length; j++) {
             if (-1 != element.src.indexOf("/" + scripts[j])) {
-                var pattern = /(http:\/\/(.*?)\/)/
-                var match   = pattern.exec(element.src)
-                if (match) {
-                    window.WeinreServerURL = match[1]
-                    return 
-                }
+                return element
             }
         }
     }
-    
-    var message = "unable to calculate the weinre server url; explicity set the variable window.WeinreServerURL instead" 
-    alert(message)
-    throw new Ex(arguments, message)
 
 //-----------------------------------------------------------------------------
 method initialize()
     this.setWeinreServerURLFromScriptSrc()
+    this.setWeinreServerIdFromScriptSrc()
     
     if (window.WeinreServerURL[window.WeinreServerURL.length-1] != "/") {
         window.WeinreServerURL += "/"
@@ -83,7 +102,7 @@ method initialize()
     
     window.addEventListener("load", Binding(this, "onLoaded"), false)
 
-    var messageDispatcher = new MessageDispatcher(window.WeinreServerURL + "ws/target")
+    var messageDispatcher = new MessageDispatcher(window.WeinreServerURL + "ws/target", window.WeinreServerId)
     Weinre.messageDispatcher = messageDispatcher
 
     Weinre.wi = {}

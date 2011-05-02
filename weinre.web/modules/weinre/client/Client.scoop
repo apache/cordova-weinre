@@ -38,7 +38,7 @@ method initialize
     window.addEventListener("load", Binding(this, "onLoaded"), false)
 
     // create the socket
-    var messageDispatcher = new MessageDispatcher("../ws/client")
+    var messageDispatcher = new MessageDispatcher("../ws/client", this._getId())
     Weinre.messageDispatcher = messageDispatcher
 
     // finish setting up InspectorBackend
@@ -53,6 +53,12 @@ method initialize
     // hack
     WebInspector.mainResource = {}
     WebInspector.mainResource.url = location.href
+
+//-----------------------------------------------------------------------------
+method _getId
+    var hash = location.href.split("#")[1]
+    if (hash) return hash
+    return "anonymous"
 
 //-----------------------------------------------------------------------------
 method uiAvailable
