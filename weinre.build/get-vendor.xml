@@ -21,6 +21,7 @@
         <delete dir="${VENDOR}"/>
         <mkdir  dir="${VENDOR}"/>
 
+        <antcall target="get-json2"/>
         <antcall target="get-cli"/>
         <antcall target="get-json4j"/>
         <antcall target="get-jetty"/>
@@ -158,6 +159,8 @@
             
     </target>
     
+    <!-- ============================================================ -->
+
     <target name="get-swt-mac">
         <delete dir="${VENDOR}/swt"/>
         <mkdir  dir="${VENDOR}/swt"/>
@@ -172,6 +175,15 @@
         <copy file="${TMP}/swt-debug.jar" tofile="${VENDOR}/swt/cocoa-macosx-x86_64/swt.jar"/>
         
         <delete dir="${TMP}"/>
+    </target>
+
+    <!-- ============================================================ -->
+
+    <target name="get-json2">
+        <delete dir="${VENDOR}/json2"/>
+        <mkdir  dir="${VENDOR}/json2"/>
+        
+        <get src="${JSON2_URL_PREFIX}/json2.js"  dest="${VENDOR}/json2/json2.js"  verbose="false"/>
     </target>
 
 </project>
