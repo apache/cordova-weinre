@@ -6,6 +6,6 @@
  */
 
 (function() {
-    var InspectorFrontEndHostImpl = require("weinre/client/InspectorFrontendHostImpl")
+    var InspectorFrontEndHostImpl = require("weinre/client/InspectorFrontendHostImpl").getClass()
     window.InspectorFrontendHost = new InspectorFrontEndHostImpl() 
 })()
