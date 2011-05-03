@@ -6,6 +6,6 @@
  */
 
 (function() {
-    var InspectorBackendImpl = require("weinre/client/InspectorBackendImpl")
+    var InspectorBackendImpl = require("weinre/client/InspectorBackendImpl").getClass()
     window.InspectorBackend = new InspectorBackendImpl()
 })()

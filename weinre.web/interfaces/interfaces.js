@@ -22,7 +22,7 @@ var e_showJava
 
 var NativeTypes = "int any number boolean string void".split(" ")
 
-var IDLTools = require("weinre/common/IDLTools")
+var IDLTools = require("weinre/common/IDLTools").getClass()
 
 if (!window.localStorage) {
     window.localStorage = {

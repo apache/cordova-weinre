@@ -82,7 +82,7 @@ def writeMergedFile(oFileName, scripts, scriptNames, srcs):
         lines.append(";")
         lines.append("")
 
-    lines.append("require('weinre/target/Target').main()")
+    lines.append("require('weinre/target/Target').getClass().main()")
     lines.append("})();")
     targetScript = "\n".join(lines)
     

@@ -67,7 +67,7 @@ def createIndexFile(iFileName, oFileName, moduleDir):
             newLines.append("<!-- ========== weinre additions: starting ========== -->\n")
             newLines.append('<link rel="stylesheet" type="text/css" href="weinre/client.css">\n')
             newLines.append('<script type="text/javascript" src="../interfaces/all-json-idls-min.js"></script>\n')
-            newLines.append('<script type="text/javascript">require("weinre/client/Client").main()</script>\n')
+            newLines.append('<script type="text/javascript">require("weinre/client/Client").getClass().main()</script>\n')
             newLines.append("<!-- ========== weinre additions: done ========== -->\n")
             newLines.append(line)
         

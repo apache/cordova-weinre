@@ -52,7 +52,7 @@ def main():
     else:
         jsonString = json.dumps(result, indent=4)
         
-    jsString = "require('weinre/common/Weinre').addIDLs(%s)" % jsonString
+    jsString = "require('weinre/common/Weinre').getClass().addIDLs(%s)" % jsonString
 
     oFile = open(oFileName, "w")
     oFile.write(jsString)
