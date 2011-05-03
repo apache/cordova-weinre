@@ -23,9 +23,9 @@ method getElement
 
 //-----------------------------------------------------------------------------
 method add(connector)
-    if (this.connectors[connector.id]) return
+    if (this.connectors[connector.channel]) return
     
-    this.connectors[connector.id] = connector
+    this.connectors[connector.channel] = connector
     
     var li = this.getListItem(connector)
 
@@ -44,12 +44,12 @@ method add(connector)
     }
 
 //-----------------------------------------------------------------------------
-method getNewestConnectorId(ignoring)
+method getNewestConnectorChannel(ignoring)
     var newest = 0
     
-    for (var connectorId in this.connectors) {
-        if (connectorId == ignoring) continue
-        if (connectorId > newest) newest = connectorId
+    for (var connectorChannel in this.connectors) {
+        if (connectorChannel == ignoring) continue
+        if (connectorChannel > newest) newest = connectorChannel
     }
     
     if (newest == 0) return null
@@ -59,8 +59,8 @@ method getNewestConnectorId(ignoring)
 method getConnectorInsertionPoint(connector)
     for (var i=0; i<this.ulConnectors.childNodes.length; i++) {
         var childNode = this.ulConnectors.childNodes[i]
-        if (null == childNode.connectorId) continue
-        if (childNode.connectorId < connector.id) {
+        if (null == childNode.connectorChannel) continue
+        if (childNode.connectorChannel < connector.channel) {
             return childNode
         }
     }
@@ -68,17 +68,17 @@ method getConnectorInsertionPoint(connector)
     return null
 
 //-----------------------------------------------------------------------------
-method remove(id, fast)
+method remove(channel, fast)
     var self = this
-    var element = this.getConnectorElement(id)
+    var element = this.getConnectorElement(channel)
     if (!element) return
 
-    var connector = this.connectors[id]
+    var connector = this.connectors[channel]
     if (connector) {
         connector.closed = true
     }
     
-    delete this.connectors[id]
+    delete this.connectors[channel]
     
     if (fast) {
         this._remove(element)
@@ -103,45 +103,45 @@ method _remove(element)
 //-----------------------------------------------------------------------------
 method removeAll()
     this.getConnectors().forEach(function(connector) {
-        this.remove(connector.id, true)
+        this.remove(connector.channel, true)
     }, this)
 
 //-----------------------------------------------------------------------------
 method getConnectors()
     var result = []
-    for (var id in this.connectors) {
-        if (!this.connectors.hasOwnProperty(id)) continue
+    for (var channel in this.connectors) {
+        if (!this.connectors.hasOwnProperty(channel)) continue
         
-        result.push(this.connectors[id])
+        result.push(this.connectors[channel])
     }
     
     return result
 
 //-----------------------------------------------------------------------------
-method getConnectorElement(id)
-    var connector = this.connectors[id]
+method getConnectorElement(channel)
+    var connector = this.connectors[channel]
     if (!connector) return null
     
     return connector.element
 
 //-----------------------------------------------------------------------------
-method setCurrent(id)
+method setCurrent(channel)
     this.getConnectors().forEach(function(connector) {
         connector.element.removeStyleClass("current")
     })
     
-    var element = this.getConnectorElement(id)
+    var element = this.getConnectorElement(channel)
     if (null == element) return
     
     element.addStyleClass("current")
 
 //-----------------------------------------------------------------------------
-method setState(id, state)
-    if (typeof id == "string") {
-        var element = this.getConnectorElement(id)
+method setState(channel, state)
+    if (typeof channel == "string") {
+        var element = this.getConnectorElement(channel)
     }
     else {
-        element = id
+        element = channel
     }
     
     if (!element) return

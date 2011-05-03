@@ -246,6 +246,7 @@
         <build-html name="Installing"   oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="License"      oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="Running"      oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
+        <build-html name="MultiUser"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="Security"     oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="TestDrive"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="ChangeLog"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>

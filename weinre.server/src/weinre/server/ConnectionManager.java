@@ -55,51 +55,59 @@ public class ConnectionManager {
     //---------------------------------------------------------------
     public void addClient(Client client) {
         clientMap.put(client.getName(), client);
-        _sendAllClientsEvent("WeinreClientEvents", "clientRegistered", client.getDescription());
+        _sendAllClientsEvent("WeinreClientEvents", client.getId(), "clientRegistered", client.getDescription());
     }
 
     //---------------------------------------------------------------
     public void addTarget(Target target) {
         targetMap.put(target.getName(), target);
-        _sendAllClientsEvent("WeinreClientEvents", "targetRegistered", target.getDescription());
+        _sendAllClientsEvent("WeinreClientEvents", target.getId(), "targetRegistered", target.getDescription());
     }
 
     //---------------------------------------------------------------
     private void _removeClient(Client client) {
-        _sendAllClientsEvent("WeinreClientEvents", "clientUnregistered", client.getName());
+        _sendAllClientsEvent("WeinreClientEvents", client.getId(), "clientUnregistered", client.getName());
         clientMap.remove(client.getName());
     }
 
     //---------------------------------------------------------------
     private void _removeTarget(Target target) {
-        _sendAllClientsEvent("WeinreClientEvents", "targetUnregistered", target.getName());
+        _sendAllClientsEvent("WeinreClientEvents", target.getId(), "targetUnregistered", target.getName());
         targetMap.remove(target.getName());
     }
 
     //---------------------------------------------------------------
-    public Client getClient(String id) {
-        return clientMap.get(id);
+    public Client getClient(String name) {
+        return clientMap.get(name);
     }
 
     //---------------------------------------------------------------
-    public Target getTarget(String id) {
-        return targetMap.get(id);
+    public Target getTarget(String name) {
+        return targetMap.get(name);
     }
 
     //---------------------------------------------------------------
-    public List<Client> getClients() {
+    public List<Client> getClients(String id) {
         List<Client> result = new ArrayList<Client>();
         
-        result.addAll(clientMap.values());
+        for (Client client: clientMap.values()) {
+            if (client.getId().equals(id)) {
+                result.add(client);
+            }
+        }
         
         return result;
     }
 
     //---------------------------------------------------------------
-    public List<Target> getTargets() {
+    public List<Target> getTargets(String id) {
         List<Target> result = new ArrayList<Target>();
         
-        result.addAll(targetMap.values());
+        for (Target target: targetMap.values()) {
+            if (target.getId().equals(id)) {
+                result.add(target);
+            }
+        }
         
         return result;
     }
@@ -144,13 +152,13 @@ public class ConnectionManager {
         String clientName = client.getChannel().getName();
         String targetName = target.getChannel().getName();
 
-        _sendAllClientsEvent("WeinreClientEvents", message, clientName, targetName);
+        _sendAllClientsEvent("WeinreClientEvents", client.getId(), message, clientName, targetName);
         target.getChannel().sendEvent("WeinreTargetEvents", message, clientName, targetName);
     }
     
     //---------------------------------------------------------------
-    private void _sendAllClientsEvent(String intfName, String message, Object... args) {
-        for (Client aClient: getClients()) {
+    private void _sendAllClientsEvent(String intfName, String id, String message, Object... args) {
+        for (Client aClient: getClients(id)) {
             aClient.getChannel().sendEvent(intfName, message, args);
         }
     }

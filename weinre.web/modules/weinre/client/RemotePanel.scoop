@@ -64,27 +64,27 @@ method addClient(client)
 method addTarget(target) 
     this.targetList.add(target)
 
-method removeClient(id) 
-    this.clientList.remove(id)
+method removeClient(channel) 
+    this.clientList.remove(channel)
     
-method removeTarget(id) 
-    this.targetList.remove(id)
+method removeTarget(channel) 
+    this.targetList.remove(channel)
 
-method setCurrentClient(id) 
-    this.clientList.setCurrent(id)
+method setCurrentClient(channel) 
+    this.clientList.setCurrent(channel)
     
-method setCurrentTarget(id) 
-    this.targetList.setCurrent(id)
+method setCurrentTarget(channel) 
+    this.targetList.setCurrent(channel)
 
-method setClientState(id, state) 
-    this.clientList.setState(id, state)
+method setClientState(channel, state) 
+    this.clientList.setState(channel, state)
     
-method setTargetState(id, state) 
-    this.targetList.setState(id, state)
+method setTargetState(channel, state) 
+    this.targetList.setState(channel, state)
 
 //-----------------------------------------------------------------------------
-method getNewestTargetId(ignoring)
-    return this.targetList.getNewestConnectorId(ignoring)
+method getNewestTargetChannel(ignoring)
+    return this.targetList.getNewestConnectorChannel(ignoring)
 
 //-----------------------------------------------------------------------------
 method afterInitialConnection
@@ -111,10 +111,11 @@ method cb_getTargets(targets)
    
     if (!Weinre.client.autoConnect()) return
     
-    var newestTargetId = this.getNewestTargetId()
-    if (!newestTargetId) return
-    
-    Weinre.WeinreClientCommands.connectTarget(Weinre.connectorId, newestTargetId)
+    var newestTargetChannel = this.getNewestTargetChannel()
+    if (!newestTargetChannel) return
+    if (!Weinre.messageDispatcher) return
+
+    Weinre.WeinreClientCommands.connectTarget(Weinre.messageDispatcher.channel, newestTargetChannel)
     
     
 //-----------------------------------------------------------------------------
@@ -183,34 +184,34 @@ class TargetList < ConnectorList
 //-----------------------------------------------------------------------------
 method getListItem(target)
     var self = this
-    var text = target.hostName + " [id: " + target.id + "]" + " - " + target.url 
+    var text = target.hostName + " [channel: " + target.channel + " id: " + target.id + "]" + " - " + target.url 
 
     var item = dt.LI(
-        { $connectorId: target.id },
+        { $connectorChannel: target.channel },
         text
     )
     
     item.addStyleClass("weinre-connector-item")
     item.addStyleClass("target")
     
-    item.addEventListener("click", function(e) {self.connectToTarget(target.id, e)}, false)
+    item.addEventListener("click", function(e) {self.connectToTarget(target.channel, e)}, false)
 
     target.element = item
 
     return item
 
 //-----------------------------------------------------------------------------
-method connectToTarget(targetId, event)
+method connectToTarget(targetChannel, event)
     if (event) {
         event.preventDefault()
         event.stopPropagation()
     }
     
-    var target = this.connectors[targetId]
+    var target = this.connectors[targetChannel]
     if (!target) return false
     if (target.closed) return false
     
-    Weinre.WeinreClientCommands.connectTarget(Weinre.clientId, targetId)
+    Weinre.WeinreClientCommands.connectTarget(Weinre.messageDispatcher.channel, targetChannel)
     
     return false
 
@@ -230,18 +231,20 @@ method afterInitialConnection()
 
 //-----------------------------------------------------------------------------
 method getListItem(client)
-    var text = client.hostName + " [id: " + client.id + "]"
+    var text = client.hostName + " [channel: " + client.channel + " id: " + client.id  + "]"
     
     var item = dt.LI(
-        { $connectorId: client.id },
+        { $connectorChannel: client.channel },
         text
     )
 
     item.addStyleClass("weinre-connector-item")
     item.addStyleClass("client")
     
-    if (client.id == Weinre.clientId) {
-        item.addStyleClass("current")
+    if (Weinre.messageDispatcher) {
+        if (client.channel == Weinre.messageDispatcher.channel) {
+            item.addStyleClass("current")
+        }
     }
 
     client.element = item

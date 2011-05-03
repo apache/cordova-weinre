@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.wink.json4j.JSONArray;
+import org.apache.wink.json4j.JSONException;
+import org.apache.wink.json4j.JSONObject;
 
 import weinre.server.Channel;
 import weinre.server.Client;
@@ -25,13 +27,15 @@ public class WeinreClientCommands {
     public void registerClient(Channel channel, String callbackId) throws IOException {
         Client client = new Client(channel);
         
-        channel.sendCallback("WeinreClientEvents", callbackId, client.getName());
+        JSONObject description = client.getDescription();
+        
+        channel.sendCallback("WeinreClientEvents", callbackId, description);
         channel.sendEvent("WeinreClientEvents", "serverProperties", Main.getSettings().asProperties());
     }
 
     //---------------------------------------------------------------
     public void getTargets(Channel channel, String callbackId) throws IOException {
-        List<Target> targets = ConnectionManager.$.getTargets();
+        List<Target> targets = ConnectionManager.$.getTargets(channel.getId());
         JSONArray targetResults = new JSONArray();
         
         for (Target target: targets) {
@@ -43,7 +47,7 @@ public class WeinreClientCommands {
 
     //---------------------------------------------------------------
     public void getClients(Channel channel, String callbackId) throws IOException {
-        List<Client> clients = ConnectionManager.$.getClients();
+        List<Client> clients = ConnectionManager.$.getClients(channel.getId());
         JSONArray clientResults = new JSONArray();
         
         for (Client client: clients) {
