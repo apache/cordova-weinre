@@ -13,6 +13,7 @@ requireClass ../common/Callback
 requireClass ../common/Weinre
 requireClass ../common/MessageDispatcher
 requireClass ../common/Binding
+requireClass ../common/IDGenerator
 
 requireClass ./InspectorBackendImpl
 requireClass ./InspectorFrontendHostImpl
@@ -80,6 +81,7 @@ method _installRemotePanel
     
     var toolbar = document.getElementById("toolbar")
     WebInspector.addPanelToolbarIcon(toolbar, panel, toolbar.childNodes[1])
+    WebInspector.panelOrder.unshift(WebInspector.panelOrder.pop())
     
     WebInspector.currentPanel = panel
     
@@ -129,6 +131,27 @@ method cb_webSocketClosed
     }, 1000)
 
 //-----------------------------------------------------------------------------
+function installWebInspectorAPIsource
+
+    if ("webInspector" in window) return
+    
+    var extensionAPI = window.parent.InspectorFrontendHost.getExtensionAPI()
+    extensionAPI = extensionAPI.replace("location.hostname + location.port", "location.hostname + ':' + location.port")
+    
+    // parms are: InjectedScriptHost, inspectedWindow, injectedScriptId
+    // InjectedScriptHost is not directly referenced
+    // inspectedWindow is not directly referenced
+    // injectedScriptId is used to scope object references, appears that
+    //     each extension should have a unique value for this
+    
+    var id = IDGenerator.next()
+    console.log("installing webInspector with injectedScriptId: " + id)
+    extensionAPI += "(null,null," + id + ")"
+    return extensionAPI
+
+//-----------------------------------------------------------------------------
 static method main
     Weinre.client = new Client()
     Weinre.client.initialize()
+
+    window.installWebInspectorAPIsource = installWebInspectorAPIsource

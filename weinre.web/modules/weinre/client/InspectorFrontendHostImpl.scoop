@@ -15,6 +15,10 @@ class InspectorFrontendHostImpl
     this._getPlatformAndPort()
 
 //-----------------------------------------------------------------------------
+init
+    var _extensionAPI
+    
+//-----------------------------------------------------------------------------
 method loaded
 
 //-----------------------------------------------------------------------------
@@ -42,6 +46,17 @@ method sendMessageToBackend(message)
         object[1] = "<long script elided>"
     }
     Weinre.logInfo(arguments.callee.signature + "(" + JSON.stringify(object,null,4) + ")")
+
+//-----------------------------------------------------------------------------
+method setExtensionAPI(extensionAPI)
+    _extensionAPI = extensionAPI
+
+//-----------------------------------------------------------------------------
+method getExtensionAPI
+    return _extensionAPI
+
+//-----------------------------------------------------------------------------
+method inspectedURLChanged
 
 //-----------------------------------------------------------------------------
 method _getPlatformAndPort
