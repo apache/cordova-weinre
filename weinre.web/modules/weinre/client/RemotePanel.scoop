@@ -64,6 +64,9 @@ method addClient(client)
 method addTarget(target) 
     this.targetList.add(target)
 
+method getTarget(channel)
+    return this.targetList.get(channel)
+    
 method removeClient(channel) 
     this.clientList.remove(channel)
     

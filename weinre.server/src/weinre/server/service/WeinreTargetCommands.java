@@ -10,7 +10,6 @@ package weinre.server.service;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
 import weinre.server.Channel;

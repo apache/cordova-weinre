@@ -17,6 +17,7 @@ import org.apache.wink.json4j.JSONObject;
 import weinre.server.Channel;
 import weinre.server.Client;
 import weinre.server.ConnectionManager;
+import weinre.server.ExtensionManager;
 import weinre.server.Main;
 import weinre.server.Target;
 
@@ -55,6 +56,26 @@ public class WeinreClientCommands {
         }
         
         channel.sendCallback("WeinreClientEvents", callbackId, clientResults);
+    }
+
+    //---------------------------------------------------------------
+    public void getExtensions(Channel channel, String callbackId) throws IOException {
+        String[]  extensions = ExtensionManager.getExtensions();
+        JSONArray result     = new JSONArray();
+        
+        try {
+            for (String extension: extensions) {
+                JSONObject extensionObject = new JSONObject();
+                extensionObject.put("startPage", "extensions/" + extension + "/extension.html");
+                
+                result.add(extensionObject);
+            }
+        }
+        catch(JSONException e) {
+            throw new RuntimeException(e);
+        }
+        
+        channel.sendCallback("WeinreClientEvents", callbackId, result);
     }
 
     //---------------------------------------------------------------

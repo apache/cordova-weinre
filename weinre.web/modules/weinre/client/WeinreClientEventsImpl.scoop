@@ -14,6 +14,13 @@ class WeinreClientEventsImpl(client)
     this.client = client
 
 //-----------------------------------------------------------------------------
+init
+    var titleNotConnected    = "weinre: target not connected"
+    var titleConnectedPrefix = "weinre: "
+    
+    document.title = titleNotConnected
+     
+//-----------------------------------------------------------------------------
 method clientRegistered(clientDescription)
     if (this.client.uiAvailable()) {
         WebInspector.panels.remote.addClient(clientDescription)
@@ -54,15 +61,23 @@ method connectionCreated(/*int*/ clientChannel, /*int*/ targetChannel)
     WebInspector.panels.elements.reset()
     WebInspector.panels.timeline._clearPanel()
     WebInspector.panels.resources.reset()
+    
+    var target = WebInspector.panels.remote.getTarget(targetChannel)
+    document.title = titleConnectedPrefix + target.url
+    
+    WebInspector.inspectedURLChanged(target.url)
 
 //-----------------------------------------------------------------------------
 method connectionDestroyed(/*int*/ clientChannel, /*int*/ targetChannel)
+
     if (this.client.uiAvailable()) {
         WebInspector.panels.remote.setClientState(clientChannel, "not-connected") 
         WebInspector.panels.remote.setTargetState(targetChannel, "not-connected")
     }
     
     if (clientChannel != Weinre.messageDispatcher.channel) return
+
+    document.title = titleNotConnected
     
     if (!Weinre.client.autoConnect()) return
     if (!this.client.uiAvailable()) return

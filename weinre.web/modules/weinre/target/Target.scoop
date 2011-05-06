@@ -90,6 +90,8 @@ method getTargetScriptElement
 
 //-----------------------------------------------------------------------------
 method initialize()
+    var self = this
+
     this.setWeinreServerURLFromScriptSrc()
     this.setWeinreServerIdFromScriptSrc()
     
@@ -101,6 +103,18 @@ method initialize()
     Weinre.injectedScript = injectedScriptConstructor(injectedScriptHost, window, 0, "?")
     
     window.addEventListener("load", Binding(this, "onLoaded"), false)
+    document.addEventListener("DOMContentLoaded", Binding(this, "onDOMContent"), false)
+    
+    this._startTime = currentTime()
+    
+    if (document.readyState == "loaded") {
+        setTimeout(function() { self.onDOMContent() }, 10)
+    }
+    
+    if (document.readyState == "complete") {
+        setTimeout(function() { self.onDOMContent() }, 10)
+        setTimeout(function() { self.onLoaded() }, 20)
+    }
 
     var messageDispatcher = new MessageDispatcher(window.WeinreServerURL + "ws/target", window.WeinreServerId)
     Weinre.messageDispatcher = messageDispatcher
@@ -160,7 +174,12 @@ method cb_registerTarget(targetDescription)
     Weinre.targetDescription    = targetDescription
 
 //-----------------------------------------------------------------------------
-method onLoaded()
+method onLoaded
+    Weinre.wi.InspectorNotify.loadEventFired(currentTime() - this._startTime)
+
+//-----------------------------------------------------------------------------
+method onDOMContent
+    Weinre.wi.InspectorNotify.domContentEventFired(currentTime() - this._startTime)
 
 //-----------------------------------------------------------------------------
 method setDocument()
@@ -170,3 +189,8 @@ method setDocument()
     var nodeData = Weinre.nodeStore.getNodeData(nodeId, 2)
 
     Weinre.wi.DOMNotify.setDocument(nodeData)
+    
+//-----------------------------------------------------------------------------
+// WebKit's currentTime() seems to return time in seconds
+function currentTime()
+    return (new Date().getMilliseconds()) / 1000.0

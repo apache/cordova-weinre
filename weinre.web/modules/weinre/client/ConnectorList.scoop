@@ -44,6 +44,10 @@ method add(connector)
     }
 
 //-----------------------------------------------------------------------------
+method get(channel)
+    return this.connectors[channel]
+
+//-----------------------------------------------------------------------------
 method getNewestConnectorChannel(ignoring)
     var newest = 0
     
