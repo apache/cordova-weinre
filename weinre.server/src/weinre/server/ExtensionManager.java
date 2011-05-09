@@ -31,6 +31,8 @@ public class ExtensionManager {
     
     //---------------------------------------------------------------
     static public String[] getExtensions() {
+        if (null == weinreExtDir) return extensions;
+        
         if (weinreExtDate != weinreExtDir.lastModified()) {
             initExtensions();
         }
@@ -41,6 +43,8 @@ public class ExtensionManager {
     //---------------------------------------------------------------
     // path: /client/extensions/weinre-ext-sample/extension.html
     static public Resource getResource(String path) throws MalformedURLException {
+        if (null == weinreExtDir) return null;
+        
         File resourceFile = new File(weinreExtDir, path.substring(18));
         if (!resourceFile.exists()) return null;
         
@@ -55,6 +59,8 @@ public class ExtensionManager {
     //---------------------------------------------------------------
     static private void initExtensions() {
         
+        extensions = EMPTY_STRING_ARRAY;
+            
         weinreHomeDir = new File(System.getProperty("user.home"), ".weinre");
         if (!weinreHomeDir.isDirectory()) {
             Main.info("extensions not enabled: ~/.weinre is not a directory");
@@ -68,8 +74,6 @@ public class ExtensionManager {
             return;
         }
         
-        extensions = EMPTY_STRING_ARRAY;
-            
         List<String> extensionList = new ArrayList<String>();
         
         String[] entries = weinreExtDir.list();
