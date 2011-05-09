@@ -42,4 +42,11 @@ method inspectedNode(/*int*/ num, callback)
 method internalConstructorName(object)
     var ctor = object.constructor
     
-    return ctor.fullClassName || ctor.displayName || ctor.name || "Object"
+    var ctorName = ctor.fullClassName || ctor.displayName || ctor.name
+    if (ctorName && (ctorName != "Object")) return ctorName
+    
+    var pattern = /\[object (.*)\]/
+    var match = pattern.exec(ctor.toString())
+    if (match) return match[1]
+    
+    return "Object"
