@@ -10,7 +10,7 @@
 <div class="toc">
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 <p>
-  <a href="index.html">Home</a>
+  <a href="Home.html">Home</a>
 - <a href="TestDrive.html">Test Drive</a>
 - <a href="Installing.html">Installing</a>
 - <a href="Running.html">Running</a>
