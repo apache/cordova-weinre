@@ -5,7 +5,9 @@ steps to create a new release
 
 - update the `WEINRE_VERSION` variable in `weinre.build/build.properties` as appropriate
 
-- add changelog to `weinre.doc/ChangeLog.body.html`, built with `weinre.build/scripts/changelog.sh`
+- add changelog to `weinre.doc/ChangeLog.body.html`, built with
+
+    weinre.build/scripts/changelog.sh [previous-version]
 
 - fix other doc as necessary
 

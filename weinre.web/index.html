@@ -33,6 +33,9 @@ pre {
 textarea {
     width:                  100%;
 }
+pre, .indent {
+    margin-left:            2em;
+}
 </style>
 </head>
 <body>
@@ -47,15 +50,36 @@ textarea {
 <tr><td>target demo:                 <td> <span id="url-target-demo-min">???</span> <br><i>(<span id="url-target-demo-pieces"></span>)</i>
 </table>
 
+<h2>Target Script</h2>
+
+<p>You can use this script to inject the weinre target code into your web page.
+
+<p class="indent"><code><span id="url-target-script">???</span></code>
+
+<p>Example:
+
+<pre>
+&ltscript src="<span id="url-target-script-raw">???</span>"&gt;&lt;/script&gt;
+</pre>
+
 <h2>Target Bookmarklet</h2>
 
-<p>link: <span id="url-target-bookmarklet">???</span> (drag to your bookmarks)
+<p>You can use this bookmarklet to inject the weinre target code into any 
+web page you are viewing.
+
+<p>link you can drag to your bookmarks: 
+
+<div class="indent">
+<span id="url-target-bookmarklet">???</span> 
+</div>
 
 <p>bookmarklet url in a pre: 
 <pre id="target-bookmarklet-src-pre"></pre>
 
 <p>bookmarklet url in a textarea: 
+<div class="indent">
 <textarea id="target-bookmarklet-src-text-area"></textarea> 
+</div>
 
 <h2>Development</h2>
 
@@ -71,6 +95,7 @@ textarea {
 <tr><td>jetty servlet:  <td> <span id="version-servlet">???</span>
 <tr><td>apache cli:     <td> <span id="version-cli">???</span>
 <tr><td>apache json4j:  <td> <span id="version-json4j">???</span>
+<tr><td>json2:          <td> <span id="version-json2">???</span>
 <tr><td>scooj:          <td> <span id="version-scooj">???</span>
 <tr><td>modjewel:       <td> <span id="version-modjewel">???</span>
 </table>

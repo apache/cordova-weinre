@@ -2,10 +2,10 @@
  * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
  * 
- * Copyright (c) 2010, 2011 IBM Corporation
+ * Copyright (c) 2011 IBM Corporation
  */
 
 (function() {
-    var InspectorBackendImpl = require("weinre/client/InspectorBackendImpl").getClass()
-    window.InspectorBackend = new InspectorBackendImpl()
+    var ExtensionRegistryImpl = require("weinre/client/ExtensionRegistryImpl").getClass()
+    window.InspectorExtensionRegistry = new ExtensionRegistryImpl()
 })()

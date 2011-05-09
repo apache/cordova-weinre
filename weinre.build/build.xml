@@ -177,6 +177,10 @@
         </copy>
         
         <copy todir="${WEB}">
+            <fileset file="${VENDOR}/json2/json2.js"/>
+        </copy>
+        
+        <copy todir="${WEB}">
             <fileset dir="../${PROJECT_WEB}">
                 <exclude name="versions.js"/>
                 <exclude name="common/**/*"/>
@@ -212,6 +216,7 @@
                 <filter token="BUILD_NUMBER_DATE"          value="${BUILD_NUMBER_DATE}"/>
                 <filter token="CLI_VERSION"                value="${CLI_VERSION}"/>
                 <filter token="JSON4J_VERSION"             value="${JSON4J_VERSION}"/>
+                <filter token="JSON2_VERSION"              value="${JSON2_VERSION}"/>
                 <filter token="WEBKIT_VERSION"             value="${WEBKIT_VERSION}"/>
                 <filter token="SWT_VERSION"                value="${SWT_VERSION}"/>
                 <filter token="JETTY_VERSION"              value="${JETTY_VERSION}"/>
@@ -246,6 +251,7 @@
         <build-html name="Installing"   oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="License"      oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="Running"      oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
+        <build-html name="MultiUser"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="Security"     oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="TestDrive"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="ChangeLog"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>

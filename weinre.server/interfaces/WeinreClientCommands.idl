@@ -18,6 +18,8 @@ module weinre {
         void connectTarget(in string clientId, in string targetId);
         void disconnectTarget(in string clientId);
         
+        void getExtensions(out string[] extensions)
+        
         void logDebug(   in string message );
         void logInfo(    in string message );
         void logWarning( in string message );

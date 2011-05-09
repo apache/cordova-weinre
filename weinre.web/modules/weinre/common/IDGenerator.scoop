@@ -11,8 +11,8 @@ class IDGenerator
 
 //-----------------------------------------------------------------------------
 init
-    var nextId = 1
-    var idName = "__weinre__id"
+    var nextIdValue = 1
+    var idName      = "__weinre__id"
 
 //-----------------------------------------------------------------------------
 static method checkId(object)
@@ -23,7 +23,7 @@ static method getId(object, map)
     var id = IDGenerator.checkId(object)
     
     if (!id) {
-        id = next()
+        id = nextId()
         
         // note:
         // attempted to use Object.defineProperty() to make
@@ -40,10 +40,14 @@ static method getId(object, map)
     }
     
     return id
-    
+
 //-----------------------------------------------------------------------------
-function next
-    var result = nextId
-    nextId += 1
+static method next
+    return nextId()
+
+//-----------------------------------------------------------------------------
+function nextId
+    var result = nextIdValue
+    nextIdValue += 1
     return result
 

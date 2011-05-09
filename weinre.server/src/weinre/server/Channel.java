@@ -22,8 +22,11 @@ import org.apache.wink.json4j.JSONObject;
 //-------------------------------------------------------------------
 public class Channel {
     
+    static public final String AnonymousId = "anonymous";
+    
     private String                pathPrefix;
     private String                name;
+    private String                id;
     private MessageQueue<String>  requestQueue;
     private MessageQueue<String>  responseQueue;
     private boolean               isClosed;
@@ -34,9 +37,10 @@ public class Channel {
     private String                remoteAddress;
     
     //---------------------------------------------------------------
-    public Channel(String pathPrefix, String name, String remoteHost, String remoteAddress) {
+    public Channel(String pathPrefix, String name, String id, String remoteHost, String remoteAddress) {
         this.pathPrefix         = pathPrefix;
         this.name               = name;
+        this.id                 = id;
         this.remoteHost         = remoteHost;
         this.remoteAddress      = remoteAddress;
         this.requestQueue       = new MessageQueue<String>();
@@ -160,6 +164,11 @@ public class Channel {
     //---------------------------------------------------------------
     public String getName() {
         return name;
+    }
+    
+    //---------------------------------------------------------------
+    public String getId() {
+        return id;
     }
     
     //---------------------------------------------------------------

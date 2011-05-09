@@ -10,6 +10,8 @@ package weinre.server.service;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.wink.json4j.JSONObject;
+
 import weinre.server.Channel;
 import weinre.server.ChannelManager;
 import weinre.server.Main;
@@ -22,7 +24,9 @@ public class WeinreTargetCommands {
     public void registerTarget(Channel channel, String url, String callbackId) throws IOException {
         Target target = new Target(channel, url);
         
-        channel.sendCallback("WeinreTargetEvents", callbackId, target.getName());
+        JSONObject description = target.getDescription();
+        
+        channel.sendCallback("WeinreTargetEvents", callbackId, description);
     }
     
     //---------------------------------------------------------------

@@ -73,10 +73,10 @@ public class ChannelManager {
     }
     
     //---------------------------------------------------------------
-    public Channel registerChannel(String pathPrefix, String channelName, String remoteHost, String remoteAddress) {
+    public Channel registerChannel(String pathPrefix, String channelName, String id, String remoteHost, String remoteAddress) {
         if (channelMap.containsKey(channelName)) return null;
         
-        Channel channel = new Channel(pathPrefix, channelName, remoteHost, remoteAddress);
+        Channel channel = new Channel(pathPrefix, channelName, id, remoteHost, remoteAddress);
         channelMap.put(channelName, channel);
         
         fireRegisteredEvent(channel);

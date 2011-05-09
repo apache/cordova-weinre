@@ -84,7 +84,7 @@ static method validateAgainstIDL(klass, interfaceName)
     if (!errors.length) return
     
     errors.forEach(function(error){
-        require("./Weinre").logError(error)
+        require("./Weinre").getClass().logError(error)
     })
 
 //-----------------------------------------------------------------------------

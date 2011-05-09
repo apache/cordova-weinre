@@ -46,6 +46,11 @@ abstract public class Connector {
     }
     
     //---------------------------------------------------------------
+    public String getId() {
+        return channel.getId();
+    }
+    
+    //---------------------------------------------------------------
     public List<Connector> getConnections() {
         List<Connector> result = new ArrayList<Connector>();
         

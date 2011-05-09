@@ -11,10 +11,16 @@ requireClass ./WebSocketXhr
 requireClass ./IDLTools
 requireClass ./Binding
 requireClass ./Ex
+requireClass ./Callback
 
 //-----------------------------------------------------------------------------
-class MessageDispatcher(url)
+class MessageDispatcher(url, id)
+    if (!id) {
+        id = "anonymous"
+    }
+
     this._url        = url
+    this._id         = id
     
     this.error       = null
     this._opening    = false
@@ -47,7 +53,7 @@ method _open
     if (this._closed) throw new Ex(arguments, "socket has already been closed")
     
     this._opening = true 
-    this._socket = new WebSocketXhr(this._url)
+    this._socket = new WebSocketXhr(this._url, this._id)
     this._socket.addEventListener("open",    Binding(this, "_handleOpen"))
     this._socket.addEventListener("error",   Binding(this, "_handleError"))
     this._socket.addEventListener("message", Binding(this, "_handleMessage"))
@@ -122,9 +128,12 @@ method isOpen
     return this._opened == true
 
 //-----------------------------------------------------------------------------
-method _handleOpen
+method _handleOpen(event)
     this._opening = false
     this._opened  = true
+    this.channel  = event.channel
+    
+    Callback.setConnectorChannel(this.channel)
     
     if (Verbose) {
         Weinre.logDebug(this.constructor.name + "[" + this._url + "]: opened")

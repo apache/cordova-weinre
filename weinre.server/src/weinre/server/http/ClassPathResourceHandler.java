@@ -14,6 +14,8 @@ import java.net.URL;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.resource.Resource;
 
+import weinre.server.ExtensionManager;
+
 //-------------------------------------------------------------------
 public class ClassPathResourceHandler extends ResourceHandler {
 
@@ -32,6 +34,11 @@ public class ClassPathResourceHandler extends ResourceHandler {
             throw new MalformedURLException(path);
         }
 
+        // handle extensions
+        if (path.startsWith("/client/extensions/")) {
+            return ExtensionManager.getResource(path);
+        }
+        
         path = pathPrefix + path;
         URL url = getClass().getClassLoader().getResource(path);
         if (url != null)

@@ -14,13 +14,13 @@ class Callback
 
 //-----------------------------------------------------------------------------
 init 
-    var CallbackTable = {}
-    var CallbackIndex = 1
-    var ConnectorId   = "???"
+    var CallbackTable    = {}
+    var CallbackIndex    = 1
+    var ConnectorChannel = "???"
 
 //-----------------------------------------------------------------------------
-static method setConnectorId(connectorId)
-    ConnectorId = ""  + connectorId
+static method setConnectorChannel(connectorChannel)
+    ConnectorChannel = ""  + connectorChannel
 
 //-----------------------------------------------------------------------------
 static method register(callback)
@@ -34,7 +34,7 @@ static method register(callback)
     if (typeof func == "string") func = receiver.func
     if (typeof func != "function") throw new Ex(arguments, "callback function was null or not found")
 
-    var index = ConnectorId + "::" + CallbackIndex
+    var index = ConnectorChannel + "::" + CallbackIndex
     
     CallbackIndex++
     if (CallbackIndex >= 65536 * 65536) CallbackIndex = 1
@@ -62,7 +62,7 @@ static method invoke(index, args)
     catch (e) {
         var funcName = func.name
         if (!funcName) funcName = "<unnamed>"
-        require("./Weinre").logError(arguments.callee.signature + " exception invoking callback: " + funcName + "(" + args.join(",") + "): " + e)
+        require("./Weinre").getClass().logError(arguments.callee.signature + " exception invoking callback: " + funcName + "(" + args.join(",") + "): " + e)
     }
     finally {
         Callback.deregister(index)
