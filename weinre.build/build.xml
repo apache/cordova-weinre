@@ -258,6 +258,8 @@
         
         <copy file="${WEB}/doc/Home.html" tofile="${WEB}/doc/index.html"/>
         
+        <copy todir="${WEB}/doc/images" file="../${PROJECT_WEB}/images/weinre-icon-64x64.png"/>
+
         <copy todir="${WEB}/doc/css">     <fileset dir="../${PROJECT_DOC}/css"/>     </copy>
         <copy todir="${WEB}/doc/images">  <fileset dir="../${PROJECT_DOC}/images"/>  </copy>
         <copy todir="${WEB}/doc/scripts"> <fileset dir="../${PROJECT_DOC}/scripts"/> </copy>

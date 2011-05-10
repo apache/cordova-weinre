@@ -22,6 +22,9 @@ body {
     padding:                0.25em 0.5em;
     background-color:       #FF0;
     font-style:             italic;
+    -webkit-box-shadow:     5px 5px 15px #888;
+    -moz-box-shadow:        5px 5px 15px #888;
+    box-shadow:             5px 5px 15px #888;
 }
 
 /*-----------------------------------------------------------------*/
