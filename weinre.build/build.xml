@@ -256,8 +256,10 @@
         <build-html name="TestDrive"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="ChangeLog"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         
-        <move file="${WEB}/doc/Home.html" tofile="${WEB}/doc/index.html"/>
+        <copy file="${WEB}/doc/Home.html" tofile="${WEB}/doc/index.html"/>
         
+        <copy todir="${WEB}/doc/images" file="../${PROJECT_WEB}/images/weinre-icon-64x64.png"/>
+
         <copy todir="${WEB}/doc/css">     <fileset dir="../${PROJECT_DOC}/css"/>     </copy>
         <copy todir="${WEB}/doc/images">  <fileset dir="../${PROJECT_DOC}/images"/>  </copy>
         <copy todir="${WEB}/doc/scripts"> <fileset dir="../${PROJECT_DOC}/scripts"/> </copy>
@@ -393,10 +395,6 @@
                 
             <zipfileset dir="${WEB}" prefix="web"/>
         </jar>
-        
-        <delete dir="../${PROJECT_SERVER_ANDROID}/lib"/>
-        <mkdir  dir="../${PROJECT_SERVER_ANDROID}/lib"/>
-        <copy file="${OUT}/weinre.jar" todir="../${PROJECT_SERVER_ANDROID}/lib"/>
         
     </target>
 
