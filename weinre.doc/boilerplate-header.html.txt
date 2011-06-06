@@ -30,7 +30,7 @@
 
 <body>
 
-<a class="no-decoration" href="https://github.com/pmuellr/weinre"><div class="ribbon">Fork weinre on GitHub</div></a>
+<a class="no-decoration" href="https://github.com/phonegap/weinre"><div class="ribbon">Fork weinre on GitHub</div></a>
 
 <!-- ======================================================================= -->
 <h1 class="page-title">weinre - @PAGE_NAME@</h1>
