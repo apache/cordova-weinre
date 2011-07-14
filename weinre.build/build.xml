@@ -273,7 +273,7 @@
     <target name="build-json-idl">
         <uptodate property="JSON_IDL_UPTODATE" targetfile="${CACHED}/json-idl/all-json-idls.js">
             <srcfiles dir="../${PROJECT_SERVER}/interfaces"    includes="*.idl"/>
-            <srcfiles dir="${VENDOR}/WebKit/WebCore/inspector" includes="*.idl"/>
+            <srcfiles dir="${VENDOR}/webkit/WebCore/inspector" includes="*.idl"/>
         </uptodate>
         
         <antcall target="build-json-idl-fresh"/>
@@ -295,14 +295,14 @@
         <simple-idl2json name="WeinreTargetCommands"  oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
         <simple-idl2json name="WeinreTargetEvents"    oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
 
-        <simple-idl2json name="InjectedScriptHost"    oDir="${CACHED}/json-idl" iDir="${VENDOR}/WebKit/WebCore/inspector"/>
+        <simple-idl2json name="InjectedScriptHost"    oDir="${CACHED}/json-idl" iDir="${VENDOR}/webkit/WebCore/inspector"/>
         
-        <simple-idl2json name="Inspector"             oDir="${CACHED}/json-idl" iDir="${VENDOR}/WebKit/WebCore/inspector">
+        <simple-idl2json name="Inspector"             oDir="${CACHED}/json-idl" iDir="${VENDOR}/webkit/WebCore/inspector">
             <arg value="--anyType"/>
             <arg value="Value"/>
         </simple-idl2json>
         
-        <simple-idl2json name="InspectorFrontendHost" oDir="${CACHED}/json-idl" iDir="${VENDOR}/WebKit/WebCore/inspector">
+        <simple-idl2json name="InspectorFrontendHost" oDir="${CACHED}/json-idl" iDir="${VENDOR}/webkit/WebCore/inspector">
             <arg value="--anyType"/>
             <arg value="MouseEvent"/>
         </simple-idl2json>
@@ -346,11 +346,11 @@
     <target name="build-client">
         
         <copy todir="${WEB}/client/nls/English.lproj">
-            <fileset file="${VENDOR}/WebKit/WebCore/English.lproj/localizedStrings.js"/>
+            <fileset file="${VENDOR}/webkit/WebCore/English.lproj/localizedStrings.js"/>
         </copy>
 
         <copy todir="${WEB}/client">
-            <fileset dir="${VENDOR}/WebKit/WebCore/inspector/front-end"/>
+            <fileset dir="${VENDOR}/webkit/WebCore/inspector/front-end"/>
         </copy>
 
         <exec executable="python" failonerror="true" failifexecutionfails="true">
