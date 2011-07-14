@@ -124,28 +124,28 @@
         <delete dir="${VENDOR}/webkit"/>
         <mkdir  dir="${VENDOR}/webkit/WebCore"/>
         
-        <exec executable="svn" dir="${VENDOR}/WebKit/WebCore">
+        <exec executable="svn" dir="${VENDOR}/webkit/WebCore">
             <arg value="export"/>
             <arg value="-r"/>
             <arg value="${WEBKIT_VERSION}"/>
             <arg value="${WEBKIT_URL_PREFIX}/Source/WebCore/inspector"/>
         </exec>
         
-        <exec executable="svn" dir="${VENDOR}/WebKit/WebCore">
+        <exec executable="svn" dir="${VENDOR}/webkit/WebCore">
             <arg value="export"/>
             <arg value="-r"/>
             <arg value="${WEBKIT_VERSION}"/>
             <arg value="${WEBKIT_URL_PREFIX}/Source/WebCore/English.lproj"/>
         </exec>
         
-        <exec executable="svn" dir="${VENDOR}/WebKit/WebCore">
+        <exec executable="svn" dir="${VENDOR}/webkit/WebCore">
             <arg value="export"/>
             <arg value="-r"/>
             <arg value="${WEBKIT_VERSION}"/>
             <arg value="${WEBKIT_URL_PREFIX}/Source/WebCore/css/CSSPropertyNames.in"/>
         </exec>
         
-        <exec executable="grep" outputproperty="gpl-grep-results" dir="${VENDOR}/WebKit/WebCore">
+        <exec executable="grep" outputproperty="gpl-grep-results" dir="${VENDOR}/webkit/WebCore">
             <arg value="-r"/>        
             <arg value="GPL"/>        
             <arg value="."/>        
