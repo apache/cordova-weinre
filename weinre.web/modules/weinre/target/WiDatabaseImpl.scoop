@@ -7,9 +7,13 @@
  */
 
 requireClass ../common/Weinre
+requireClass ../common/Native
 
 //-----------------------------------------------------------------------------
 class WiDatabaseImpl
+    if (!window.openDatabase) return
+    
+    window.openDatabase = nativeOpenDatabase
 
 //-----------------------------------------------------------------------------
 method getDatabaseTableNames(/*int*/ databaseId, callback)
@@ -21,3 +25,12 @@ method getDatabaseTableNames(/*int*/ databaseId, callback)
 method executeSQL(/*int*/ databaseId, /*string*/ query, callback)
     // callback: function(/*boolean*/ success, /*int*/ transactionId)
     Weinre.notImplemented(arguments.callee.signature)
+
+//-----------------------------------------------------------------------------
+function nativeOpenDatabase(name, version, displayName, estimatedSize, creationCallback)
+    
+    Weinre.wi.DatabaseNotify.addDatabase(name)
+    
+    return Native.openDatabase(name, version, displayName, estimatedSize, creationCallback)
+    
+    
