@@ -12,6 +12,7 @@ var buttonStartStuff
 var buttonClearOutput
 var outputElement 
 var storageIndex = 0
+var db
 
 // set the id based on the hash
 var hash = location.href.split("#")[1]
@@ -26,7 +27,7 @@ function onLoad() {
     
     buttonStartStuff.addEventListener("click", function() {
         lastClickTime = new Date().toString()
-        db.transaction(addClick)
+        if (db) db.transaction(addClick)
         
         if (!started) {
             buttonStartStuff.value = "stop stuff"
@@ -43,6 +44,7 @@ function onLoad() {
         outputElement.innerHTML = ""
     })
     
+    setTimeout(_openDatabase,1000)
 }
 
 //------------------------------------------------------------------------------
@@ -132,10 +134,11 @@ function createDatabase(tx) {
 }
 
 //------------------------------------------------------------------------------
-var db
-if (window.openDatabase) {
-    db = window.openDatabase("clicks", "1.0", "clicks", 8192)
-    db.transaction(createDatabase)
+function _openDatabase() {
+    if (window.openDatabase) {
+        db = window.openDatabase("clicks", "1.0", "clicks", 8192)
+        db.transaction(createDatabase)
+    }
 }
 
 //------------------------------------------------------------------------------
