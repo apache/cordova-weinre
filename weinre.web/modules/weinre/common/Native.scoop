@@ -25,6 +25,7 @@ init
     Native.original.SessionStorage_setItem    = window.sessionStorage ? window.sessionStorage.setItem    : null
     Native.original.SessionStorage_removeItem = window.sessionStorage ? window.sessionStorage.removeItem : null
     Native.original.SessionStorage_clear      = window.sessionStorage ? window.sessionStorage.clear      : null
+    Native.original.openDatabase              = window.openDatabase
 
     Native.clearInterval             = function() { return Native.original.clearInterval.apply( window, [].slice.call(arguments))}
     Native.clearTimeout              = function() { return Native.original.clearTimeout.apply(  window, [].slice.call(arguments))}
@@ -38,3 +39,5 @@ init
     Native.SessionStorage_setItem    = function() { return Native.original.SessionStorage_setItem.apply(    window.sessionStorage, [].slice.call(arguments))}
     Native.SessionStorage_removeItem = function() { return Native.original.SessionStorage_removeItem.apply( window.sessionStorage, [].slice.call(arguments))}
     Native.SessionStorage_clear      = function() { return Native.original.SessionStorage_clear.apply(      window.sessionStorage, [].slice.call(arguments))}
+    Native.openDatabase              = function() { return Native.original.openDatabase.apply( window, [].slice.call(arguments))}
+
