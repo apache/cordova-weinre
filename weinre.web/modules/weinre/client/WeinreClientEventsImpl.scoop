@@ -9,6 +9,8 @@
 requireClass ../common/Callback
 requireClass ../common/Weinre
 
+requireClass ./WeinreExtraTargetEventsImpl
+
 //-----------------------------------------------------------------------------
 class WeinreClientEventsImpl(client)
     this.client = client
@@ -67,6 +69,10 @@ method connectionCreated(/*int*/ clientChannel, /*int*/ targetChannel)
     
     WebInspector.inspectedURLChanged(target.url)
 
+    Weinre.WeinreExtraClientCommands.getDatabases(function(databaseRecords) {
+        WeinreExtraTargetEventsImpl.addDatabaseRecords(databaseRecords)
+    })
+    
 //-----------------------------------------------------------------------------
 method connectionDestroyed(/*int*/ clientChannel, /*int*/ targetChannel)
 

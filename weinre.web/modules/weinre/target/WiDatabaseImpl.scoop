@@ -18,6 +18,16 @@ class WiDatabaseImpl
     window.openDatabase = wrappedOpenDatabase
 
 //-----------------------------------------------------------------------------
+static method getDatabases
+    var result = []
+    
+    for (var id in id2db) {
+        result.push(id2db[id])
+    }
+    
+    return result
+
+//-----------------------------------------------------------------------------
 function logSqlError(sqlError)
     console.log("SQL Error " + sqlError.code + ": " + sqlError.message)
 
@@ -52,12 +62,61 @@ method getDatabaseTableNames( databaseId, callback)
     stepper.run(db, logSqlError)
 
 //-----------------------------------------------------------------------------
+function executeSQL_step_1()
+    this.executeSql(this.query);
+
+//-----------------------------------------------------------------------------
+function executeSQL_step_2(resultSet)
+    var columnNames = []
+    var values      = []
+    var rows        = resultSet.rows
+    
+    for (var i=0; i<rows.length; i++) {
+        var row = rows.item(i)
+        
+        if (i == 0) {
+            for (var propName in row) {
+                columnNames.push(propName)
+            }
+        }
+        
+        for (var j=0; j<columnNames.length; j++) {
+            values.push(row[columnNames[j]])
+        }
+    }
+
+    Weinre.wi.DatabaseNotify.sqlTransactionSucceeded(this.txid, columnNames, values)
+
+//-----------------------------------------------------------------------------
+function executeSQL_error(sqlError)
+    var error = {
+        code:    sqlError.code,
+        message: sqlError.message
+    }
+    
+    Weinre.wi.DatabaseNotify.sqlTransactionFailed(this.txid, error)
+
+//-----------------------------------------------------------------------------
 method executeSQL(/*int*/ databaseId, /*string*/ query, callback)
     var db = dbById(databaseId)
     if (!db) return
     
-    // callback: function(/*boolean*/ success, /*int*/ transactionId)
-    Weinre.notImplemented(arguments.callee.signature)
+    var txid = Weinre.targetDescription.channel + "-" + IDGenerator.next()
+    
+    var stepper = SqlStepper([
+        executeSQL_step_1,
+        executeSQL_step_2,
+    ])
+    
+    stepper.txid     = txid
+    stepper.query    = query
+    stepper.callback = callback
+    stepper.run(db, executeSQL_error)
+    
+    if (callback) {
+        Weinre.WeinreTargetCommands.sendClientCallback(callback, [true, txid])
+    }
+    
 
 //-----------------------------------------------------------------------------
 function wrappedOpenDatabase(name, version, displayName, estimatedSize, creationCallback)
@@ -94,29 +153,19 @@ function dbAdd(db, name, version)
     if (record) return record
     
     record = {}
-    record.db      = db
+    record.id      = IDGenerator.next()
+    record.domain  = window.location.origin
     record.name    = name
     record.version = version
-    record.id      = IDGenerator.next()
+    record.db      = db
     
     id2db[record.id] = record
     name2db[name]    = record
 
     var payload = {}
     payload.id      = record.id
-    payload.domain  = "???"
+    payload.domain  = record.domain
     payload.name    = name
     payload.version = version
     
-    Weinre.wi.DatabaseNotify.addDatabase(payload)
-
-//-----------------------------------------------------------------------------
-function dbGetAll()
-    var result = []
-    
-    for (var id in id2db) {
-        result.push(id2db[id])
-    }
-    
-    return result
-    
+    Weinre.WeinreExtraTargetEvents.databaseOpened(payload)

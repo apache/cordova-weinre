@@ -44,7 +44,7 @@ function onLoad() {
         outputElement.innerHTML = ""
     })
     
-    setTimeout(_openDatabase,1000)
+    openTheDatabase()
 }
 
 //------------------------------------------------------------------------------
@@ -134,9 +134,9 @@ function createDatabase(tx) {
 }
 
 //------------------------------------------------------------------------------
-function _openDatabase() {
+function openTheDatabase() {
     if (window.openDatabase) {
-        db = window.openDatabase("clicks", "1.0", "clicks", 8192)
+        db = window.openDatabase("clicks_db", "1.0", "clicks", 8192)
         db.transaction(createDatabase)
     }
 }
