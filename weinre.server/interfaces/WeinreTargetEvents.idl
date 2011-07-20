@@ -14,7 +14,7 @@ module weinre {
         void connectionDestroyed(string clientId, string targetId);
         
         void sendCallback(string callbackId, Object result);
-
+        
     };
 }
 

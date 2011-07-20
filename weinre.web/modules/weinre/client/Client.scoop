@@ -18,6 +18,7 @@ requireClass ../common/IDGenerator
 requireClass ./InspectorBackendImpl
 requireClass ./InspectorFrontendHostImpl
 requireClass ./WeinreClientEventsImpl
+requireClass ./WeinreExtraTargetEventsImpl
 requireClass ./RemotePanel
 
 //-----------------------------------------------------------------------------
@@ -47,7 +48,10 @@ method initialize
 
     // create the client commands proxy
     Weinre.WeinreClientCommands = messageDispatcher.createProxy("WeinreClientCommands")
+    Weinre.WeinreExtraClientCommands = messageDispatcher.createProxy("WeinreExtraClientCommands")
 
+    messageDispatcher.registerInterface("WeinreExtraTargetEvents", new WeinreExtraTargetEventsImpl(), false)
+    
     // register WebInspector interface
     messageDispatcher.registerInterface("WebInspector", WebInspector, false)
     

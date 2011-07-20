@@ -21,6 +21,7 @@ requireClass ./ElementHighlighter
 requireClass ./InjectedScriptHostImpl
 
 requireClass ./WeinreTargetEventsImpl
+requireClass ./WeinreExtraClientCommandsImpl
 
 requireClass ./WiConsoleImpl
 requireClass ./WiCSSImpl
@@ -45,15 +46,16 @@ static method main
     }
     
 //------------------------------------------------------------------------------
-method setWeinreServerURLFromScriptSrc()
+method setWeinreServerURLFromScriptSrc(element)
     if (window.WeinreServerURL) return
 
-    var element = this.getTargetScriptElement()
-    var pattern = /(http:\/\/(.*?)\/)/
-    var match   = pattern.exec(element.src)
-    if (match) {
-        window.WeinreServerURL = match[1]
-        return 
+    if (element) {
+        var pattern = /(http:\/\/(.*?)\/)/
+        var match   = pattern.exec(element.src)
+        if (match) {
+            window.WeinreServerURL = match[1]
+            return 
+        }
     }
     
     var message = "unable to calculate the weinre server url; explicity set the variable window.WeinreServerURL instead" 
@@ -62,14 +64,25 @@ method setWeinreServerURLFromScriptSrc()
 
 
 //-----------------------------------------------------------------------------
-method setWeinreServerIdFromScriptSrc()
+method setWeinreServerIdFromScriptSrc(element)
     if (window.WeinreServerId) return
 
     var element = this.getTargetScriptElement()
 
-    var hash = element.src.split("#")[1]
-    if (!hash) hash = "anonymous"
-    
+    var hash = "anonymous"
+    if (element) {
+        var attempt = element.src.split("#")[1]
+        if (attempt) {
+            hash = attempt
+        }
+        else {
+            attempt = location.hash.split("#")[1]
+            if (attempt) {
+                hash = attempt
+            }
+        }
+    }
+
     window.WeinreServerId = hash
 
 //-----------------------------------------------------------------------------
@@ -92,8 +105,9 @@ method getTargetScriptElement
 method initialize()
     var self = this
 
-    this.setWeinreServerURLFromScriptSrc()
-    this.setWeinreServerIdFromScriptSrc()
+    var element = this.getTargetScriptElement()
+    this.setWeinreServerURLFromScriptSrc(element)
+    this.setWeinreServerIdFromScriptSrc(element)
     
     if (window.WeinreServerURL[window.WeinreServerURL.length-1] != "/") {
         window.WeinreServerURL += "/"
@@ -121,13 +135,13 @@ method initialize()
 
     Weinre.wi = {}
     
-    Weinre.wi.Console          = new WiConsoleImpl()
-    Weinre.wi.CSS              = new WiCSSImpl()
-    Weinre.wi.Database         = new WiDatabaseImpl()
-    Weinre.wi.DOM              = new WiDOMImpl()
-    Weinre.wi.DOMStorage       = new WiDOMStorageImpl()
-    Weinre.wi.Inspector        = new WiInspectorImpl()
-    Weinre.wi.Runtime          = new WiRuntimeImpl()
+    Weinre.wi.Console                   = new WiConsoleImpl()
+    Weinre.wi.CSS                       = new WiCSSImpl()
+    Weinre.wi.Database                  = new WiDatabaseImpl()
+    Weinre.wi.DOM                       = new WiDOMImpl()
+    Weinre.wi.DOMStorage                = new WiDOMStorageImpl()
+    Weinre.wi.Inspector                 = new WiInspectorImpl()
+    Weinre.wi.Runtime                   = new WiRuntimeImpl()
     
     messageDispatcher.registerInterface("Console",          Weinre.wi.Console          , false)
     messageDispatcher.registerInterface("CSS",              Weinre.wi.CSS              , false)
@@ -136,8 +150,9 @@ method initialize()
     messageDispatcher.registerInterface("DOMStorage",       Weinre.wi.DOMStorage       , false)
     messageDispatcher.registerInterface("Inspector",        Weinre.wi.Inspector        , false)
     messageDispatcher.registerInterface("Runtime",          Weinre.wi.Runtime          , false)
-    
-    messageDispatcher.registerInterface("WeinreTargetEvents", new WeinreTargetEventsImpl(), true)
+
+    messageDispatcher.registerInterface("WeinreExtraClientCommands",  new WeinreExtraClientCommandsImpl() , true)
+    messageDispatcher.registerInterface("WeinreTargetEvents",         new WeinreTargetEventsImpl(),         true)
 
     Weinre.wi.ApplicationCacheNotify = messageDispatcher.createProxy("ApplicationCacheNotify")
     Weinre.wi.ConsoleNotify          = messageDispatcher.createProxy("ConsoleNotify")
@@ -147,7 +162,8 @@ method initialize()
     Weinre.wi.InspectorNotify        = messageDispatcher.createProxy("InspectorNotify")
     Weinre.wi.TimelineNotify         = messageDispatcher.createProxy("TimelineNotify")
     
-    Weinre.WeinreTargetCommands  = messageDispatcher.createProxy("WeinreTargetCommands")
+    Weinre.WeinreTargetCommands     = messageDispatcher.createProxy("WeinreTargetCommands")
+    Weinre.WeinreExtraTargetEvents  = messageDispatcher.createProxy("WeinreExtraTargetEvents")
 
     messageDispatcher.getWebSocket().addEventListener("open", Binding(this, this.cb_webSocketOpened))
     

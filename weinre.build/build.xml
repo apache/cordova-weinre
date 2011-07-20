@@ -290,10 +290,12 @@
         <delete dir="${CACHED}/json-idl"/>
         <mkdir  dir="${CACHED}/json-idl"/>
         
-        <simple-idl2json name="WeinreClientCommands"  oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
-        <simple-idl2json name="WeinreClientEvents"    oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
-        <simple-idl2json name="WeinreTargetCommands"  oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
-        <simple-idl2json name="WeinreTargetEvents"    oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
+        <simple-idl2json name="WeinreClientCommands"      oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
+        <simple-idl2json name="WeinreClientEvents"        oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
+        <simple-idl2json name="WeinreTargetCommands"      oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
+        <simple-idl2json name="WeinreTargetEvents"        oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
+        <simple-idl2json name="WeinreExtraClientCommands" oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
+        <simple-idl2json name="WeinreExtraTargetEvents"   oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
 
         <simple-idl2json name="InjectedScriptHost"    oDir="${CACHED}/json-idl" iDir="${VENDOR}/webkit/WebCore/inspector"/>
         
