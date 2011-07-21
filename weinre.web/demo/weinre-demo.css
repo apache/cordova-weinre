@@ -26,3 +26,25 @@ h1 {
 #button {
     font-size: 150%;
 }
+
+.size-test {
+    display: none;
+}
+
+@media only screen and (min-width: 800px) {
+	.size-large { 
+		display: inline;
+	}
+}
+
+@media only screen and (min-width: 400px) and (max-width: 799px) {
+	.size-medium { 
+		display: inline;
+	}
+}
+
+@media only screen and (max-width: 399px) {
+	.size-small { 
+		display: inline;
+	}
+}

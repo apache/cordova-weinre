@@ -41,6 +41,25 @@ method getComputedStyle(node)
     return styleObject
 
 //-----------------------------------------------------------------------------
+method _addRule(node, cssRule, bucket)
+    
+    if (_elementMatchesSelector(node, cssRule.selectorText)) {
+        var object = {}
+    
+        object.ruleId = this._getStyleRuleId(cssRule)
+        object.selectorText = cssRule.selectorText
+        object.style = this._buildMirrorForStyle(cssRule.style, true)
+        bucket.push(object)
+    }
+    
+    if (cssRule.cssRules) {
+        for (var i=0; i<cssRule.cssRules.length; i++) {
+            this._addRule(node, cssRule.cssRules[i], bucket)
+        }
+    }
+    
+
+//-----------------------------------------------------------------------------
 method getMatchedCSSRules(node)
     var result = []
     
@@ -50,16 +69,7 @@ method getMatchedCSSRules(node)
         if (!styleSheet.cssRules) continue
         
         for (var j=0; j<styleSheet.cssRules.length; j++) {
-            var cssRule = styleSheet.cssRules[j]
-            
-            if (!_elementMatchesSelector(node, cssRule.selectorText)) continue
-            
-            var object = {}
-            
-            object.ruleId = this._getStyleRuleId(cssRule)
-            object.selectorText = cssRule.selectorText
-            object.style = this._buildMirrorForStyle(cssRule.style, true)
-            result.push(object)
+            this._addRule(node, styleSheet.cssRules[j], result)
         }
     }
     
