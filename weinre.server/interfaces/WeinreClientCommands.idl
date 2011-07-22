@@ -14,7 +14,7 @@ module weinre {
 
         void getTargets(out Object[] targets);
         void getClients(out Object[] clients);
-        
+
         void connectTarget(in string clientId, in string targetId);
         void disconnectTarget(in string clientId);
         

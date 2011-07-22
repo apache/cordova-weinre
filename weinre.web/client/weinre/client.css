@@ -19,6 +19,34 @@
      font-family: Monaco, Consolas, Lucida Console, dejavu sans mono, monospace;
 }
 
+.panel.resources .cookie-storage-tree-item {
+	display: none;
+}
+
+.panel.resources .frame-storage-tree-item {
+	display: none;
+}
+
+.panel.resources .application-cache-storage-tree-item {
+	display: none;
+}
+
+.panel.timeline .resources-size-graph-sidebar-item {
+	display: none;
+}
+
+#main-status-bar .timeline-category-rendering {
+	display: none;
+}
+
+#search {
+	display: none;
+}
+
+#search-toolbar-label {
+	display: none;
+}
+
 .weinre-connector-item {
     font-size: 140%;
 }

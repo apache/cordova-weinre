@@ -12,6 +12,8 @@ var buttonStartStuff
 var buttonClearOutput
 var outputElement 
 var storageIndex = 0
+var db
+var otherDB 
 
 // set the id based on the hash
 var hash = location.href.split("#")[1]
@@ -25,6 +27,11 @@ function onLoad() {
     if (!outputElement)     outputElement     = document.getElementById("output")
     
     buttonStartStuff.addEventListener("click", function() {
+        lastClickTime = new Date().toString()
+        if (db) db.transaction(addClick)
+        
+        openTheOtherDatabase()
+        
         if (!started) {
             buttonStartStuff.value = "stop stuff"
             startStuff()
@@ -40,6 +47,7 @@ function onLoad() {
         outputElement.innerHTML = ""
     })
     
+    openTheDatabase()
 }
 
 //------------------------------------------------------------------------------
@@ -94,6 +102,64 @@ function intervalStuff() {
     var empty = null
     empty.x = 1
     
+}
+
+//------------------------------------------------------------------------------
+function sqlSuccess(tx, resultSet) {
+    console.log("SQL Success!")
+}
+
+//------------------------------------------------------------------------------
+function sqlError(tx, error) {
+    console.log("SQL Error " + error.code + ": " + error.message)
+}
+
+//------------------------------------------------------------------------------
+var lastClickTime
+
+function addClick(tx) {
+    var sql = "insert into clicks (date) values (?)"
+    tx.executeSql(sql, [lastClickTime], null, sqlError)
+}
+
+//------------------------------------------------------------------------------
+function clearDatabase(tx, resultSet) {
+    var sql = "delete from clicks"
+    tx.executeSql(sql, null, null, sqlError);
+}
+
+//------------------------------------------------------------------------------
+function createDatabase(tx) {
+    var schema = "clicks (id integer primary key, date text)"
+    var sql = "create table if not exists " + schema
+    
+    tx.executeSql(sql, null, clearDatabase, sqlError);
+}
+
+//------------------------------------------------------------------------------
+function createDatabase_other(tx) {
+    var schema = "clicks_other (id integer primary key, other text)"
+    var sql = "create table if not exists " + schema
+    
+    tx.executeSql(sql, null, null, sqlError);
+}
+
+//------------------------------------------------------------------------------
+function openTheDatabase() {
+    if (window.openDatabase) {
+        db = window.openDatabase("clicks_db", "1.0", "clicks_db", 8192)
+        db.transaction(createDatabase)
+    }
+}
+
+//------------------------------------------------------------------------------
+function openTheOtherDatabase() {
+    if (otherDB) return
+    
+    if (window.openDatabase) {
+        otherDB = window.openDatabase("clicks_other_db", "1.0", "clicks_other_db", 8192)
+        otherDB.transaction(createDatabase_other)
+    }
 }
 
 //------------------------------------------------------------------------------
