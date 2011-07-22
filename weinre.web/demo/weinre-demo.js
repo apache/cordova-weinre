@@ -13,6 +13,7 @@ var buttonClearOutput
 var outputElement 
 var storageIndex = 0
 var db
+var otherDB 
 
 // set the id based on the hash
 var hash = location.href.split("#")[1]
@@ -28,6 +29,8 @@ function onLoad() {
     buttonStartStuff.addEventListener("click", function() {
         lastClickTime = new Date().toString()
         if (db) db.transaction(addClick)
+        
+        openTheOtherDatabase()
         
         if (!started) {
             buttonStartStuff.value = "stop stuff"
@@ -134,10 +137,28 @@ function createDatabase(tx) {
 }
 
 //------------------------------------------------------------------------------
+function createDatabase_other(tx) {
+    var schema = "clicks_other (id integer primary key, other text)"
+    var sql = "create table if not exists " + schema
+    
+    tx.executeSql(sql, null, null, sqlError);
+}
+
+//------------------------------------------------------------------------------
 function openTheDatabase() {
     if (window.openDatabase) {
-        db = window.openDatabase("clicks_db", "1.0", "clicks", 8192)
+        db = window.openDatabase("clicks_db", "1.0", "clicks_db", 8192)
         db.transaction(createDatabase)
+    }
+}
+
+//------------------------------------------------------------------------------
+function openTheOtherDatabase() {
+    if (otherDB) return
+    
+    if (window.openDatabase) {
+        otherDB = window.openDatabase("clicks_other_db", "1.0", "clicks_other_db", 8192)
+        otherDB.transaction(createDatabase_other)
     }
 }
 
