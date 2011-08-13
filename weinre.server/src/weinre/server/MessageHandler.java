@@ -7,6 +7,7 @@
 
 package weinre.server;
 
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import org.apache.wink.json4j.JSONObject;
 
 //-------------------------------------------------------------------
 public class MessageHandler {
+    private PrintWriter messageLog;
 
     //---------------------------------------------------------------
     static public void start() {
@@ -43,6 +45,7 @@ public class MessageHandler {
     
     //---------------------------------------------------------------
     private MessageHandler() {
+        messageLog = Main.getSettings().getMessageLog();
     }
     
     //---------------------------------------------------------------
@@ -70,6 +73,13 @@ public class MessageHandler {
                     try {
                         request = acc.getString(i);
                         accRequest = new JSONObject(request);
+                        accRequest.put("_from", channel.getName() + "#" + channel.getId());
+                        
+                        if (null != messageLog) {
+                            messageLog.print(accRequest.toString(true));
+                            messageLog.println(",");
+                        }
+                        
                     }
                     catch (JSONException e) {
                         Main.warn("error parsing request: " + e + ": '" + request + "'");

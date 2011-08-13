@@ -8,6 +8,7 @@
 package weinre.server;
 
 import java.io.PrintStream;
+import java.io.PrintWriter;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.log.Log;
@@ -56,6 +57,12 @@ public class Main {
         Settings = ServerSettings.getOptions(args);
         if (null == Settings) System.exit(0);
         
+        if (null != Settings.getMessageLog()) {
+            Settings.getMessageLog().println("[");
+        }
+        
+        Runtime.getRuntime().addShutdownHook(onShutdownThread());
+        
         consoleStdout = ConsoleOutputStream.newPrintStream(this, System.out, true);
         consoleStderr = ConsoleOutputStream.newPrintStream(this, System.err, false);
 
@@ -68,6 +75,19 @@ public class Main {
         httpServerStart();
         httpServerWaitTillDone();
         exit();
+    }
+    
+    //---------------------------------------------------------------
+    private Thread onShutdownThread() {
+        return new Thread(new Runnable() {
+            public void run() {
+                PrintWriter messageLog = Settings.getMessageLog();
+                if (null == messageLog) return;
+                
+                messageLog.println("null ]");
+                messageLog.close();
+            }
+        });
     }
     
     //---------------------------------------------------------------
