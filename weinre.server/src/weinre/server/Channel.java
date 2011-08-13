@@ -8,6 +8,7 @@
 package weinre.server;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ public class Channel {
     private Map<String,Object>    serviceMap;
     private String                remoteHost;
     private String                remoteAddress;
+    private PrintWriter           messageLog;
     
     //---------------------------------------------------------------
     public Channel(String pathPrefix, String name, String id, String remoteHost, String remoteAddress) {
@@ -49,6 +51,7 @@ public class Channel {
         this.connector          = null;
         this.serviceMap         = new HashMap<String,Object>();
         this.lastRead           = System.currentTimeMillis();
+        this.messageLog         = Main.getSettings().getMessageLog();
     }
 
     //---------------------------------------------------------------
@@ -186,6 +189,7 @@ public class Channel {
         if (isClosed()) return;
         
         requestQueue.add(json);
+        log(json);
     }
 
     //---------------------------------------------------------------
@@ -193,6 +197,24 @@ public class Channel {
         if (isClosed()) return;
         
         responseQueue.add(json);
+        log(json);
+    }
+
+    //---------------------------------------------------------------
+    private void log(String json) {
+        if (null == messageLog) return;
+        
+        JSONObject jObject;
+        try {
+            jObject = new JSONObject(json);
+            jObject.put("_to", getName() + "#" + getId());
+        }
+        catch (JSONException e) {
+            return;
+        }
+        
+        messageLog.print(jObject.toString(true));
+        messageLog.println(",");
     }
 
     //---------------------------------------------------------------
