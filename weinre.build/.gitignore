@@ -3,5 +3,6 @@ cached
 out
 tmp
 vendor
+node_modules
 
 personal.properties

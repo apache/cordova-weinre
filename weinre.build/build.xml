@@ -1,27 +1,27 @@
 <!--
  * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
+ *
  * Copyright (c) 2010, 2011 IBM Corporation
 -->
 
-<project name="build" default="build" basedir="."> 
+<project name="build" default="build" basedir=".">
 
     <!-- ============================================================
          set properties
          ============================================================ -->
-    
+
     <property file="personal.properties" />
     <property file="build.properties" />
     <property file="vendor.properties" />
 
     <!-- hint: override in your personal.properties -->
     <property name="BUILDER" value="The Unknown Builder"/>
-    
+
     <basename property="ant.file.basename" file="${ant.file}"/>
 
     <available property="VENDOR_FOUND"   file="${VENDOR}"/>
-    
+
     <tstamp>
         <format property="TSTAMP_STARTED" pattern="HH:mm:ss"/>
     </tstamp>
@@ -29,14 +29,14 @@
     <tstamp>
         <format property="BUILD_NUMBER_DATE" pattern="yyyy-MM-dd--HH-mm-ss" timezone="GMT"/>
     </tstamp>
-    
+
     <property name="BUILD_NUMBER" value="${WEINRE_VERSION}build-${BUILD_NUMBER_DATE}"/>
-    
-    
+
+
     <!-- ============================================================
          main entry point
          ============================================================ -->
-    
+
     <target name="build" depends="build-dev">
         <antcall target="build-jar"/>
         <antcall target="build-ui-jar"/>
@@ -53,12 +53,12 @@
     <target name="clean">
         <delete dir="${OUT}"/>
         <mkdir  dir="${OUT}"/> <!-- this is an Eclipse source folder! -->
-        
+
         <delete dir="${TMP}"/>
         <delete dir="${CACHED}"/>
         <delete dir="${VENDOR}"/>
     </target>
-    
+
     <!-- ============================================================
          development-time build
          ============================================================ -->
@@ -66,14 +66,14 @@
     <target name="build-dev">
         <delete dir="${OUT}"/>
         <mkdir  dir="${OUT}"/>
-        
-        <property 
+
+        <property
             name  = "build-info-text"
             value = "weinre build ${BUILD_NUMBER} by ${BUILDER}"
         />
-        
+
         <echo file="${OUT}/build-info.txt" message="${build-info-text}"/>
-        
+
         <antcall target="build-vendor"/>
         <antcall target="compile-java"/>
         <antcall target="build-web"/>
@@ -85,7 +85,7 @@
         <tstamp>
             <format property="TSTAMP_FINISHED" pattern="HH:mm:ss"/>
         </tstamp>
-        
+
         <property name="MESSAGE_FINISHED" value="at ${TSTAMP_FINISHED} for ${ant.file}:build-dev"/>
 
         <antcall target="finished"/>
@@ -100,7 +100,7 @@
         <delete dir="../${PROJECT_SERVER}/bin"/>
         <mkdir  dir="../${PROJECT_SERVER}/bin"/>
 
-        <javac 
+        <javac
             srcdir            = "../${PROJECT_SERVER}/src"
             destdir           = "../${PROJECT_SERVER}/bin"
             debug             = "true"
@@ -113,11 +113,11 @@
             <classpath path="../${PROJECT_BUILD}/vendor/jetty/servlet-api.jar"/>
             <compilerarg value="-Xlint"/>
         </javac>
-        
+
         <delete dir="../${PROJECT_APPLICATION}/bin"/>
         <mkdir  dir="../${PROJECT_APPLICATION}/bin"/>
-        
-        <javac 
+
+        <javac
             srcdir            = "../${PROJECT_APPLICATION}/src"
             destdir           = "../${PROJECT_APPLICATION}/bin"
             debug             = "true"
@@ -129,9 +129,9 @@
             <classpath path="../${PROJECT_BUILD}/vendor/swt/cocoa-macosx-x86_64/swt.jar"/>
             <compilerarg value="-Xlint"/>
         </javac>
-        
+
     </target>
-        
+
     <!-- ============================================================
          build vendor libs
          ============================================================ -->
@@ -139,7 +139,7 @@
     <target name="build-vendor" unless="VENDOR_FOUND">
         <ant antfile="get-vendor.xml"/>
     </target>
-        
+
     <!-- ============================================================
          basic web resources
          ============================================================ -->
@@ -147,22 +147,50 @@
     <target name="build-web">
         <delete dir="${WEB}" />
         <mkdir  dir="${WEB}" />
-        
+
         <delete dir="${TMP}" />
         <mkdir  dir="${TMP}" />
 
+<!--
         <echo message="compiling scoop modules"/>
         <exec executable="python" failonerror="true" failifexecutionfails="true">
             <arg  file="vendor/scooj/scoopc.py"/>
-            <arg value="--out"/>
+            <arg value="-o"/>
             <arg  file="${TMP}/modules"/>
             <arg  file="../${PROJECT_WEB}/modules"/>
         </exec>
-            
+-->
+
+        <echo message="compiling CoffeeScript modules"/>
+        <mkdir  dir="${TMP}/modules/weinre/client" />
+        <mkdir  dir="${TMP}/modules/weinre/common" />
+        <mkdir  dir="${TMP}/modules/weinre/target" />
+
+        <echo message="compiling CoffeeScript files in: ${PROJECT_WEB}/modules/weinre/client"/>
+        <exec executable="sh" failonerror="true" failifexecutionfails="true">
+            <arg value="-c"/>
+            <arg value="node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/client ../${PROJECT_WEB}/modules/weinre/client/*.coffee"/>
+        </exec>
+
+        <echo message="compiling CoffeeScript files in: ${PROJECT_WEB}/modules/weinre/common"/>
+        <exec executable="sh" failonerror="true" failifexecutionfails="true">
+            <arg value="-c"/>
+            <arg value="node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/common ../${PROJECT_WEB}/modules/weinre/common/*.coffee"/>
+        </exec>
+
+        <echo message="compiling CoffeeScript files in: ${PROJECT_WEB}/modules/weinre/target"/>
+        <exec executable="sh" failonerror="true" failifexecutionfails="true">
+            <arg value="-c"/>
+            <arg value="node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/target ../${PROJECT_WEB}/modules/weinre/target/*.coffee"/>
+        </exec>
+
+
+<!--
         <copy todir="${TMP}/modules">
             <fileset file="${VENDOR}/scooj/scooj.js"/>
         </copy>
-        
+-->
+
         <echo message="transportd-izing modules"/>
         <exec executable="python" failonerror="true" failifexecutionfails="true">
             <arg  file="vendor/modjewel/module2transportd.py"/>
@@ -175,11 +203,11 @@
         <copy todir="${WEB}">
             <fileset file="${VENDOR}/modjewel/modjewel-require.js"/>
         </copy>
-        
+
         <copy todir="${WEB}">
             <fileset file="${VENDOR}/json2/json2.js"/>
         </copy>
-        
+
         <copy todir="${WEB}">
             <fileset dir="../${PROJECT_WEB}">
                 <exclude name="versions.js"/>
@@ -193,23 +221,23 @@
         </copy>
 
         <echo message="building InjectedScript.js"/>
-        <echo 
+        <echo
             file    = "${WEB}/weinre/target/InjectedScript.js"
             message = "var injectedScriptConstructor = ${line.separator}"
         />
-        <concat 
+        <concat
             destfile = "${WEB}/weinre/target/InjectedScript.js"
             append   = "true"
         >
             <fileset file="${VENDOR}/webkit/WebCore/inspector/InjectedScriptSource.js"/>
         </concat>
-            
+
         <echo message="building versions.js"/>
         <copy todir="${WEB}">
             <fileset dir="../${PROJECT_WEB}">
                 <include name="versions.js"/>
             </fileset>
-        
+
             <filterset>
                 <filter token="WEINRE_VERSION"             value="${WEINRE_VERSION}"/>
                 <filter token="BUILD_NUMBER"               value="${BUILD_NUMBER}"/>
@@ -233,7 +261,7 @@
             <arg value="vendor/webkit/WebCore/CSSPropertyNames.in"/>
             <arg value="${WEB}/add-css-properties.js"/>
         </exec>
-        
+
     </target>
 
     <!-- ============================================================
@@ -243,9 +271,9 @@
     <target name="build-doc">
 
         <mkdir  dir="${WEB}/doc" />
-        
+
         <copy todir="${WEB}/doc" file="${OUT}/build-info.txt"/>
-        
+
         <build-html name="Building"     oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="Home"         oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="Installing"   oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
@@ -255,17 +283,17 @@
         <build-html name="Security"     oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="TestDrive"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
         <build-html name="ChangeLog"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
-        
+
         <copy file="${WEB}/doc/Home.html" tofile="${WEB}/doc/index.html"/>
-        
+
         <copy todir="${WEB}/doc/images" file="../${PROJECT_WEB}/images/weinre-icon-64x64.png"/>
 
         <copy todir="${WEB}/doc/css">     <fileset dir="../${PROJECT_DOC}/css"/>     </copy>
         <copy todir="${WEB}/doc/images">  <fileset dir="../${PROJECT_DOC}/images"/>  </copy>
         <copy todir="${WEB}/doc/scripts"> <fileset dir="../${PROJECT_DOC}/scripts"/> </copy>
-        
+
     </target>
-    
+
     <!-- ============================================================
          convert IDL to JSON (cached)
          ============================================================ -->
@@ -275,21 +303,21 @@
             <srcfiles dir="../${PROJECT_SERVER}/interfaces"    includes="*.idl"/>
             <srcfiles dir="${VENDOR}/webkit/WebCore/inspector" includes="*.idl"/>
         </uptodate>
-        
+
         <antcall target="build-json-idl-fresh"/>
-        
+
         <copy todir="${WEB}/interfaces"> <fileset dir="${CACHED}/json-idl"/></copy>
     </target>
-    
+
     <!-- ============================================================
          convert IDL to JSON (slow part)
          ============================================================ -->
-    
+
     <target name="build-json-idl-fresh" unless="JSON_IDL_UPTODATE">
 
         <delete dir="${CACHED}/json-idl"/>
         <mkdir  dir="${CACHED}/json-idl"/>
-        
+
         <simple-idl2json name="WeinreClientCommands"      oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
         <simple-idl2json name="WeinreClientEvents"        oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
         <simple-idl2json name="WeinreTargetCommands"      oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
@@ -298,12 +326,12 @@
         <simple-idl2json name="WeinreExtraTargetEvents"   oDir="${CACHED}/json-idl" iDir="../${PROJECT_SERVER}/interfaces"/>
 
         <simple-idl2json name="InjectedScriptHost"    oDir="${CACHED}/json-idl" iDir="${VENDOR}/webkit/WebCore/inspector"/>
-        
+
         <simple-idl2json name="Inspector"             oDir="${CACHED}/json-idl" iDir="${VENDOR}/webkit/WebCore/inspector">
             <arg value="--anyType"/>
             <arg value="Value"/>
         </simple-idl2json>
-        
+
         <simple-idl2json name="InspectorFrontendHost" oDir="${CACHED}/json-idl" iDir="${VENDOR}/webkit/WebCore/inspector">
             <arg value="--anyType"/>
             <arg value="MouseEvent"/>
@@ -329,24 +357,24 @@
          ============================================================ -->
 
     <target name="build-target">
-        
+
         <mkdir dir="${WEB}/target"/>
-        
+
         <exec executable="python" failonerror="true" failifexecutionfails="true">
             <arg file="scripts/build-target-scripts.py"/>
             <arg file="../${PROJECT_WEB}/demo/weinre-demo-pieces.html"/>
             <arg file="${WEB}"/>
             <arg file="${WEB}/target"/>
         </exec>
-        
+
     </target>
 
     <!-- ============================================================
          build the web/client files
          ============================================================ -->
-        
+
     <target name="build-client">
-        
+
         <copy todir="${WEB}/client/nls/English.lproj">
             <fileset file="${VENDOR}/webkit/WebCore/English.lproj/localizedStrings.js"/>
         </copy>
@@ -359,51 +387,51 @@
             <arg file="scripts/build-client-html.py"/>
             <arg file="${WEB}"/>
         </exec>
-        
+
     </target>
-    
+
     <!-- ============================================================
          build the main jar
          ============================================================ -->
-        
+
     <target name="build-jar">
-        
+
         <jar destfile="${OUT}/weinre.jar">
             <manifest>
                 <attribute name="Built-By" value="${ant.file.basename} - ${ant.project.name}"/>
                 <attribute name="Main-Class" value="weinre.server.Main"/>
             </manifest>
-            
+
             <fileset file="${OUT}/build-info.txt"/>
 
             <zipfileset src="${VENDOR}/jetty/jetty.jar">
                 <exclude name="about*.html"/>
                 <exclude name="META-INF/**/*"/>
             </zipfileset>
-            
+
             <zipfileset src="${VENDOR}/jetty/servlet-api.jar">
                 <exclude name="META-INF/**/*"/>
             </zipfileset>
-            
+
             <zipfileset src="${VENDOR}/cli/commons-cli.jar">
                 <exclude name="META-INF/**/*"/>
             </zipfileset>
-            
+
             <zipfileset src="${VENDOR}/json4j/json4j.jar">
                 <exclude name="META-INF/**/*"/>
             </zipfileset>
-            
+
             <fileset dir="../${PROJECT_SERVER}/bin"/>
-                
+
             <zipfileset dir="${WEB}" prefix="web"/>
         </jar>
-        
+
     </target>
 
     <!-- ============================================================
          build the ui jar
          ============================================================ -->
-        
+
     <target name="build-ui-jar">
 
         <fileset dir="../${PROJECT_APPLICATION}/bin"/>
@@ -413,22 +441,22 @@
                 <attribute name="Built-By" value="${ant.file.basename} - ${ant.project.name}"/>
                 <attribute name="Main-Class" value="weinre.application.GUIMain"/>
             </manifest>
-            
+
             <fileset file="${OUT}/build-info.txt"/>
-            
+
             <fileset dir="../${PROJECT_APPLICATION}/bin"/>
-            
+
             <zipfileset src="${VENDOR}/swt/cocoa-macosx-x86_64/swt.jar">
                 <exclude name="META-INF/**/*"/>
             </zipfileset>
         </jar>
-        
+
     </target>
 
     <!-- ============================================================
          build the mac application
          ============================================================ -->
-        
+
     <target name="build-application-mac">
         <delete dir="${OUT}/applications/mac"/>
         <mkdir  dir="${OUT}/applications/mac/weinre.app"/>
@@ -438,7 +466,7 @@
                 <exclude name="**/Info.plist"/>
             </fileset>
         </copy>
-        
+
         <copy todir="${OUT}/applications/mac/weinre.app">
             <fileset dir="../${PROJECT_APPLICATION}/resources/macosx/weinre.app">
                 <include name="**/Info.plist"/>
@@ -447,25 +475,25 @@
                 <filter token="VERSION" value="${WEINRE_VERSION}"/>
             </filterset>
         </copy>
-        
+
         <chmod file="${OUT}/applications/mac/weinre.app/Contents/MacOS/launcher" perm="+x"/>
         <copy todir="${OUT}/applications/mac/weinre.app/Contents/MacOS" file="${OUT}/weinre.jar" />
         <copy todir="${OUT}/applications/mac/weinre.app/Contents/MacOS" file="${OUT}/weinre-ui.jar"/>
         <copy todir="${OUT}/applications/mac/weinre.app/Contents/Resources" file="${OUT}/build-info.txt"/>
-        
+
     </target>
 
     <!-- ============================================================
          build the archives
          ============================================================ -->
     <target name="build-archives">
-        
+
         <!-- =================================== -->
         <delete dir="${OUT}/archives"/>
         <mkdir  dir="${OUT}/archives"/>
-        
+
         <delete dir="${OUT}/files"/>
-        
+
         <delete dir="${OUT}/files/weinre-jar"/>
         <mkdir  dir="${OUT}/files/weinre-jar"/>
         <copy todir="${OUT}/files/weinre-jar" file="${OUT}/build-info.txt"/>
@@ -487,7 +515,7 @@
             <fileset dir="${OUT}/applications/mac"/>
         </copy>
         <chmod file="${OUT}/files/weinre-mac/weinre.app/Contents/MacOS/launcher" perm="+x"/>
-        
+
         <!-- ant's zip task doesn't preserve permission bits -->
         <exec executable="zip" dir="${OUT}/files">
             <arg value="-q"/>
@@ -503,7 +531,7 @@
         <copy todir="${OUT}/files/weinre-doc">
             <fileset dir="${OUT}/web/doc"/>
         </copy>
-        
+
         <!-- ant's zip task doesn't preserve permission bits -->
         <exec executable="zip" dir="${OUT}/files">
             <arg value="-q"/>
@@ -521,7 +549,7 @@
         <copy todir="${OUT}/files/weinre-src/weinre.doc">         <fileset dir="../weinre.doc"         excludes="**/bin/"/></copy>
         <copy todir="${OUT}/files/weinre-src/weinre.server">      <fileset dir="../weinre.server"      excludes="**/bin/"/></copy>
         <copy todir="${OUT}/files/weinre-src/weinre.web">         <fileset dir="../weinre.web"         excludes="**/bin/"/></copy>
-        
+
         <!-- ant's zip task doesn't preserve permission bits -->
         <exec executable="zip" dir="${OUT}/files">
             <arg value="-q"/>
@@ -529,25 +557,25 @@
             <arg value="../archives/weinre-src-${BUILD_NUMBER}.zip"/>
             <arg value="weinre-src"/>
         </exec>
-        
+
         <!-- =================================== -->
         <delete dir="${OUT}/files"/>
-        
+
     </target>
-            
-    
+
+
     <!-- ============================================================
          done!
          ============================================================ -->
-             
+
     <target name="finished">
         <echo>ant completed successfully ${MESSAGE_FINISHED}</echo>
     </target>
-    
+
     <!-- ============================================================
          done! via growl
          ============================================================ -->
-             
+
     <target name="finished-growl" if="USE_GROWL">
         <exec os="Mac OS X" executable="growlnotify">
             <arg value="-m"/>
@@ -559,7 +587,7 @@
     <!-- ============================================================
          macro to compile IDL to JSON
          ============================================================ -->
-        
+
     <macrodef name="simple-idl2json">
        <attribute name="name"/>
        <attribute name="iDir"/>
@@ -575,11 +603,11 @@
            </exec>
        </sequential>
     </macrodef>
-                    
+
     <!-- ============================================================
          macro to compile HTML
          ============================================================ -->
-        
+
     <macrodef name="build-html">
        <attribute name="name"/>
        <attribute name="iDir"/>
@@ -600,6 +628,6 @@
            <echo>generated @{oDir}/@{name}.html</echo>
        </sequential>
     </macrodef>
-                    
+
     <!-- ============================================================ -->
 </project>
