@@ -283,7 +283,7 @@ instrumentedTimerCode = (code, timeout, singleShot) ->
       return code unless typeof (code) == "function"
 
       instrumentedCode = ->
-          result = code()
+          result = code.apply(this, arguments)
           id = arguments.callee.__timerId
           Timeline.addRecord_TimerFire id, timeout, singleShot
           result
