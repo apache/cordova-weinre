@@ -7,8 +7,8 @@
 #---------------------------------------------------------------------------------
 
 Weinre      = require('../common/Weinre')
-Native      = require('../common/Native')
 IDGenerator = require('../common/IDGenerator')
+HookSites   = require('./HookSites')
 SqlStepper  = require('./SqlStepper')
 
 id2db   = {}
@@ -19,7 +19,15 @@ module.exports = class WiDatabaseImpl
 
     constructor: ->
         return unless window.openDatabase
-        window.openDatabase = wrappedOpenDatabase
+
+        HookSites.window_openDatabase.addHooks
+            after: (receiver, args, db) ->
+                return if not db
+
+                name    = args[0]
+                version = args[1]
+
+                dbAdd db, name, version
 
     #---------------------------------------------------------------------------
     @getDatabases: ->
@@ -111,12 +119,6 @@ executeSQL_error = (sqlError) ->
           message: sqlError.message
 
       Weinre.wi.DatabaseNotify.sqlTransactionFailed @txid, error
-
-#-------------------------------------------------------------------------------
-wrappedOpenDatabase = (name, version, displayName, estimatedSize, creationCallback) ->
-      db = Native.openDatabase(name, version, displayName, estimatedSize, creationCallback)
-      dbAdd db, name, version
-      db
 
 #-------------------------------------------------------------------------------
 dbById = (id) ->

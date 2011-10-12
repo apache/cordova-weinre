@@ -6,8 +6,8 @@
 # Copyright (c) 2010, 2011 IBM Corporation
 #---------------------------------------------------------------------------------
 
-Weinre = require('../common/Weinre')
-Native = require('../common/Native')
+Weinre    = require('../common/Weinre')
+HookSites = require('./HookSites')
 
 #-------------------------------------------------------------------------------
 module.exports = class WiDOMStorageImpl
@@ -45,9 +45,11 @@ module.exports = class WiDOMStorageImpl
 
         result = true
         try
-            if storageArea == window.localStorage
-                Native.LocalStorage_setItem key, value
-            else Native.SessionStorage_setItem key, value if storageArea == window.sessionStorage
+            HookLib.ignoreHooks ->
+                if storageArea == window.localStorage
+                    localStorage.setItem key, value
+                else if storageArea == window.sessionStorage
+                    sessionStorage.setItem key, value
         catch e
             result = false
 
@@ -64,11 +66,11 @@ module.exports = class WiDOMStorageImpl
 
         result = true
         try
-            if storageArea == window.localStorage
-                Native.LocalStorage_removeItem key
-            else
-                if storageArea == window.sessionStorage
-                    Native.SessionStorage_removeItem key
+            HookLib.ignoreHooks ->
+                if storageArea == window.localStorage
+                    localStorage.removeItem key
+                else if storageArea == window.sessionStorage
+                    sessionStorage.removeItem key
         catch e
             result = false
 
@@ -82,17 +84,14 @@ module.exports = class WiDOMStorageImpl
                 host: window.location.host
                 isLocalStorage: true
 
-            window.localStorage.setItem = (key, value) ->
-                Native.LocalStorage_setItem key, value
-                _storageEventHandler storageArea: window.localStorage
+            HookSites.LocalStorage_setItem.addHooks
+                after: -> _storageEventHandler storageArea: window.localStorage
 
-            window.localStorage.removeItem = (key) ->
-                Native.LocalStorage_removeItem key
-                _storageEventHandler storageArea: window.localStorage
+            HookSites.LocalStorage_removeItem.addHooks
+                after: -> _storageEventHandler storageArea: window.localStorage
 
-            window.localStorage.clear = ->
-                Native.LocalStorage_clear()
-                _storageEventHandler storageArea: window.localStorage
+            HookSites.LocalStorage_clear.addHooks
+                after: -> _storageEventHandler storageArea: window.localStorage
 
         if window.sessionStorage
             Weinre.wi.DOMStorageNotify.addDOMStorage
@@ -100,17 +99,14 @@ module.exports = class WiDOMStorageImpl
                 host: window.location.host
                 isLocalStorage: false
 
-            window.sessionStorage.setItem = (key, value) ->
-                Native.SessionStorage_setItem key, value
-                _storageEventHandler storageArea: window.sessionStorage
+            HookSites.SeesionStorage_setItem.addHooks
+                after: -> _storageEventHandler storageArea: window.sessionStorage
 
-            window.sessionStorage.removeItem = (key) ->
-                Native.SessionStorage_removeItem key
-                _storageEventHandler storageArea: window.sessionStorage
+            HookSites.SeesionStorage_removeItem.addHooks
+                after: -> _storageEventHandler storageArea: window.sessionStorage
 
-            window.sessionStorage.clear = ->
-                Native.SessionStorage_clear()
-                _storageEventHandler storageArea: window.sessionStorage
+            HookSites.SeesionStorage_clear.addHooks
+                after: -> _storageEventHandler storageArea: window.sessionStorage
 
         document.addEventListener "storage", _storageEventHandler, false
 
@@ -118,7 +114,8 @@ module.exports = class WiDOMStorageImpl
 _getStorageArea = (storageId) ->
       if storageId == 1
           return window.localStorage
-      else return window.sessionStorage if storageId == 2
+      else if storageId == 2
+          return window.sessionStorage
 
       null
 

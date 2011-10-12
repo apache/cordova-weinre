@@ -17,7 +17,8 @@ module.exports = class Ex
 
         StackTrace.dump args
         message = "threw error: " + message if message instanceof Error
-        new Error(prefix(args, message))
+        message = prefix(args, message)
+        message
 
 #-------------------------------------------------------------------------------
 prefix = (args, string) ->

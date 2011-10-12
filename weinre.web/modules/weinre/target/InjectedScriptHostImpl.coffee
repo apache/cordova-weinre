@@ -40,7 +40,7 @@ module.exports = class InjectedScriptHostImpl
         return ctorName if ctorName and (ctorName != "Object")
 
         pattern = /\[object (.*)\]/
-        match = pattern.exec(ctor.toString())
+        match = pattern.exec(object.toString())
 
         return match[1] if match
 

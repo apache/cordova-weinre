@@ -6,17 +6,18 @@
 # Copyright (c) 2010, 2011 IBM Corporation
 #---------------------------------------------------------------------------------
 
-Native                        = require('../common/Native')
 Ex                            = require('../common/Ex')
 Binding                       = require('../common/Binding')
 Callback                      = require('../common/Callback')
 MessageDispatcher             = require('../common/MessageDispatcher')
 Weinre                        = require('../common/Weinre')
+HookLib                       = require('../common/HookLib')
 
 CheckForProblems              = require('./CheckForProblems')
 NodeStore                     = require('./NodeStore')
 CSSStore                      = require('./CSSStore')
 ElementHighlighter            = require('./ElementHighlighter')
+ExceptionalCallbacks          = require('./ExceptionalCallbacks')
 InjectedScriptHostImpl        = require('./InjectedScriptHostImpl')
 WeinreTargetEventsImpl        = require('./WeinreTargetEventsImpl')
 WeinreExtraClientCommandsImpl = require('./WeinreExtraClientCommandsImpl')
@@ -41,6 +42,8 @@ module.exports = class Target
 
         Weinre.addCSSProperties = addCSSProperties = (properties) ->
             CSSStore.addCSSProperties properties
+
+        ExceptionalCallbacks.addHooks()
 
     #----------------------------------------------------------------------------
     setWeinreServerURLFromScriptSrc: (element) ->
@@ -77,7 +80,7 @@ module.exports = class Target
     #---------------------------------------------------------------------------
     getTargetScriptElement: ->
         elements = document.getElementsByTagName("script")
-        scripts = [ "Target.", "target-script.", "target-script-min." ]
+        scripts = [ "target-script.js", "target-script-min.js" ]
         i = 0
 
         while i < elements.length
@@ -90,8 +93,6 @@ module.exports = class Target
 
     #---------------------------------------------------------------------------
     initialize: () ->
-        self = this
-
         element = @getTargetScriptElement()
 
         @setWeinreServerURLFromScriptSrc element
@@ -106,17 +107,13 @@ module.exports = class Target
 
         @_startTime = currentTime()
         if document.readyState == "loaded"
-            setTimeout (->
-                self.onDOMContent()
-            ), 10
+            HookLib.ignoreHooks =>
+                setTimeout (=> this.onDOMContent()), 10
 
         if document.readyState == "complete"
-            setTimeout (->
-                self.onDOMContent()
-            ), 10
-            setTimeout (->
-                self.onLoaded()
-            ), 20
+            HookLib.ignoreHooks =>
+                setTimeout (=> this.onDOMContent()), 10
+                setTimeout (=> this.onLoaded()), 20
 
 #        MessageDispatcher.verbose(true)
         messageDispatcher = new MessageDispatcher(window.WeinreServerURL + "ws/target", window.WeinreServerId)
@@ -179,10 +176,20 @@ module.exports = class Target
 
     #---------------------------------------------------------------------------
     onLoaded: ->
+        if not Weinre.wi.InspectorNotify
+            HookLib.ignoreHooks =>
+                setTimeout (=> this.onLoaded()), 10
+            return
+
         Weinre.wi.InspectorNotify.loadEventFired currentTime() - @_startTime
 
     #---------------------------------------------------------------------------
     onDOMContent: ->
+        if not Weinre.wi.InspectorNotify
+            HookLib.ignoreHooks =>
+                setTimeout (=> this.onDOMContent()), 10
+            return
+
         Weinre.wi.InspectorNotify.domContentEventFired currentTime() - @_startTime
 
     #---------------------------------------------------------------------------

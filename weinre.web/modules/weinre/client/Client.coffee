@@ -6,7 +6,6 @@
 # Copyright (c) 2010, 2011 IBM Corporation
 #---------------------------------------------------------------------------------
 
-Native            = require('../common/Native')
 IDLTools          = require('../common/IDLTools')
 Callback          = require('../common/Callback')
 Weinre            = require('../common/Weinre')
@@ -110,7 +109,8 @@ module.exports = class Client
 
     #---------------------------------------------------------------------------
     cb_webSocketClosed: ->
-        Native.setTimeout (->
+
+        setTimeout (->
             WebInspector.panels.remote.connectionClosed()
             WebInspector.currentPanel = WebInspector.panels.remote
         ), 1000

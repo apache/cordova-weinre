@@ -1,7 +1,7 @@
 <!--
  * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
+ *
  * Copyright (c) 2010, 2011 IBM Corporation
 -->
 
@@ -10,17 +10,24 @@
 <meta name="viewport" content="user-scalable=no, width=device-width, height=device-height">
 <title>weinre demo</title>
 <link rel="stylesheet" href="weinre-demo.css">
-<script src="weinre-demo.js"></script>
+<script>try {window.WeinreServerId = location.hash.split("#")[1]} catch(e) {window.WeinreServerId = "anonymous"}</script>
 <script src="/target/target-script-min.js"></script>
+<script src="weinre-demo.js"></script>
 
 <script type="text/javascript">
-    require("weinre/common/Weinre").getClass().showNotImplemented()
+    require("weinre/common/Weinre").showNotImplemented()
 </script>
-
 </head>
 
 <body onload="onLoad()">
 <input id="button-start-stuff" type="button" value="start stuff">
+
+<p>exceptions in callbacks<p>
+<input id="button-error-DOM-event"    type="button" value="DOM addEventHandler">
+<input id="button-error-window-event" type="button" value="window addEventHandler">
+<input id="button-error-XHR-event"    type="button" value="XHR addEventHandler">
+<input id="button-error-setTimeout"   type="button" value="setTimeout()">
+<input id="button-error-setInterval"  type="button" value="setInterval()">
 
 <h1>this is a green h1</h1>
 <h1 class="blue">this is a blue h1</h1>

@@ -10,7 +10,8 @@ Ex          = require('../common/Ex')
 Weinre      = require('../common/Weinre')
 IDGenerator = require('../common/IDGenerator')
 StackTrace  = require('../common/StackTrace')
-Native      = require('../common/Native')
+HookLib     = require('../common/HookLib')
+HookSites   = require('./HookSites')
 
 Running = false
 
@@ -163,122 +164,99 @@ module.exports = class Timeline
 
         Weinre.wi.TimelineNotify.addRecordToTimeline record
 
+
     #---------------------------------------------------------------------------
     @installGlobalListeners: ->
         if applicationCache
-            applicationCache.addEventListener "checking", ((e) ->
-                Timeline.addRecord_EventDispatch e, "applicationCache.checking", "loading"
-            ), false
+            applicationCache.addEventListener "checking",    ((e) -> Timeline.addRecord_EventDispatch e, "applicationCache.checking", "loading"    ), false
+            applicationCache.addEventListener "error",       ((e) -> Timeline.addRecord_EventDispatch e, "applicationCache.error", "loading"       ), false
+            applicationCache.addEventListener "noupdate",    ((e) -> Timeline.addRecord_EventDispatch e, "applicationCache.noupdate", "loading"    ), false
+            applicationCache.addEventListener "downloading", ((e) -> Timeline.addRecord_EventDispatch e, "applicationCache.downloading", "loading" ), false
+            applicationCache.addEventListener "progress",    ((e) -> Timeline.addRecord_EventDispatch e, "applicationCache.progress", "loading"    ), false
+            applicationCache.addEventListener "updateready", ((e) -> Timeline.addRecord_EventDispatch e, "applicationCache.updateready", "loading" ), false
+            applicationCache.addEventListener "cached",      ((e) -> Timeline.addRecord_EventDispatch e, "applicationCache.cached", "loading"      ), false
+            applicationCache.addEventListener "obsolete",    ((e) -> Timeline.addRecord_EventDispatch e, "applicationCache.obsolete", "loading"    ), false
 
-            applicationCache.addEventListener "error", ((e) ->
-                Timeline.addRecord_EventDispatch e, "applicationCache.error", "loading"
-            ), false
-
-            applicationCache.addEventListener "noupdate", ((e) ->
-                Timeline.addRecord_EventDispatch e, "applicationCache.noupdate", "loading"
-            ), false
-
-            applicationCache.addEventListener "downloading", ((e) ->
-                Timeline.addRecord_EventDispatch e, "applicationCache.downloading", "loading"
-            ), false
-
-            applicationCache.addEventListener "progress", ((e) ->
-                Timeline.addRecord_EventDispatch e, "applicationCache.progress", "loading"
-            ), false
-
-            applicationCache.addEventListener "updateready", ((e) ->
-                Timeline.addRecord_EventDispatch e, "applicationCache.updateready", "loading"
-            ), false
-
-            applicationCache.addEventListener "cached", ((e) ->
-                Timeline.addRecord_EventDispatch e, "applicationCache.cached", "loading"
-            ), false
-
-            applicationCache.addEventListener "obsolete", ((e) ->
-                Timeline.addRecord_EventDispatch e, "applicationCache.obsolete", "loading"
-            ), false
-
-        window.addEventListener "error", ((e) ->
-            Timeline.addRecord_EventDispatch e, "window.error"
-        ), false
-
-        window.addEventListener "hashchange", ((e) ->
-            Timeline.addRecord_EventDispatch e, "window.hashchange"
-        ), false
-
-        window.addEventListener "message", ((e) ->
-            Timeline.addRecord_EventDispatch e, "window.message"
-        ), false
-
-        window.addEventListener "offline", ((e) ->
-            Timeline.addRecord_EventDispatch e, "window.offline"
-        ), false
-
-        window.addEventListener "online", ((e) ->
-            Timeline.addRecord_EventDispatch e, "window.online"
-        ), false
-
-        window.addEventListener "scroll", ((e) ->
-            Timeline.addRecord_EventDispatch e, "window.scroll"
-        ), false
+        window.addEventListener "error",      ((e) -> Timeline.addRecord_EventDispatch e, "window.error"      ), false
+        window.addEventListener "hashchange", ((e) -> Timeline.addRecord_EventDispatch e, "window.hashchange" ), false
+        window.addEventListener "message",    ((e) -> Timeline.addRecord_EventDispatch e, "window.message"    ), false
+        window.addEventListener "offline",    ((e) -> Timeline.addRecord_EventDispatch e, "window.offline"    ), false
+        window.addEventListener "online",     ((e) -> Timeline.addRecord_EventDispatch e, "window.online"     ), false
+        window.addEventListener "scroll",     ((e) -> Timeline.addRecord_EventDispatch e, "window.scroll"     ), false
 
     #---------------------------------------------------------------------------
-    @installFunctionWrappers: ->
-        window.clearInterval        = wrapped_clearInterval
-        window.clearTimeout         = wrapped_clearTimeout
-        window.setTimeout           = wrapped_setTimeout
-        window.setInterval          = wrapped_setInterval
-        window.XMLHttpRequest::open = wrapped_XMLHttpRequest_open
-        window.XMLHttpRequest       = wrapped_XMLHttpRequest
+    @installNativeHooks: ->
 
+        #-----------------------------------------------------------------------
+        HookSites.window_setInterval.addHooks
+
+            before: (receiver, args) ->
+                code = args[0]
+                return unless typeof(code) is "function"
+
+                interval  = args[1]
+                code      = instrumentedTimerCode(code, interval, false)
+                args[0]   = code
+                @userData = code
+
+            after: (receiver, args, result) ->
+                code = @userData
+                return unless typeof(code) is "function"
+
+                id             = result
+                code.__timerId = id
+                addTimer id, interval, false
+
+        #-----------------------------------------------------------------------
+        HookSites.window_clearInterval.addHooks
+
+            before: (receiver, args) ->
+                id = args[0]
+                removeTimer id, false
+
+        #-----------------------------------------------------------------------
+        HookSites.window_setTimeout.addHooks
+
+            before: (receiver, args) ->
+                code = args[0]
+                return unless typeof(code) is "function"
+
+                interval  = args[1]
+                code      = instrumentedTimerCode(code, interval, true)
+                args[0]   = code
+                @userData = code
+
+            after: (receiver, args, result) ->
+                code = @userData
+                return unless typeof(code) is "function"
+
+                id             = result
+                code.__timerId = id
+                addTimer id, interval, true
+
+        #-----------------------------------------------------------------------
+        HookSites.window_clearTimeout.addHooks
+
+            before: (receiver, args) ->
+                id = args[0]
+                removeTimer id, true
+
+        #-----------------------------------------------------------------------
+        HookSites.XMLHttpRequest_open.addHooks
+
+            before:  (receiver, args) ->
+                xhr = receiver
+                IDGenerator.getId xhr
+
+                xhr.__weinre_method = args[0]
+                xhr.__weinre_url    = args[1]
+
+                xhr.addEventListener "readystatechange", getXhrEventHandler(xhr), false
 
 #-------------------------------------------------------------------------------
-addStackTrace = (record, skip) ->
-      skip = 1 unless skip
-      trace = new StackTrace(arguments).trace
-      record.stackTrace = []
-      i = skip
-
-      while i < trace.length
-          record.stackTrace.push
-              functionName: trace[i]
-              scriptName:   ""
-              lineNumber:   ""
-          i++
-
-#-------------------------------------------------------------------------------
-wrapped_setInterval = (code, interval) ->
-      code = instrumentedTimerCode(code, interval, false)
-
-      id = Native.setInterval(code, interval)
-      code.__timerId = id
-      addTimer id, interval, false
-
-      id
-
-#-------------------------------------------------------------------------------
-wrapped_setTimeout = (code, delay) ->
-      code = instrumentedTimerCode(code, delay, true)
-
-      id = Native.setTimeout(code, delay)
-      code.__timerId = id
-      addTimer id, delay, true
-
-      id
-
-#-------------------------------------------------------------------------------
-wrapped_clearInterval = (id) ->
-      result = Native.clearInterval(id)
-      removeTimer id, false
-
-      result
-
-#-------------------------------------------------------------------------------
-wrapped_clearTimeout = (id) ->
-      result = Native.clearTimeout(id)
-      removeTimer id, true
-
-      result
+getXhrEventHandler = (xhr) ->
+      (event) ->
+          Timeline.addRecord_XHRReadyStateChange xhr.__weinre_method, xhr.__weinre_url, IDGenerator.getId(xhr), xhr
 
 #-------------------------------------------------------------------------------
 addTimer = (id, timeout, singleShot) ->
@@ -310,39 +288,27 @@ instrumentedTimerCode = (code, timeout, singleShot) ->
           Timeline.addRecord_TimerFire id, timeout, singleShot
           result
 
+      instrumentedCode.displayName = code.name || code.displayName
+
       instrumentedCode
 
 #-------------------------------------------------------------------------------
-wrapped_XMLHttpRequest = () ->
-      xhr = new Native.XMLHttpRequest()
-      IDGenerator.getId xhr
-      xhr.addEventListener "readystatechange", getXhrEventHandler(xhr), false
-      xhr
+addStackTrace = (record, skip) ->
+      skip = 1 unless skip
+      trace = new StackTrace(arguments).trace
+      record.stackTrace = []
+      i = skip
 
-wrapped_XMLHttpRequest.UNSENT           = 0
-wrapped_XMLHttpRequest.OPENED           = 1
-wrapped_XMLHttpRequest.HEADERS_RECEIVED = 2
-wrapped_XMLHttpRequest.LOADING          = 3
-wrapped_XMLHttpRequest.DONE             = 4
-
-#-------------------------------------------------------------------------------
-wrapped_XMLHttpRequest_open = () ->
-      xhr = this
-
-      xhr.__weinre_method = arguments[0]
-      xhr.__weinre_url = arguments[1]
-      result = Native.XMLHttpRequest_open.apply(xhr, [].slice.call(arguments))
-
-      result
-
-#-------------------------------------------------------------------------------
-getXhrEventHandler = (xhr) ->
-      (event) ->
-          Timeline.addRecord_XHRReadyStateChange xhr.__weinre_method, xhr.__weinre_url, IDGenerator.getId(xhr), xhr
+      while i < trace.length
+          record.stackTrace.push
+              functionName: trace[i]
+              scriptName:   ""
+              lineNumber:   ""
+          i++
 
 #-------------------------------------------------------------------------------
 Timeline.installGlobalListeners()
-Timeline.installFunctionWrappers()
+Timeline.installNativeHooks()
 
 #-------------------------------------------------------------------------------
 require("../common/MethodNamer").setNamesForClass(module.exports)

@@ -81,6 +81,7 @@ module.exports = class ConnectorList
         else
             @setState element, "closed"
             element.addStyleClass "weinre-fade"
+
             window.setTimeout (->
                 self._remove element
             ), 5000

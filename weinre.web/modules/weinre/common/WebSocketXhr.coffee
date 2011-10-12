@@ -8,10 +8,8 @@
 
 Ex             = require('./Ex')
 Weinre         = require('./Weinre')
+HookLib        = require('./HookLib')
 EventListeners = require('./EventListeners')
-Native         = require('./Native')
-
-XMLHttpRequest = Native.XMLHttpRequest
 
 #-------------------------------------------------------------------------------
 module.exports = class WebSocketXhr
@@ -94,9 +92,10 @@ module.exports = class WebSocketXhr
             @_fireEventListeners "error", message: "non-JSON response from read request"
             return
 
-        Native.setTimeout (->
-            self._readLoop()
-        ), 0
+        HookLib.ignoreHooks ->
+            setTimeout (->
+                self._readLoop()
+            ), 0
 
         for data in datum
             self._fireEventListeners "message", data: data
@@ -128,9 +127,10 @@ module.exports = class WebSocketXhr
 
         @_sendInProgress = false
 
-        Native.setTimeout (->
-            httpSocket._sendQueued()
-        ), 0
+        HookLib.ignoreHooks ->
+            setTimeout (->
+                httpSocket._sendQueued()
+            ), 0
 
     #---------------------------------------------------------------------------
     close: ->
@@ -187,7 +187,10 @@ module.exports = class WebSocketXhr
         xhr.httpSocket = this
         xhr.httpSocketHandler = handler
         xhr.onreadystatechange = _xhrEventHandler
-        xhr.open method, url, true
+
+        HookLib.ignoreHooks ->
+            xhr.open method, url, true
+
         xhr.setRequestHeader "Content-Type", "text/plain"
         xhr.send data
 
