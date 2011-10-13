@@ -1,7 +1,7 @@
 /*
  * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
+ *
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
@@ -22,9 +22,9 @@ import org.apache.wink.json4j.JSONObject;
 
 //-------------------------------------------------------------------
 public class Channel {
-    
+
     static public final String AnonymousId = "anonymous";
-    
+
     private String                pathPrefix;
     private String                name;
     private String                id;
@@ -37,7 +37,7 @@ public class Channel {
     private String                remoteHost;
     private String                remoteAddress;
     private PrintWriter           messageLog;
-    
+
     //---------------------------------------------------------------
     public Channel(String pathPrefix, String name, String id, String remoteHost, String remoteAddress) {
         this.pathPrefix         = pathPrefix;
@@ -58,46 +58,46 @@ public class Channel {
     public Connector getConnector() {
         return connector;
     }
-    
+
     //---------------------------------------------------------------
     public String getRemoteHost() {
         return remoteHost;
     }
-    
+
     //---------------------------------------------------------------
     public String getRemoteAddress() {
         return remoteAddress;
     }
-    
+
     //---------------------------------------------------------------
     protected void _setConnector(Connector connector) {
         this.connector = connector;
     }
-    
+
     //---------------------------------------------------------------
     public void sendCallback(String intfName, String callbackId, Object... args) throws IOException {
         if (callbackId == null) return;
-        
+
         List<Object> innerArgs = new ArrayList<Object>();
         innerArgs.add(callbackId);
         innerArgs.add(Arrays.asList(args));
-        
+
         sendEvent(intfName, "sendCallback", innerArgs.toArray());
     }
-    
+
     //---------------------------------------------------------------
     public void sendEvent(String intfName, String methodName, Object... args) {
         Main.debug(getName() + ": send " + intfName + "." + methodName + "()");
-        
+
         JSONObject response = new JSONObject();
-        
+
         String responseString;
         try {
             response.put("interface", intfName);
             response.put("method", methodName);
-            
+
             List<Object> passedArgs = new ArrayList<Object>(Arrays.asList(args));
-            
+
             response.put("args", passedArgs);
 
             responseString = response.toString();
@@ -106,10 +106,10 @@ public class Channel {
             Main.warn("IOException serializing message for " + intfName + "." + methodName);
             return;
         }
-        
+
         this.postResponse(responseString);
     }
-    
+
     //---------------------------------------------------------------
     public Object getService(String name) {
         try {
@@ -122,12 +122,12 @@ public class Channel {
             throw new RuntimeException(e);
         }
     }
-    
+
     //---------------------------------------------------------------
     @SuppressWarnings("rawtypes")
     private Object getService_(String name) throws InstantiationException, IllegalAccessException {
         if (serviceMap.containsKey(name)) return serviceMap.get(name);
-        
+
         String klassName = "weinre.server.service." + name;
         Class  klass = null;
         try {
@@ -138,56 +138,56 @@ public class Channel {
             serviceMap.put(name, null);
             return null;
         }
-        
+
         Object result = klass.newInstance();
         serviceMap.put(name, result);
         Main.debug("loaded service class: " + klassName);
         return result;
     }
-    
+
     //---------------------------------------------------------------
     public void close() {
         isClosed = true;
         requestQueue.shutdown();
         responseQueue.shutdown();
-        
+
         ChannelManager.$.deregisterChannel(name);
     }
-    
+
     //---------------------------------------------------------------
     public boolean isClosed() {
         return isClosed;
     }
-    
+
     //---------------------------------------------------------------
     public String getPathPrefix() {
         return pathPrefix;
     }
-    
+
     //---------------------------------------------------------------
     public String getName() {
         return name;
     }
-    
+
     //---------------------------------------------------------------
     public String getId() {
         return id;
     }
-    
+
     //---------------------------------------------------------------
     public long getLastRead() {
         return lastRead;
     }
-    
+
     //---------------------------------------------------------------
     public void updateLastRead() {
         lastRead = System.currentTimeMillis();
     }
-    
+
     //---------------------------------------------------------------
     public void postRequest(String json) {
         if (isClosed()) return;
-        
+
         requestQueue.add(json);
         log(json);
     }
@@ -195,7 +195,7 @@ public class Channel {
     //---------------------------------------------------------------
     public void postResponse(String json) {
         if (isClosed()) return;
-        
+
         responseQueue.add(json);
         log(json);
     }
@@ -203,7 +203,7 @@ public class Channel {
     //---------------------------------------------------------------
     private void log(String json) {
         if (null == messageLog) return;
-        
+
         JSONObject jObject;
         try {
             jObject = new JSONObject(json);
@@ -212,7 +212,7 @@ public class Channel {
         catch (JSONException e) {
             return;
         }
-        
+
         messageLog.print(jObject.toString(true));
         messageLog.println(",");
     }
@@ -220,7 +220,7 @@ public class Channel {
     //---------------------------------------------------------------
     public List<String> getRequests(int timeoutSeconds) throws InterruptedException {
         if (isClosed()) return new LinkedList<String>();
-        
+
         List<String> result = requestQueue.getAll(timeoutSeconds, TimeUnit.SECONDS);
 
         return result;
@@ -229,7 +229,7 @@ public class Channel {
     //---------------------------------------------------------------
     public List<String> getResponses(int timeoutSeconds) throws InterruptedException {
         if (isClosed()) return new LinkedList<String>();
-        
+
         List<String> result = responseQueue.getAll(timeoutSeconds, TimeUnit.SECONDS);
 
         return result;

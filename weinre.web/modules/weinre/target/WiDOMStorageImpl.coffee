@@ -99,13 +99,13 @@ module.exports = class WiDOMStorageImpl
                 host: window.location.host
                 isLocalStorage: false
 
-            HookSites.SeesionStorage_setItem.addHooks
+            HookSites.SessionStorage_setItem.addHooks
                 after: -> _storageEventHandler storageArea: window.sessionStorage
 
-            HookSites.SeesionStorage_removeItem.addHooks
+            HookSites.SessionStorage_removeItem.addHooks
                 after: -> _storageEventHandler storageArea: window.sessionStorage
 
-            HookSites.SeesionStorage_clear.addHooks
+            HookSites.SessionStorage_clear.addHooks
                 after: -> _storageEventHandler storageArea: window.sessionStorage
 
         document.addEventListener "storage", _storageEventHandler, false
