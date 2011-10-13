@@ -152,7 +152,7 @@ module.exports = class MessageDispatcher
             intf = InspectorBackend.getRegisteredDomainDispatcher(intfName.substr(0, intfName.length - 6))
 
         unless intf
-            Weinre.logWarning "weinre: request for non-registered interface:" + methodSignature
+            Weinre.notImplemented "weinre: request for non-registered interface: #{methodSignature}"
             return
 
         methodSignature = intf.constructor.name + ".#{methodName}()"

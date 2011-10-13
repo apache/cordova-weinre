@@ -13,30 +13,28 @@
 <script>try {window.WeinreServerId = location.hash.split("#")[1]} catch(e) {window.WeinreServerId = "anonymous"}</script>
 <script src="/target/target-script.js"></script>
 <script src="weinre-demo.js"></script>
-
-<script type="text/javascript">
-    require("weinre/common/Weinre").showNotImplemented()
-</script>
 </head>
 
 <body onload="onLoad()">
 <input id="button-start-stuff" type="button" value="start stuff">
-
-<p>exceptions in callbacks<p>
-<input id="button-error-DOM-event"    type="button" value="DOM addEventHandler">
-<input id="button-error-window-event" type="button" value="window addEventHandler">
-<input id="button-error-XHR-event"    type="button" value="XHR addEventHandler">
-<input id="button-error-setTimeout"   type="button" value="setTimeout()">
-<input id="button-error-setInterval"  type="button" value="setInterval()">
 
 <h1>this is a green h1</h1>
 <h1 class="blue">this is a blue h1</h1>
 <h1 style="color:red">this is a red h1</h1>
 <p>Some text, <i>some italic text</i>, and <b>some bold text</b>.
 
-<div id="metrics">a div</div>
+<hr>
+<p>test exceptions in callbacks:
+<div style="margin-left:1em">
+    <input id="button-error-DOM-event"    type="button" value="DOM addEventHandler">
+<br><input id="button-error-window-event" type="button" value="window addEventHandler">
+<br><input id="button-error-XHR-event"    type="button" value="XHR addEventHandler">
+<br><input id="button-error-setTimeout"   type="button" value="setTimeout()">
+<br><input id="button-error-setInterval"  type="button" value="setInterval()">
+</div>
 
-<input id="button-clear-output" type="button" value="clear output">
+<hr>
+<p><input id="button-clear-output" type="button" value="clear output">
 <div id="output"></div>
 </body>
 

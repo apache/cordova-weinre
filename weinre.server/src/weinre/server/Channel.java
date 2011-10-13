@@ -134,14 +134,14 @@ public class Channel {
             klass = Class.forName(klassName);
         }
         catch (ClassNotFoundException e) {
-            Main.debug("service class not found: " + klassName);
+            // Main.debug("service class not found: " + klassName);
             serviceMap.put(name, null);
             return null;
         }
 
         Object result = klass.newInstance();
         serviceMap.put(name, result);
-        Main.debug("loaded service class: " + klassName);
+        // Main.debug("loaded service class: " + klassName);
         return result;
     }
 
