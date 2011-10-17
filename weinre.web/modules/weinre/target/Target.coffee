@@ -164,7 +164,7 @@ module.exports = class Target
         lineno   = event.lineno   or "[unknown lineno]"
         message  = event.message  or "[unknown message]"
 
-        Weinre.logError "error occurred: #{filename}:#{lineno}: " + message
+        console.log "error occurred: #{filename}:#{lineno}: #{message}"
 
     #---------------------------------------------------------------------------
     cb_webSocketOpened: () ->
