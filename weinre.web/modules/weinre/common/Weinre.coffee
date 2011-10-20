@@ -12,7 +12,6 @@ StackTrace = require('./StackTrace')
 
 _notImplemented     = {}
 _showNotImplemented = false
-CSSProperties       = []
 logger              = null
 
 #-------------------------------------------------------------------------------
@@ -25,14 +24,6 @@ module.exports = class Weinre
     #---------------------------------------------------------------------------
     @addIDLs: (idls) ->
         IDLTools.addIDLs idls
-
-    #---------------------------------------------------------------------------
-    @addCSSProperties: (cssProperties) ->
-        CSSProperties = cssProperties
-
-    #---------------------------------------------------------------------------
-    @getCSSProperties: ->
-        CSSProperties
 
     #---------------------------------------------------------------------------
     @deprecated: () ->

@@ -197,15 +197,18 @@ module.exports = class Timeline
                 interval  = args[1]
                 code      = instrumentedTimerCode(code, interval, false)
                 args[0]   = code
-                @userData = code
+
+                @userData = {}
+                @userData.code     = code
+                @userData.interval = interval
 
             after: (receiver, args, result) ->
-                code = @userData
+                code = @userData.code
                 return unless typeof(code) is "function"
 
                 id             = result
                 code.__timerId = id
-                addTimer id, interval, false
+                addTimer id, @userData.interval, false
 
         #-----------------------------------------------------------------------
         HookSites.window_clearInterval.addHooks
@@ -224,15 +227,18 @@ module.exports = class Timeline
                 interval  = args[1]
                 code      = instrumentedTimerCode(code, interval, true)
                 args[0]   = code
-                @userData = code
+
+                @userData = {}
+                @userData.code     = code
+                @userData.interval = interval
 
             after: (receiver, args, result) ->
-                code = @userData
+                code = @userData.code
                 return unless typeof(code) is "function"
 
                 id             = result
                 code.__timerId = id
-                addTimer id, interval, true
+                addTimer id, @userData.interval, true
 
         #-----------------------------------------------------------------------
         HookSites.window_clearTimeout.addHooks

@@ -17,6 +17,5 @@
     json4j:   "@JSON4J_VERSION@",
     json2:    "@JSON2_VERSION@",
     swt:      "@SWT_VERSION@",
-    modjewel: "@MODJEWEL_VERSION@",
-    scooj:    "@SCOOJ_VERSION@"
+    modjewel: "@MODJEWEL_VERSION@"
  };

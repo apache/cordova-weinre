@@ -54,7 +54,6 @@ def createIndexFile(iFileName, oFileName, moduleDir):
                 '<script type="text/javascript" src="weinre/hacks.js"></script>\n',
                 '<script type="text/javascript" src="../modjewel-require.js"></script>\n',
                 '<script type="text/javascript">require("modjewel").warnOnRecursiveRequire(true)</script>\n',
-                '<script type="text/javascript" src="../scooj.transportd.js"></script>\n',
             ])
 
             for module in getModules(moduleDir):

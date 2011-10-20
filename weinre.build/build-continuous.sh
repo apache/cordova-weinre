@@ -18,7 +18,7 @@ cd $EWS/weinre.build
 # run-when-changed: https://gist.github.com/240922
 #-------------------------------------------------------------
 
-run-when-changed "ant build-dev" \
+run-when-changed "ant build" \
   ../weinre.application \
   ../weinre.build/*.xml \
   ../weinre.build/*.properties \

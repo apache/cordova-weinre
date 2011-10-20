@@ -40,9 +40,6 @@ module.exports = class Target
         Weinre.target = new Target()
         Weinre.target.initialize()
 
-        Weinre.addCSSProperties = addCSSProperties = (properties) ->
-            CSSStore.addCSSProperties properties
-
         ExceptionalCallbacks.addHooks()
 
     #----------------------------------------------------------------------------
@@ -194,7 +191,7 @@ module.exports = class Target
 
     #---------------------------------------------------------------------------
     setDocument: () ->
-        Weinre.elementHighlighter = new ElementHighlighter()
+        Weinre.elementHighlighter = ElementHighlighter.create()
 
         nodeId   = Weinre.nodeStore.getNodeId(document)
         nodeData = Weinre.nodeStore.getNodeData(nodeId, 2)

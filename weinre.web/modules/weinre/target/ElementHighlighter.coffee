@@ -6,74 +6,50 @@
 # Copyright (c) 2010, 2011 IBM Corporation
 #---------------------------------------------------------------------------------
 
-Binding = require('../common/Binding')
-Weinre  = require('../common/Weinre')
+canvasAvailable           = null
+highlighterClass          = null
+currentHighlighterElement = null
 
 #-------------------------------------------------------------------------------
 module.exports = class ElementHighlighter
 
-    ElementHighlighter::__defineGetter__("element", -> @boxMargin)
+    #---------------------------------------------------------------------------
+    @create: ->
+        highlighterClass ?= require('./ElementHighlighterDivs2')
 
+        new highlighterClass()
+
+    #---------------------------------------------------------------------------
     constructor: ->
-        @boxMargin  = document.createElement("div")
-        @boxBorder  = document.createElement("div")
-        @boxPadding = document.createElement("div")
-        @boxContent = document.createElement("div")
+        @hElement = @createHighlighterElement()
+        @hElement.__weinreHighlighter = true
+        @hElement.style.display = "none"
+        @hElement.style.zIndex  = 10 * 1000 * 1000
 
-        @boxMargin.appendChild  @boxBorder
-        @boxBorder.appendChild  @boxPadding
-        @boxPadding.appendChild @boxContent
+        if currentHighlighterElement
+            document.body.removeChild currentHighlighterElement
 
-        @boxMargin.style.backgroundColor  = "#FCC"
-        @boxBorder.style.backgroundColor  = "#000"
-        @boxPadding.style.backgroundColor = "#CFC"
-        @boxContent.style.backgroundColor = "#CCF"
+        currentHighlighterElement = @hElement
 
-        @boxMargin.style.opacity       = @boxBorder.style.opacity       = @boxPadding.style.opacity       = @boxContent.style.opacity       = 0.6
-        @boxMargin.style.position      = @boxBorder.style.position      = @boxPadding.style.position      = @boxContent.style.position      = "absolute"
-        @boxMargin.style.borderWidth   = @boxBorder.style.borderWidth   = @boxPadding.style.borderWidth   = @boxContent.style.borderWidth   = "thin"
-        @boxMargin.style.borderStyle   = @boxBorder.style.borderStyle   = @boxPadding.style.borderStyle   = @boxContent.style.borderStyle   = "solid"
-        @boxMargin.__weinreHighlighter = @boxBorder.__weinreHighlighter = @boxPadding.__weinreHighlighter = @boxContent.__weinreHighlighter = true
-
-        @boxMargin.style.display = "none"
-        document.body.appendChild @boxMargin
+        document.body.appendChild @hElement
 
     #---------------------------------------------------------------------------
     on: (element) ->
         return if null == element
         return unless element.nodeType == Node.ELEMENT_NODE
 
-        @calculateMetrics element
-        @boxMargin.style.display = "block"
+        @redraw getMetricsForElement(element)
+
+        @hElement.style.display = "block"
 
     #---------------------------------------------------------------------------
     off: ->
-        @boxMargin.style.display = "none"
-
-    #---------------------------------------------------------------------------
-    calculateMetrics: (element) ->
-        metrics = getMetrics(element)
-
-        @boxMargin.style.top     = metrics.y + "px"
-        @boxMargin.style.left    = metrics.x + "px"
-        @boxMargin.style.height  = metrics.height + "px"
-        @boxMargin.style.width   = metrics.width + "px"
-        @boxBorder.style.top     = metrics.marginTop + "px"
-        @boxBorder.style.left    = metrics.marginLeft + "px"
-        @boxBorder.style.bottom  = metrics.marginBottom + "px"
-        @boxBorder.style.right   = metrics.marginRight + "px"
-        @boxPadding.style.top    = metrics.borderTop + "px"
-        @boxPadding.style.left   = metrics.borderLeft + "px"
-        @boxPadding.style.bottom = metrics.borderBottom + "px"
-        @boxPadding.style.right  = metrics.borderRight + "px"
-        @boxContent.style.top    = metrics.paddingTop + "px"
-        @boxContent.style.left   = metrics.paddingLeft + "px"
-        @boxContent.style.bottom = metrics.paddingBottom + "px"
-        @boxContent.style.right  = metrics.paddingRight + "px"
+        @hElement.style.display = "none"
 
 #-------------------------------------------------------------------------------
-getMetrics = (element) ->
-      result = {}
+getMetricsForElement = (element) ->
+      metrics = {}
+
       left = 0
       top  = 0
       el   = element
@@ -83,37 +59,41 @@ getMetrics = (element) ->
           top += el.offsetTop
           break unless el = el.offsetParent
 
-      result.x = left
-      result.y = top
+      metrics.x = left
+      metrics.y = top
 
       cStyle = document.defaultView.getComputedStyle(element)
 
-      result.width         = fromPx(cStyle["width"])
-      result.height        = fromPx(cStyle["height"])
-      result.marginLeft    = fromPx(cStyle["margin-left"])
-      result.marginRight   = fromPx(cStyle["margin-right"])
-      result.marginTop     = fromPx(cStyle["margin-top"])
-      result.marginBottom  = fromPx(cStyle["margin-bottom"])
-      result.borderLeft    = fromPx(cStyle["border-left-width"])
-      result.borderRight   = fromPx(cStyle["border-right-width"])
-      result.borderTop     = fromPx(cStyle["border-top-width"])
-      result.borderBottom  = fromPx(cStyle["border-bottom-width"])
-      result.paddingLeft   = fromPx(cStyle["padding-left"])
-      result.paddingRight  = fromPx(cStyle["padding-right"])
-      result.paddingTop    = fromPx(cStyle["padding-top"])
-      result.paddingBottom = fromPx(cStyle["padding-bottom"])
+      metrics.width         = element.offsetWidth
+      metrics.height        = element.offsetHeight
+      metrics.marginLeft    = fromPx(cStyle["margin-left"])
+      metrics.marginRight   = fromPx(cStyle["margin-right"])
+      metrics.marginTop     = fromPx(cStyle["margin-top"])
+      metrics.marginBottom  = fromPx(cStyle["margin-bottom"])
+      metrics.borderLeft    = fromPx(cStyle["border-left-width"])
+      metrics.borderRight   = fromPx(cStyle["border-right-width"])
+      metrics.borderTop     = fromPx(cStyle["border-top-width"])
+      metrics.borderBottom  = fromPx(cStyle["border-bottom-width"])
+      metrics.paddingLeft   = fromPx(cStyle["padding-left"])
+      metrics.paddingRight  = fromPx(cStyle["padding-right"])
+      metrics.paddingTop    = fromPx(cStyle["padding-top"])
+      metrics.paddingBottom = fromPx(cStyle["padding-bottom"])
 
-      result.width  += result.marginLeft + result.marginRight  + result.borderRight  + result.paddingLeft + result.paddingRight
-      result.height += result.marginTop  + result.marginBottom + result.borderBottom + result.paddingTop  + result.paddingBottom
+      metrics.x -= metrics.marginLeft
+      metrics.y -= metrics.marginTop
 
-      result.x -= result.marginLeft
-      result.y -= result.marginTop
-
-      result
+      metrics
 
 #-------------------------------------------------------------------------------
 fromPx = (string) ->
       parseInt string.replace(/px$/, "")
+
+#-------------------------------------------------------------------------------
+supportsCanvas = () ->
+    element = document.createElement('canvas')
+    return false unless element.getContext
+    return true if element.getContext('2d')
+    return false
 
 #-------------------------------------------------------------------------------
 require("../common/MethodNamer").setNamesForClass(module.exports)

@@ -111,10 +111,6 @@ module.exports = class WiCSSImpl
         Weinre.notImplemented arguments.callee.signature
 
     #---------------------------------------------------------------------------
-    getSupportedCSSProperties: (callback) ->
-        Weinre.getCSSProperties()
-
-    #---------------------------------------------------------------------------
     querySelectorAll: (documentId, selector, callback) ->
         Weinre.notImplemented arguments.callee.signature
 

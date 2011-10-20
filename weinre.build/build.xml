@@ -151,16 +151,6 @@
         <delete dir="${TMP}" />
         <mkdir  dir="${TMP}" />
 
-<!--
-        <echo message="compiling scoop modules"/>
-        <exec executable="python" failonerror="true" failifexecutionfails="true">
-            <arg  file="vendor/scooj/scoopc.py"/>
-            <arg value="-o"/>
-            <arg  file="${TMP}/modules"/>
-            <arg  file="../${PROJECT_WEB}/modules"/>
-        </exec>
--->
-
         <echo message="compiling CoffeeScript modules"/>
         <mkdir  dir="${TMP}/modules/weinre/client" />
         <mkdir  dir="${TMP}/modules/weinre/common" />
@@ -183,13 +173,6 @@
             <arg value="-c"/>
             <arg value="node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/target ../${PROJECT_WEB}/modules/weinre/target/*.coffee"/>
         </exec>
-
-
-<!--
-        <copy todir="${TMP}/modules">
-            <fileset file="${VENDOR}/scooj/scooj.js"/>
-        </copy>
--->
 
         <echo message="transportd-izing modules"/>
         <exec executable="python" failonerror="true" failifexecutionfails="true">
@@ -248,19 +231,20 @@
                 <filter token="WEBKIT_VERSION"             value="${WEBKIT_VERSION}"/>
                 <filter token="SWT_VERSION"                value="${SWT_VERSION}"/>
                 <filter token="JETTY_VERSION"              value="${JETTY_VERSION}"/>
-                <filter token="SCOOJ_VERSION"              value="${SCOOJ_VERSION}"/>
                 <filter token="MODJEWEL_VERSION"           value="${MODJEWEL_VERSION}"/>
                 <filter token="JAVAX_SERVLET_VERSION"      value="${JAVAX_SERVLET_VERSION}"/>
                 <filter token="JAVAX_SERVLET_VERSION_IMPL" value="${JAVAX_SERVLET_VERSION_IMPL}"/>
             </filterset>
         </copy>
 
+<!--
         <echo message="building add-css-properties.js"/>
         <exec executable="python" failonerror="true" failifexecutionfails="true">
             <arg  file="scripts/build-css-properties.py"/>
             <arg value="vendor/webkit/WebCore/CSSPropertyNames.in"/>
             <arg value="${WEB}/add-css-properties.js"/>
         </exec>
+-->
 
     </target>
 
@@ -362,7 +346,6 @@
 
         <exec executable="python" failonerror="true" failifexecutionfails="true">
             <arg file="scripts/build-target-scripts.py"/>
-            <arg file="../${PROJECT_WEB}/demo/weinre-demo-pieces.html"/>
             <arg file="${WEB}"/>
             <arg file="${WEB}/target"/>
         </exec>

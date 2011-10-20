@@ -25,7 +25,6 @@
         <antcall target="get-cli"/>
         <antcall target="get-json4j"/>
         <antcall target="get-jetty"/>
-        <antcall target="get-scooj"/>
         <antcall target="get-coffeescript"/>
         <antcall target="get-modjewel"/>
         <antcall target="get-web-inspector"/>
@@ -97,16 +96,6 @@
         <get src="${JETTY_SRC_URL}"     dest="${VENDOR}/jetty/jetty-src.jar"   verbose="false"/>
         <get src="${JETTY_BIN_URL}"     dest="${VENDOR}/jetty/jetty.jar"       verbose="false"/>
         <get src="${JAVAX_SERVLET_URL}" dest="${VENDOR}/jetty/servlet-api.jar" verbose="false"/>
-    </target>
-
-    <!-- ============================================================ -->
-
-    <target name="get-scooj">
-        <delete dir="${VENDOR}/scooj"/>
-        <mkdir  dir="${VENDOR}/scooj"/>
-
-        <get src="${SCOOJ_URL_PREFIX}/scooj.js"  dest="${VENDOR}/scooj/scooj.js"  verbose="false"/>
-        <get src="${SCOOJ_URL_PREFIX}/scoopc.py" dest="${VENDOR}/scooj/scoopc.py" verbose="false"/>
     </target>
 
     <!-- ============================================================ -->

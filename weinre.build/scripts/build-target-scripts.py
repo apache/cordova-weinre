@@ -17,38 +17,41 @@ import optparse
 def main():
 
     #----------------------------------------------------------------
-    if len(sys.argv) < 4:
-        error("expecting parameters piecesHtmlFile srcDir outputDir")
+    if len(sys.argv) < 3:
+        error("expecting parameters srcDir outputDir")
 
-    iFileName   = sys.argv[1]
-    srcDirName  = sys.argv[2]
-    oDirName    = sys.argv[3]
+    srcDirName  = sys.argv[1]
+    oDirName    = sys.argv[2]
 
-    if not os.path.exists(iFileName):   error("input file not found: '" + iFileName + "'")
     if not os.path.exists(srcDirName):  error("source directory not found: '" + srcDirName + "'")
     if not os.path.isdir(srcDirName):   error("source directory not a directory: '" + srcDirName + "'")
     if not os.path.exists(oDirName):    error("output directory not found: '" + oDirName + "'")
     if not os.path.isdir(oDirName):     error("output directory not a directory: '" + oDirName + "'")
 
     #----------------------------------------------------------------
-    with open(iFileName, "r") as iFile:
-        lines = iFile.readlines()
-
-    #----------------------------------------------------------------
     scripts     = []
     scriptNames = {}
     scriptSrc   = {}
     scriptMin   = {}
-    scriptSrcPattern = re.compile(r'.*?<script\s+src\s*=\s*"/(.*?)"\s*>\s*</script>.*')
 
-    for line in lines:
-        match = scriptSrcPattern.match(line)
-        if not match: continue
+    includedFiles = []
+    includedFiles.append("modjewel-require.js")
 
-        baseScriptFile = match.group(1)
+    entries = os.listdir(os.path.join(srcDirName, "weinre/common"))
+    for entry in entries:
+        includedFiles.append("weinre/common/%s" % entry)
+
+    entries = os.listdir(os.path.join(srcDirName, "weinre/target"))
+    for entry in entries:
+        includedFiles.append("weinre/target/%s" % entry)
+
+    includedFiles.append("interfaces/all-json-idls-min.js")
+
+    for includedFile in includedFiles:
+        baseScriptFile = includedFile
         scriptFile = os.path.join(srcDirName, baseScriptFile)
-        if scriptFile == "weinre-demo.js": continue
-        if not os.path.exists(scriptFile):   error("script file not found: '" + scriptFile + "'")
+        if not os.path.exists(scriptFile):
+            error("script file not found: '" + scriptFile + "'")
 
         scripts.append(scriptFile)
         scriptNames[scriptFile] = baseScriptFile
@@ -62,27 +65,35 @@ def main():
 
     #----------------------------------------------------------------
     oFileName = os.path.join(oDirName, "target-script.js")
-    writeMergedFile(oFileName, scripts, scriptNames, scriptSrc)
+    writeMergedFile(oFileName, scripts, scriptNames, scriptSrc, True)
 
     #----------------------------------------------------------------
     oFileName = os.path.join(oDirName, "target-script-min.js")
-    writeMergedFile(oFileName, scripts, scriptNames, scriptMin)
+    writeMergedFile(oFileName, scripts, scriptNames, scriptMin, False)
 
 #--------------------------------------------------------------------
-def writeMergedFile(oFileName, scripts, scriptNames, srcs):
-
+def writeMergedFile(oFileName, scripts, scriptNames, srcs, useEval):
     lines = []
     lines.append(";(function(){")
 
     for script in scripts:
-        lines.append("//==================================================")
-        lines.append("// file: " + scriptNames[script])
-        lines.append("//==================================================")
-        lines.append(srcs[script])
-        lines.append(";")
-        lines.append("")
 
-    lines.append("// require('weinre/common/Weinre').showNotImplemented()")
+        src     = srcs[script]
+        srcName = scriptNames[script]
+        if not useEval:
+            lines.append("// %s" % srcName)
+            lines.append(src)
+            lines.append(";")
+        else:
+            src = "%s\n//@ sourceURL=%s" % (src, srcName)
+            lines.append(";eval(%s)" % json.dumps(src))
+
+        if srcName == "modjewel-require.js":
+            lines.append("require('modjewel').warnOnRecursiveRequire(true);")
+            if not useEval:
+                lines.append("")
+
+    lines.append("// require('weinre/common/Weinre').showNotImplemented();")
     lines.append("require('weinre/target/Target').main()")
     lines.append("})();")
     targetScript = "\n".join(lines)

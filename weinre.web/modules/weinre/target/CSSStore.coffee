@@ -9,8 +9,6 @@
 IDGenerator = require('../common/IDGenerator')
 Weinre      = require('../common/Weinre')
 
-Properties = []
-
 _elementMatchesSelector = null
 
 #-------------------------------------------------------------------------------
@@ -22,10 +20,6 @@ module.exports = class CSSStore
         @styleRuleMap  = {}
         @styleDeclMap  = {}
         @testElement   = document.createElement("div")
-
-    #---------------------------------------------------------------------------
-    @addCSSProperties: (properties) ->
-        Properties = properties
 
     #---------------------------------------------------------------------------
     getInlineStyle: (node) ->
