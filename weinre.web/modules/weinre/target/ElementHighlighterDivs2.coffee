@@ -62,7 +62,6 @@ module.exports = class ElementHighlighterDivs2 extends ElementHighlighter
 
     #---------------------------------------------------------------------------
     redraw: (metrics) ->
-        console.log(JSON.stringify(metrics, null, 4))
 
         @hElement1.style.top               = px metrics.y
         @hElement1.style.left              = px metrics.x

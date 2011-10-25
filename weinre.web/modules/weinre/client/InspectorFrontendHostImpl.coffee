@@ -26,7 +26,8 @@ module.exports = class InspectorFrontendHostImpl
 
     #---------------------------------------------------------------------------
     hiddenPanels: ->
-        "audits,profiles,network"
+        # "audits,profiles,network"
+        "audits,profiles"
 
     #---------------------------------------------------------------------------
     platform: ->

@@ -19,6 +19,7 @@ CSSStore                      = require('./CSSStore')
 ElementHighlighter            = require('./ElementHighlighter')
 ExceptionalCallbacks          = require('./ExceptionalCallbacks')
 InjectedScriptHostImpl        = require('./InjectedScriptHostImpl')
+NetworkRequest                = require('./NetworkRequest')
 WeinreTargetEventsImpl        = require('./WeinreTargetEventsImpl')
 WeinreExtraClientCommandsImpl = require('./WeinreExtraClientCommandsImpl')
 WiConsoleImpl                 = require('./WiConsoleImpl')
@@ -39,8 +40,6 @@ module.exports = class Target
         CheckForProblems.check()
         Weinre.target = new Target()
         Weinre.target.initialize()
-
-        ExceptionalCallbacks.addHooks()
 
     #----------------------------------------------------------------------------
     setWeinreServerURLFromScriptSrc: (element) ->
@@ -143,6 +142,7 @@ module.exports = class Target
         Weinre.wi.DatabaseNotify         = messageDispatcher.createProxy("DatabaseNotify")
         Weinre.wi.InspectorNotify        = messageDispatcher.createProxy("InspectorNotify")
         Weinre.wi.TimelineNotify         = messageDispatcher.createProxy("TimelineNotify")
+        Weinre.wi.NetworkNotify          = messageDispatcher.createProxy("NetworkNotify")
         Weinre.WeinreTargetCommands      = messageDispatcher.createProxy("WeinreTargetCommands")
         Weinre.WeinreExtraTargetEvents   = messageDispatcher.createProxy("WeinreExtraTargetEvents")
 
@@ -154,6 +154,9 @@ module.exports = class Target
         window.addEventListener "error", ((e) ->
             Target.handleError e
         ), false
+
+        ExceptionalCallbacks.addHooks()
+        NetworkRequest.installNativeHooks()
 
     #---------------------------------------------------------------------------
     @handleError: (event) ->

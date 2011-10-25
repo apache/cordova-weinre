@@ -192,7 +192,9 @@ module.exports = class WebSocketXhr
             xhr.open method, url, true
 
         xhr.setRequestHeader "Content-Type", "text/plain"
-        xhr.send data
+
+        HookLib.ignoreHooks ->
+            xhr.send data
 
 #-------------------------------------------------------------------------------
 _xhrEventHandler = (event) ->
