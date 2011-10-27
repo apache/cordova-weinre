@@ -1,7 +1,7 @@
 <!--
  * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
+ *
  * Copyright (c) 2010, 2011 IBM Corporation
 -->
 
@@ -19,26 +19,26 @@ each other.
 <dl class="spaced">
 
 <dt>Debug Server
-<dd>This is the HTTP server that you run from the <tt>weinre.jar</tt> file 
+<dd>This is the HTTP server that you run from the <tt>weinre.jar</tt> file
 or the Mac application.  It's the HTTP server that's used by the
 <b>Debug Client</b> and <b>Debug Target</b>.
 
 <dt>Debug Client
-<dd>This is the Web Inspector user interface; the web page which 
-displays the Elements and Console panels, for instance.  
+<dd>This is the Web Inspector user interface; the web page which
+displays the Elements and Console panels, for instance.
 
 <dt>Debug Target
 <dd>This is your web page that you want to debug.  This
 name (Debug Target) is also used to refer to the machine
 running the browser displaying the web page.  Since a design
-point of <span class="weinre">weinre</span> is to allow 
+point of <span class="weinre">weinre</span> is to allow
 debugging applications on mobile devices, the debug
 target, when speaking of the machine, is your mobile
-device. 
+device.
 
 </dl>
 
-<p>Both the <b>Debug Client</b> and the <b>Debug Target</b> communicate to 
+<p>Both the <b>Debug Client</b> and the <b>Debug Target</b> communicate to
 the <b>Debug Server</b> via HTTP using <tt>XMLHttpRequest</tt> (XHR).
 
 <p>Typically, you run both the <b>Debug Client</b> and the <b>Debug Server</b>
@@ -47,7 +47,7 @@ on your desktop/laptop, and the <b>Debug Target</b> on your mobile device.
 <p>When using the Mac application, the
 <b>Debug Client</b> and <b>Debug Server</b> are running
 in the same process.
-When you launch the application, 
+When you launch the application,
 the server starts, and then the browser included in the
 application is launched
 on the appropriate URL automagically.
@@ -75,7 +75,7 @@ to function as a <b>Debug Target</b>.
 <!-- ======================================================== -->
 <h2>Running the debug server using the weinre.jar file</h2>
 
-<p>To run <span class="weinre">weinre</span> from the jar file, 
+<p>To run <span class="weinre">weinre</span> from the jar file,
 execute the following command:
 
 <pre>
@@ -101,11 +101,11 @@ java -jar path/to/weinre.jar [options]
 <div class="indent">
 <p>The ip address to bind the server to.
 <p>Default: <tt>localhost</tt>
- 
+
 <p>With the default of <tt>localhost</tt>, you won't be able to access
 the server from any machine other than the one the server is running on.  You will
 need to bind to another hostname / ip address to make the server accessible to other
-machines.  You can use the value <tt>-all-</tt> to indicate that you 
+machines.  You can use the value <tt>-all-</tt> to indicate that you
 want to bind to all interfaces available on the current machine.
 
 <p>Use <tt>ifconfig</tt> on Linux or the Mac, and <tt>ipconfig</tt>
@@ -120,7 +120,7 @@ on Windows, to get the ip addresses available on your machine.
 
 <li><tt>--reuseAddr [true | false]</tt>
 <div class="indent">
-<p>Sets the "reuseAddr" flag for Jetty.  
+<p>Sets the "reuseAddr" flag for Jetty.
 <p>Default: <tt>false</tt>
 
 <p>May be needed if you restart your server frequently.
@@ -133,10 +133,10 @@ to be available to send to the target or client.
 <p>Default: <tt>5</tt>
 
 <p>Can probably be set larger, but then your browser may
-time out.  Probably don't want to set it much lower than 
+time out.  Probably don't want to set it much lower than
 this as it will cause additional network traffic when
 no messages are being sent (it will cause more "empty"
-messages to be sent).  
+messages to be sent).
 </div>
 
 <li><tt>--deathTimeout [seconds]</tt>
@@ -152,10 +152,10 @@ it much longer.
 
 </ul>
 
-<p>You may also create a file named 
-<tt>server.properties</tt> in the 
+<p>You may also create a file named
+<tt>server.properties</tt> in the
 directory <tt>.weinre</tt> in your
-home directory (eg. 
+home directory (eg.
 <tt>~/.weinre/server.properties</tt>).
 The keys should be
 the same as the name of the options above,
@@ -166,16 +166,21 @@ file might look like this:
 
 <pre>
 boundHost:    -all-
-httpPort:     8081 
-reuseAddr:    true 
-readTimeout:  1 
+httpPort:     8081
+reuseAddr:    true
+readTimeout:  1
 deathTimeout: 5
 </pre>
 
 <p>Command-line options override the options specified in the
-<tt>~/.weinre/server.properties</tt> file. 
+<tt>~/.weinre/server.properties</tt> file.
 
 <p>The server will run until you kill it.  Control-C will do the job.
+
+<p>Below is what you should see from the console after running
+<span class="weinre">weinre</span> from the <tt>weinre.jar</tt> file.
+
+<p><img src="images/shell.png">
 
 <!-- ======================================================== -->
 <h2>Running the debug server using the Mac application</h2>
@@ -199,8 +204,8 @@ in a separate tab.
 <!-- ======================================================== -->
 <h2>Running the debug server bound to something other than <tt>localhost</tt></h3>
 
-<p>Since the web page you want to debug (the debug target) is probably running on 
-a different machine (your mobile device) than the debug server (your desktop / laptop), 
+<p>Since the web page you want to debug (the debug target) is probably running on
+a different machine (your mobile device) than the debug server (your desktop / laptop),
 you <b>can't</b> use the
 default <tt>localhost</tt> value for the <tt>--boundHost</tt>
 option.  Instead, you will need to specify a host name / ip address
@@ -217,12 +222,12 @@ debug target should use.  If you've use the
 using the URL <tt>http://localhost:[portNumber]/client/</tt>
 from the same machine the debug server is running on.  On that
 page, under <b>Server Properties</b>, is a list of bound hosts
-that the server believes it's available on.  
+that the server believes it's available on.
 
-<p>From the debug target device (eg, your mobile device), 
+<p>From the debug target device (eg, your mobile device),
 try accessing the server home page
 from all of those host names, using the URL
-<tt>http://[host name / ipaddress]:[portNumber]/</tt>.  
+<tt>http://[host name / ipaddress]:[portNumber]/</tt>.
 Once you find one
 that displays the server's home page correctly, remember
 that host name / ip address, we'll be using it in a minute.
@@ -245,21 +250,21 @@ will be accessible from the debug target.  Let's say that URL
 <p>To make your web page debuggable with <span class="weinre">weinre</span>,
 add the following line to your web page:
 <pre>
-&lt;script src="http://a.b.c:8081/target/target-script-min.js"&gt;&lt;/script&gt; 
+&lt;script src="http://a.b.c:8081/target/target-script-min.js"&gt;&lt;/script&gt;
 </pre>
 
 <p>You can now open a debug client by browsing to
-<tt>http://a.b.c:8081/client</tt> 
-(or probably 
+<tt>http://a.b.c:8081/client</tt>
+(or probably
 <tt>http://localhost:8081/client</tt>
-as well) on your desktop/laptop, 
-then reload your newly instrumented web page on your mobile device, 
+as well) on your desktop/laptop,
+then reload your newly instrumented web page on your mobile device,
 and see the two connect in the Remote panel of the debug client.
 
 <!-- ======================================================== -->
 <h2>Hardcoding host names / IP addresses in your web page?</h3>
 
-<p>Yeah, gross.  
+<p>Yeah, gross.
 
 <p>Besides being gross, there are a few practical problems with hardcoding the
 debug server address in your web page as well:
@@ -269,7 +274,7 @@ debug server address in your web page as well:
 <li>Your html file is probably stored in an SCM, and you
 don't really want to be storing that address in the SCM.
 It won't work for other people using that html file,
-for instance.  
+for instance.
 
 <p>But you don't want to be keeping the
 <tt>&lt;script src=""></tt> line in your SCM either.
@@ -277,13 +282,13 @@ You should look for a way, as part of your personal
 build process to add that line only for development
 builds, and presumably with a user-customizable URL.
 
-<li>The URL the debug server runs on may be 
-different depending on your location.  At work, you may use 
+<li>The URL the debug server runs on may be
+different depending on your location.  At work, you may use
 one IP address and host name; at home, you likely have a different
 IP address and host name.  You may not have a host name at all,
 just an IP address (which is fine - a host name isn't required,
 but usually makes things easier).  You may be running on a
-dynamically assigned IP address, in which case your IP 
+dynamically assigned IP address, in which case your IP
 changes every time you log into your network.
 
 <p>One way out of the dilemma is to use a dynamic
@@ -296,13 +301,13 @@ some links to such services:
 can arrange to use the same host name for your debug server
 no matter what network you are connected to.
 
-</ul> 
+</ul>
 
 <!-- ======================================================== -->
 <h2>Using a bookmarklet</h2>
 
 <p>Some platforms support 'bookmarkets', which allow you to inject
-arbitrary JavaScript code into any web page running in your 
+arbitrary JavaScript code into any web page running in your
 browser.  Mobile Safari is one of these browsers.  It appears that
 the browser shipped with Android 2.2 and later also supports bookmarklets.
 
@@ -317,45 +322,3 @@ paste into the previously added bookmark.
 <p>Once the bookmarklet is installed, you can debug any web page
 by visiting it, and selecting the bookmarklet from your bookmarks
 menu.
-
-<!-- ======================================================== -->
-<h2>Using the <tt>target/target-script-min.js</tt> file statically</h2>
-
-<p>If you'd like to use the debug target code statically, instead of
-downloading it from the server all the time, then you will need to do
-one more thing.  The debug target code computes the address of the
-debug server from the <tt>src</tt> attribute in the 
-<tt>&lt;script&gt;</tt> tag, and it won't
-be correct in the static case.  Instead you can set the
-following variable to be the URL of the debug server:
-
-<pre>
-window.WeinreServerURL
-</pre>
-
-<p>This URL overrides what's otherwise calculated from the debug target
-code itself.  You will need to set this value before the
-<tt>target/target-script-min.js</tt> script is loaded. 
-
-<!-- ======================================================== -->
-<h3>Future Enhancements</h3>
-
-<p>The calculation of the debug server url by the debug target is a bit fragile and
-ham-fisted.  We should look at additional ways to handle this.
-For instance, we could prompt the user for the debug server
-address, and then always using the debug target in a more static
-mode; eg, you'd include the <tt>target-script-min.js</tt> with all your
-other files in your application.
-
-<p>Running the debug server on the target device is another option.
-This shouldn't be a huge problem for Android, but is more of a problem
-on iOS.  By running the debug server on the target device, the 
-debug target can always connect to the debug server by using a
-<tt>localhost</tt> hostname.  The debug client, running on your
-desktop/laptop, would then need to connect to the target device
-to debug.  In practice this may be an easier scenario to work with,
-as the potentially changing IP address of the mobile device just
-means having to type a different URL in your web browser on your desktop / laptop
-when running the debug client. That's easier than hard-coding
-URLs in your web page, for instance.
- 

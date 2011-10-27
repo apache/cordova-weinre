@@ -96,7 +96,7 @@
          compile java code
          ============================================================ -->
 
-    <target name="compile-java" if="USE_JAVAC">
+    <target name="compile-java" unless="USE_ECLIPSE">
         <delete dir="../${PROJECT_SERVER}/bin"/>
         <mkdir  dir="../${PROJECT_SERVER}/bin"/>
 
@@ -258,15 +258,15 @@
 
         <copy todir="${WEB}/doc" file="${OUT}/build-info.txt"/>
 
-        <build-html name="Building"     oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
-        <build-html name="Home"         oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
-        <build-html name="Installing"   oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
-        <build-html name="License"      oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
-        <build-html name="Running"      oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
-        <build-html name="MultiUser"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
-        <build-html name="Security"     oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
-        <build-html name="TestDrive"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
-        <build-html name="ChangeLog"    oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
+        <build-html name="Building"      title="Building"       oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
+        <build-html name="Home"          title="Home"           oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
+        <build-html name="Installing"    title="Installing"     oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
+        <build-html name="License"       title="License"        oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
+        <build-html name="Running"       title="Running"        oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
+        <build-html name="MultiUser"     title="Muli-User"      oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
+        <build-html name="Security"      title="Security"       oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
+        <build-html name="UserInterface" title="User Interface" oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
+        <build-html name="ChangeLog"     title="ChangeLog"      oDir="${WEB}/doc" iDir="../${PROJECT_DOC}"/>
 
         <copy file="${WEB}/doc/Home.html" tofile="${WEB}/doc/index.html"/>
 
@@ -593,6 +593,7 @@
 
     <macrodef name="build-html">
        <attribute name="name"/>
+       <attribute name="title"/>
        <attribute name="iDir"/>
        <attribute name="oDir"/>
        <element name="args" optional="true" implicit="true"/>
@@ -604,7 +605,7 @@
                <filelist dir="@{iDir}" files="boilerplate-trailer.html.txt"/>
                <filterchain>
                   <replacetokens>
-                    <token key="PAGE_NAME" value="@{name}"/>
+                    <token key="PAGE_NAME" value="@{title}"/>
                   </replacetokens>
                 </filterchain>
            </concat>

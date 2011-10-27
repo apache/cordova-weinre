@@ -1,2 +1,2 @@
 For more information on weinre, please visit
-[http://phonegap.github.com/weinre/](http://phonegap.github.com/weinre/)
+[https://github.com/callback/callback-weinre/](https://github.com/callback/callback-weinre/)

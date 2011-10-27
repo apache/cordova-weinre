@@ -2,74 +2,73 @@
 <!--
  * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
+ *
  * Copyright (c) 2010, 2011 IBM Corporation
 -->
 
-<p><span class="weinre">weinre</span> is <b>We</b>b <b>In</b>spector <b>Re</b>mote.
+<p><span class="weinre">weinre</span> is <b>WE</b>b <b>IN</b>spector <b>RE</b>mote.
 Pronounced like the word "winery".  Or maybe like the word "weiner".  Who knows,
 really.
 
-<p>Interesting places:
-<ul>
-<li>GitHub: <a href="https://github.com/phonegap/weinre">https://github.com/phonegap/weinre</a>
-<li>Google Group: <a href="http://groups.google.com/group/weinre">http://groups.google.com/group/weinre</a>
-<li>weinre documentation: <a href="http://phonegap.github.com/weinre">http://phonegap.github.com/weinre</a>
-<li>Google Chrome Developer Tools: <a href="http://code.google.com/chrome/devtools/docs/overview.html">http://code.google.com/chrome/devtools/docs/overview.html</a>
-</ul>
-
-<p>It's a debugger for web pages, like 
+<p><span class="weinre">weinre</span> is a debugger for web pages, like
 FireBug (for FireFox)
-and 
+and
 Web Inspector (for WebKit-based browsers), except it's designed
 to work <b>remotely</b>, and in particular, to <b>allow you debug web pages
 on a mobile device such as a phone</b>.
 
-<p>If you aren't familiar with FireBug or Web Inspector, 
+<p>Interesting places to visit:
+<table>
+<tr><td>- videos at YouTube:               <td><a href="http://www.youtube.com/results?search_query=weinre">http://www.youtube.com/results?search_query=weinre</a>
+<tr><td>- this documentation at GitHub:    <td><a href="http://callback.github.com/callback-weinre">http://callback.github.com/callback-weinre</a>
+<tr><td>- source at GitHub:                <td><a href="https://github.com/callback/callback-weinre">https://github.com/callback/callback-weinre</a>
+<tr><td>- discussion at Google Group:      <td><a href="http://groups.google.com/group/weinre">http://groups.google.com/group/weinre</a>
+</table>
+
+<p>More information on <span class="weinre">weinre</span>'s big brothers, Web Inspector / Google Chrome
+Developer Tools, is available at
+<a href="http://code.google.com/chrome/devtools/docs/overview.html">Google's Chrome Dev Tools pages</a>
+and
+<a href="http://developer.apple.com/library/safari/#documentation/appleapplications/Conceptual/Safari_Developer_Guide/DebuggingYourWebsite/DebuggingYourWebsite.html">Apple's Web Inspector pages</a>.
+
+<p>If you aren't familiar with FireBug or Web Inspector,
 <span class="weinre">weinre</span> isn't going to make too much sense to you.
 <span class="weinre">weinre</span> reuses the user interface code from the
 <a href="http://trac.webkit.org/wiki/WebInspector">Web Inspector project at WebKit</a>,
-so if you've used Safari's Web Inspector or Chrome's Developer Tools,  
+so if you've used Safari's Web Inspector or Chrome's Developer Tools,
 <span class="weinre">weinre</span> will be very familiar.  If you're not
-familiar with Web Inspector, the link above to Google Chrome Developer Tools
-provides some documentation Real Web Inspector, which <span class="weinre">weinre</span> is based on.
+familiar with Web Inspector, the links above to Google's and Apple's documentation
+will be useful.
 
-<!--
-<div class="note">
-<p>NOTE: Please note that <span class="weinre">weinre</span> is still under development and 
-is not fully operational.  
-The current version only supports the following functionality:
+<p>Here's an example session using <span class="weinre">weinre</span>:
 
-<ul class="spaced">
-<li>basic console interaction, to capture <tt>console.log()</tt> messages, and 
-interactively execute JavaScript in the web page
-<li>displaying the DOM in the elements panel
-</ul>
+<p><img src="images/weinre-demo.jpg">
 
-</div>
--->
+<p>Two screen captures are shown above.  On the left is the
+<span class="weinre">weinre</span> <b>client</b> application, displaying debug
+information.
+On the right is the <b>target</b> web page, running in Mobile Safari in the iOS Simulator.
 
-<p>Here's what you can do with it:
+<p>In normal usage, you will be running the <b>client</b> application in a browser
+on your desktop/laptop, and running a <b>target</b> web page on your mobile device.
 
-<p><img src="images/gmail-green-target-client.jpg">
-
-<p>Two screen captures are shown above.  
-
-<p>The screen capture on the left is from an 
-iPod Touch, running the Mobile Safari app, visiting a browser-based email web site
-you may be familiar with.
-
-<p>The screen capture on the right is the from a laptop computer, running the
-<span class="weinre">weinre</span> debug client, debugging the web page on the left.  The DOM being displayed
-in the elements panel is from the HTML being displayed in the web browser on the iPod Touch.
-
-<p>You might think that green background in the email client is a bit horrifying.
-It's not normally green.  I made it green by executing the following JavaScript code
-in the <span class="weinre">weinre</span> console area (as you can see above):
+<p>In the session above, the debugger is display the Elements panel, with the
+embedded console expanded in the bottom third of the window.  In the console
+area, we've entered two statements:
 
 <pre>
-document.body.style.background = "green"
+document.body.style.backgroundColor
+document.body.style.backgroundColor = "pink"
 </pre>
+
+<p>The result of running the first statement shows the value of the body's background style is not set.
+The second statement sets the body's background to pink.  That horrifying pink
+background is then rendered in the <b>target</b>'s window.
+
+<p>In addition, an <tt>h1</tt> element is selected in the upper third of the
+Elements panel, which causes the side panels on the right to be filled in with
+relevant information.  In this case, the matched CSS rules for that <tt>h1</tt>
+element are being shown.
 
 <p>If you are familiar with WebKit's Web Inspector,
 a partial list of differences between it and <span class="weinre">weinre</span>
@@ -77,34 +76,31 @@ are listed below:
 
 <ul class="spaced">
 
-<li><span class="weinre">weinre</span> does not make use of any 'native' code, 
+<li><span class="weinre">weinre</span> does not make use of any 'native' code,
 it's all JavaScript (and currently Java code for the 'server').
 
-<li>Because <span class="weinre">weinre</span> doesn't use 'native' code, 
+<li>Because <span class="weinre">weinre</span> doesn't use 'native' code,
 it's functionality is limited.  For instance, source level debug of JavaScript
-is not possible.
-  
-<li>Because <span class="weinre">weinre</span> doesn't use 'native' code, 
+is not <span class="strike">possible</span>
+<a href="http://lexandera.com/aardwolf/">easy</a>.
+
+<li>Because <span class="weinre">weinre</span> doesn't use 'native' code,
 the debug target code will run on browsers
 without specialized debug support.  For instance, a browser running on your phone.
-  
-<li><span class="weinre">weinre</span> supports 'remote' interaction, 
-so you can run the debugger user interface on one 
+
+<li><span class="weinre">weinre</span> supports 'remote' interaction,
+so you can run the debugger user interface on one
 machine and can debug a web page running
 on another machine.  For instance, debug a web page displayed on your phone from your
 laptop.
-  
-<li>Because <span class="weinre">weinre</span> supports 'remote' interaction, 
+
+<li>Because <span class="weinre">weinre</span> supports 'remote' interaction,
 multiple debug clients can be debugging the same debug target at the same time.
 
 <li>One thing <b>not</b> different from Web Inspector is that the debug client
-user interface only runs on WebKit-based browsers.  Sorry folks.
+user interface only runs on WebKit-based browsers.
 
 </ul>
-
-<p>Find out more by clicking one of the links at the top or bottom of the page 
-- to see a walkthrough of
-how to use it, visit the <a href="TestDrive.html">Test Drive</a>.
 
 <!-- ======================================================== -->
 <h2>Supported Libraries and Platforms</h2>
@@ -127,7 +123,7 @@ but let us know.
 <li>versions of Prototype.js before version 1.7 are not supported,
 as they do not support the <tt>JSON.stringify()</tt> API correctly.  You
 will get an <tt>alert()</tt> in the web page you are debugging if you
-attempt to debug it with weinre and you are using an unsupported
+attempt to debug it with <span class="weinre">weinre</span> and you are using an unsupported
 version of Prototype.js.
 </ul>
 
@@ -137,7 +133,7 @@ version of Prototype.js.
 <ul>
 <li>weinre Mac application - Mac OS X 10.6 64-bit
 <li>Google Chrome 8.x
-<li>Apple Safari 5.x 
+<li>Apple Safari 5.x
 </ul>
 
 <h3>Platforms supported - debug target</h3>

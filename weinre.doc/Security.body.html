@@ -1,7 +1,7 @@
 <!--
  * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
+ *
  * Copyright (c) 2010, 2011 IBM Corporation
 -->
 
@@ -16,10 +16,10 @@
 no level of authentication for requests.
 
 <p>The primary security exposure with <span class="weinre">weinre</span> is via
-the debug server.  
+the debug server.
 
 <p>Currently, the server only reads files from the <tt>weinre.jar</tt> file,
-and from the <tt>~/.weinre/</tt> directory (for property files).  
+and from the <tt>~/.weinre/</tt> directory (for property files).
 The only thing the server writes to is <tt>stdout</tt> and <tt>stderr</tt>.
 
 <p>If you use the default <tt>--boundHost</tt> option value of
@@ -27,16 +27,16 @@ The only thing the server writes to is <tt>stdout</tt> and <tt>stderr</tt>.
 server can communicate with the debug server.  This probably isn't a big
 deal, since presumably you control the software running on that machine.
 
-<p>If you use a non-default <tt>--boundHost</tt> option value, 
+<p>If you use a non-default <tt>--boundHost</tt> option value,
 then <b>any software on any machine that can access that specified
 host can communicate with the debug server</b>.  This is a much bigger
 deal.
 
 <p>The most obvious exposure with using <tt>--boundHost</tt> and
-a specific hostname / ip address, is that any debug client or 
+a specific hostname / ip address, is that any debug client or
 debug target that can access that hostname / ip address can access
-the server.  For example, a rogue debug client could connect to 
-your debug target and fiddle about with it. 
+the server.  For example, a rogue debug client could connect to
+your debug target and fiddle about with it.
 
 <p>Other exposures include leaving a debug target injection
 script line (ie, <tt>&lt;script src="[...]/target/target-script.js"&gt;</tt>)
@@ -48,39 +48,6 @@ server running at that address.
 
 <ul class="spaced">
 
-
-<li><b>use HTTPS with basic auth</b>
-
-<p>This shouldn't be a big problem with the debug client, but may be a pain in the ass
-since basic auth can be a pain in the ass (trying to log out of it).
-
-<p>On the debug target side, this is tougher, since the only HTTP access is done via
-XHR.  So, presumably, we will need to tack on the userid/password to XHR requests,
-unless the browsers do that for us.  That is, I assume the browsers don't throw up
-a password prompt when an XHR returns with an auth-required response code.
-
-<p>Storing userid/passwords on the client isn't going to be much fun.  How do we even
-get these from the user?
-
-<p>Note that there is also a 'server discovery' issue we may want to do something
-about.  That is, how does the debug target even know the URL of the server?
-If we want to allow the user to "enter it from the target", then entering the
-userid/password can fit into the same scheme, I guess.  
-
-<p>Will need some light-weight userid/password store for the server, if
-we do this.
- 
-<p>Will need to get the horrifying SSL keystore dance crap with Java
-in some kind of usable state.  Should we ship a working, basic self-signed keystore
-that we recommend user's replace?
- 
-<li><b>use HTTPS with OAuth</b>
-
-<p>Been a while, not sure if OAuth even helps with this,
-or how hard it would be to integrate support for it.
-
-<p>Same issue with HTTPS and the SSL keystore above.
-
-<li><b>other ideas?</b>
+<li>Let's chat
 
 </ul>

@@ -3,7 +3,7 @@
 <!--
  * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
+ *
  * Copyright (c) 2010, 2011 IBM Corporation
 -->
 
@@ -12,32 +12,18 @@
 <title>weinre - @PAGE_NAME@</title>
 <link rel="stylesheet" href="css/main.css" type="text/css">
 <link rel="shortcut icon" href="images/weinre-icon-64x64.png" />
-<script src="scripts/main.js"></script>
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-736164-7']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
 </head>
 
 <body>
 
-<a class="no-decoration" href="https://github.com/phonegap/weinre"><div class="ribbon">Fork weinre on GitHub</div></a>
+<a class="no-decoration" href="https://github.com/callback/callback-weinre"><div class="ribbon">Fork weinre on GitHub</div></a>
 
 <!-- ======================================================================= -->
 <h1 class="page-title">weinre - @PAGE_NAME@</h1>
 
 <div class="toc">
   <a href="Home.html">Home</a>
-- <a href="TestDrive.html">Test Drive</a>
+- <a href="UserInterface.html">User Interface</a>
 - <a href="Installing.html">Installing</a>
 - <a href="Running.html">Running</a>
 - <a href="MultiUser.html">Multi-User</a>

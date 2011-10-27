@@ -1,7 +1,7 @@
 /*
  * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
+ *
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
@@ -17,8 +17,8 @@ body {
     left:                   0;
     border-right:           thin solid #000;
     border-bottom:          thin solid #000;
-    -moz-border-radius-bottomright:     0.5em; 
-    -webkit-border-bottom-right-radius: 0.5em;   
+    -moz-border-radius-bottomright:     0.5em;
+    -webkit-border-bottom-right-radius: 0.5em;
     padding:                0.25em 0.5em;
     background-color:       #FF0;
     font-style:             italic;
@@ -30,6 +30,11 @@ body {
 /*-----------------------------------------------------------------*/
 .no-decoration {
     text-decoration:        none;
+}
+
+/*-----------------------------------------------------------------*/
+.strike {
+    text-decoration:        line-through;
 }
 
 /*-----------------------------------------------------------------*/
@@ -123,9 +128,9 @@ tt {
     padding:               0.00em 0.5em;
     border-width:          1;
     border-style:          solid;
-    border-radius:         0.5em; 
-    -moz-border-radius:    0.5em; 
-    -webkit-border-radius: 0.5em;   
+    border-radius:         0.5em;
+    -moz-border-radius:    0.5em;
+    -webkit-border-radius: 0.5em;
 }
 
 /*-----------------------------------------------------------------*/
@@ -140,29 +145,29 @@ pre, xmp {
     margin-left:           1.4em;
     margin-right:          1.4em;
 	background:            #FFFFDF;
-	border-radius:         0.5em; 
-    -moz-border-radius:    0.5em; 
-    -webkit-border-radius: 0.5em;	
-	box-shadow:            0.3em 0.3em 0.3em 0em #DDD; 
-	-moz-box-shadow:       0.3em 0.3em 0.3em 0em #DDD; 
-	-webkit-box-shadow:    0.3em 0.3em 0.3em 0em #DDD; 
+	border-radius:         0.5em;
+    -moz-border-radius:    0.5em;
+    -webkit-border-radius: 0.5em;
+	box-shadow:            0.3em 0.3em 0.3em 0em #DDD;
+	-moz-box-shadow:       0.3em 0.3em 0.3em 0em #DDD;
+	-webkit-box-shadow:    0.3em 0.3em 0.3em 0em #DDD;
 }
 
 /*-----------------------------------------------------------------*/
 h2 {
     padding:               0.25em 0.50em;
     background-color:      #DDD;
-    border-radius:         0.5em; 
-    -moz-border-radius:    0.5em; 
-    -webkit-border-radius: 0.5em;   
+    border-radius:         0.5em;
+    -moz-border-radius:    0.5em;
+    -webkit-border-radius: 0.5em;
 }
 
 /*-----------------------------------------------------------------*/
 kewl {
-	box-shadow:            0.3em 0.3em 0.3em 0em #DDD; 
-	-moz-box-shadow:       0.3em 0.3em 0.3em 0em #DDD; 
-	-webkit-box-shadow:    0.3em 0.3em 0.3em 0em #DDD; 
-	border-radius:         0.5em; 
-    -moz-border-radius:    0.5em; 
-    -webkit-border-radius: 0.5em;	
+	box-shadow:            0.3em 0.3em 0.3em 0em #DDD;
+	-moz-box-shadow:       0.3em 0.3em 0.3em 0em #DDD;
+	-webkit-box-shadow:    0.3em 0.3em 0.3em 0em #DDD;
+	border-radius:         0.5em;
+    -moz-border-radius:    0.5em;
+    -webkit-border-radius: 0.5em;
 }
