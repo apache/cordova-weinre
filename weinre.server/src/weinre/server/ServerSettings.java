@@ -7,6 +7,10 @@
 
 package weinre.server;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -38,6 +42,7 @@ public class ServerSettings {
     private int         readTimeoutSeconds = 5;
     private int         deathTimeoutSeconds;
     private Properties  fileProperties;
+    private PrintWriter messageLog;
     
     //---------------------------------------------------------------
     static public ServerSettings getOptions(String[] commandLine) {
@@ -65,6 +70,7 @@ public class ServerSettings {
         options.addOption("reuseAddr",    true,  "force bind the port if already bound [true|false]");
         options.addOption("readTimeout",  true,  "seconds before timing out HTTP GETs");
         options.addOption("deathTimeout", true,  "seconds before considering connector dead");
+        options.addOption("messageLog",   true,  "file to log messages to");
        
         return options;
     }
@@ -126,6 +132,7 @@ public class ServerSettings {
         reuseAddr           = getBooleanFromOption(commandLine, "reuseAddr",    reuseAddr);
         readTimeoutSeconds  = getIntFromOption(commandLine,     "readTimeout",  readTimeoutSeconds,   0, 0x00FFFFFF);
         deathTimeoutSeconds = getIntFromOption(commandLine,     "deathTimeout", readTimeoutSeconds*3, 0, 0x00FFFF);
+        messageLog          = getPrintWriterFromOption(commandLine, "messageLog");
 
         // handle verbose logging
         if (commandLine.hasOption("verbose")) {
@@ -188,7 +195,29 @@ public class ServerSettings {
 
         return result;
     }
-    
+
+    //---------------------------------------------------------------
+    private PrintWriter getPrintWriterFromOption(CommandLine commandLine, String name) {
+        
+        String fileName = commandLine.getOptionValue(name);
+        if (null == fileName) {
+            fileName = fileProperties.getProperty(name);
+        }
+
+        if (null == fileName) return null;
+        
+        File file = new File(fileName);
+        
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            return new PrintWriter(fileWriter);
+        } 
+        catch (IOException e) {
+            error(name + " parameter file name '" + fileName + "' cannot be opened for writing.");
+            return null;
+        }
+    }
+
     //---------------------------------------------------------------
     private void error(String message) {
         System.out.println("error with command-line option: " + message);
@@ -266,7 +295,12 @@ public class ServerSettings {
     public boolean reuseAddr() {
         return reuseAddr;
     }
-    
+
+    //---------------------------------------------------------------
+    public PrintWriter getMessageLog() {
+        return messageLog;
+    }
+
     //---------------------------------------------------------------
     public String getNiceHostName() {
         String hostName = getBoundHostValue();

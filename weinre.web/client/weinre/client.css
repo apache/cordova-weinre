@@ -1,7 +1,7 @@
 /*
  * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
+ *
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
@@ -20,46 +20,46 @@
 }
 
 .panel.resources .cookie-storage-tree-item {
-	display: none;
+    display: none;
 }
 
 .panel.resources .frame-storage-tree-item {
-	display: none;
+    display: none;
 }
 
 .panel.resources .application-cache-storage-tree-item {
-	display: none;
+    display: none;
 }
 
 .panel.timeline .resources-size-graph-sidebar-item {
-	display: none;
+    display: none;
 }
 
 #main-status-bar .timeline-category-rendering {
-	display: none;
+    display: none;
 }
 
 #search {
-	display: none;
+    display: none;
 }
 
 #search-toolbar-label {
-	display: none;
+    display: none;
 }
 
 .weinre-connector-item {
     font-size: 140%;
 }
- 
+
 .weinre-connector-item.target {
-    text-decoration: underline; 
+    text-decoration: underline;
     color: blue;
 }
- 
+
 .weinre-connector-item.target.connected {
     color: #0D0;
 }
- 
+
 .weinre-connector-item.closed {
     color: #B00;
 }

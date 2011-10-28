@@ -3,7 +3,7 @@
 # ---
 # weinre is available under *either* the terms of the modified BSD license *or* the
 # MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
-# 
+#
 # Copyright (c) 2010, 2011 IBM Corporation
 # ---
 
@@ -17,17 +17,17 @@ import optparse
 def main():
     if len(sys.argv) < 3:
         error("expecting parameters outputFile inputDir")
-        
+
     min = False
     if sys.argv[1] == "-min":
         min = True
         oFileName = sys.argv[2]
         iDirName  = sys.argv[3]
-        
+
     else:
         oFileName = sys.argv[1]
         iDirName  = sys.argv[2]
-    
+
     entries  = os.listdir(iDirName)
     if 0 == len(entries): error("no files found in '" + iDirName + "'")
 
@@ -38,26 +38,26 @@ def main():
     for entry in entries:
         iFileName = os.path.join(iDirName, entry)
         if not os.path.exists(iFileName): error("File not found: '" + iFileName + "'")
-        
+
         iFile = open(iFileName, "r")
         contents = iFile.read()
         iFile.close()
-        
+
         result.append(json.loads(contents))
-        
+
     if min:
         result = minimize(result)
         jsonString = json.dumps(result)
-    
+
     else:
         jsonString = json.dumps(result, indent=4)
-        
-    jsString = "require('weinre/common/Weinre').getClass().addIDLs(%s)" % jsonString
+
+    jsString = "require('weinre/common/Weinre').addIDLs(%s)" % jsonString
 
     oFile = open(oFileName, "w")
     oFile.write(jsString)
     oFile.close()
-    
+
     log("generated collected json idls in: " + oFileName)
 
 #--------------------------------------------------------------------
@@ -66,7 +66,7 @@ def minimize(idl):
         for interface in module["interfaces"]:
             if "extendedAttributes" in interface:
                 del interface["extendedAttributes"]
-            
+
             if "methods" in interface:
                 for method in interface["methods"]:
                     if "returns" in method:
@@ -75,12 +75,12 @@ def minimize(idl):
                         del method["callbackParameters"]
                     if "extendedAttributes" in method:
                         del method["extendedAttributes"]
-                        
+
                     if "parameters" in method:
                         for parameter in method["parameters"]:
                             if "type" in parameter:
                                 del parameter["type"]
-        
+
     return idl
 
 #--------------------------------------------------------------------

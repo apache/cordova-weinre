@@ -10,6 +10,4 @@ java \
 	-Dfile.encoding=UTF-8 \
 	-classpath $CP \
 	weinre.server.Main \
-	--verbose      true \
 	--deathTimeout 120
-	

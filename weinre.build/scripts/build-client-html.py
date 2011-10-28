@@ -3,7 +3,7 @@
 # ---
 # weinre is available under *either* the terms of the modified BSD license *or* the
 # MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
-# 
+#
 # Copyright (c) 2010, 2011 IBM Corporation
 # ---
 
@@ -19,24 +19,24 @@ def main():
         error("expecting parameters [web directory]")
 
     webDir = sys.argv[1]
-    
+
     iFileName = os.path.join(webDir, "client/inspector.html")
     oFileName = os.path.join(webDir, "client/index.html")
     moduleDir = os.path.join(webDir, "weinre")
-    
+
     if not os.path.exists(iFileName): error("file does not exist: %s" % iFileName)
     if not os.path.exists(moduleDir): error("module directory does not exist: %s" % moduleDir)
     if not os.path.isdir(moduleDir):  error("module directory is not a directory: %s" % moduleDir)
-    
+
     createIndexFile(iFileName, oFileName, moduleDir)
 
 #--------------------------------------------------------------------
 def createIndexFile(iFileName, oFileName, moduleDir):
     with open(iFileName) as iFile: lines = iFile.readlines()
-    
+
     pattern_head_start = re.compile(r"^\s*<meta http-equiv=\"content-type\".*$")
     pattern_head_end   = re.compile(r"^\s*</head>\s$")
-    
+
     newLines   = []
     foundStart = False
     foundEnd   = False
@@ -44,7 +44,7 @@ def createIndexFile(iFileName, oFileName, moduleDir):
         if pattern_head_start.match(line):
             foundStart = True
             newLines.append(line)
-            
+
             newLines.append("<!-- ========== weinre additions: starting ========== -->\n")
             newLines.extend([
                 '<meta http-equiv="X-UA-Compatible" content="chrome=1">\n'
@@ -54,29 +54,28 @@ def createIndexFile(iFileName, oFileName, moduleDir):
                 '<script type="text/javascript" src="weinre/hacks.js"></script>\n',
                 '<script type="text/javascript" src="../modjewel-require.js"></script>\n',
                 '<script type="text/javascript">require("modjewel").warnOnRecursiveRequire(true)</script>\n',
-                '<script type="text/javascript" src="../scooj.transportd.js"></script>\n',
             ])
-            
+
             for module in getModules(moduleDir):
                 newLines.append('<script type="text/javascript" src="../%s"></script>\n' % module)
-                
+
             newLines.append("<!-- ========== weinre additions: done ========== -->\n")
-            
+
         elif pattern_head_end.match(line):
             foundEnd = True
             newLines.append("<!-- ========== weinre additions: starting ========== -->\n")
             newLines.append('<link rel="stylesheet" type="text/css" href="weinre/client.css">\n')
             newLines.append('<script type="text/javascript" src="../interfaces/all-json-idls-min.js"></script>\n')
-            newLines.append('<script type="text/javascript">require("weinre/client/Client").getClass().main()</script>\n')
+            newLines.append('<script type="text/javascript">require("weinre/client/Client").main()</script>\n')
             newLines.append("<!-- ========== weinre additions: done ========== -->\n")
             newLines.append(line)
-        
+
         else:
             newLines.append(line)
-            
+
     if not foundStart: error("didn't find the location to start writing")
     if not foundEnd:   error("didn't find the location to finish writing")
-    
+
     with open(oFileName, "w") as oFile: oFile.writelines(newLines)
 
     log("created %s" % oFileName)
@@ -84,15 +83,15 @@ def createIndexFile(iFileName, oFileName, moduleDir):
 #--------------------------------------------------------------------
 def getModules(moduleDir):
     modules = []
-    
+
     for module in os.listdir(os.path.join(moduleDir, "common")):
         modules.append("weinre/common/%s" % module)
-    
+
     for module in os.listdir(os.path.join(moduleDir, "client")):
         modules.append("weinre/client/%s" % module)
 
     return modules
-        
+
 #--------------------------------------------------------------------
 def log(message):
     message = "%s: %s" % (PROGRAM_NAME, message)

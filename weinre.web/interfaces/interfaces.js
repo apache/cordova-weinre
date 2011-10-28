@@ -1,7 +1,7 @@
 /*
  * weinre is available under *either* the terms of the modified BSD license *or* the
  * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
+ *
  * Copyright (c) 2010, 2011 IBM Corporation
  */
 
@@ -22,7 +22,7 @@ var e_showJava
 
 var NativeTypes = "int any number boolean string void".split(" ")
 
-var IDLTools = require("weinre/common/IDLTools").getClass()
+var IDLTools = require("weinre/common/IDLTools")
 
 if (!window.localStorage) {
     window.localStorage = {
@@ -39,7 +39,7 @@ function onLoad() {
     e_showIdl        = document.getElementById("show-Idl")
     e_showJavaScript = document.getElementById("show-JavaScript")
     e_showJava       = document.getElementById("show-Java")
-    
+
     setUpShowCheckBoxes()
     populateInterfacesList(IDLTools.getIDLsMatching(/.*/))
 }
@@ -54,23 +54,23 @@ function setUpShowCheckBoxes() {
 //-----------------------------------------------------------------------------
 function setUpShowCheckBox(element, key) {
     var value = localStorage.getItem(key)
-    if (null == value) 
+    if (null == value)
         value = true
     else
         value = (value == "true")
-    
+
     element.checked    = value
     element.storageKey = key
-    
+
     element.addEventListener("click", el_showCheckBoxClicked, false)
 }
 
 //-----------------------------------------------------------------------------
 function el_showCheckBoxClicked(event) {
     var element = event.target
-    
+
     localStorage.setItem(element.storageKey, element.checked)
-    
+
     reapplyDisplayStyle("." + element.storageKey, element.checked)
 }
 
@@ -85,25 +85,25 @@ function reapplyDisplayStyles() {
 function reapplyDisplayStyle(className, value) {
     value = value ? "block" : "none"
     ;[].slice.call(document.querySelectorAll(className)).forEach(function(element) {
-        element.style.display = value 
+        element.style.display = value
     })
 }
 
 //-----------------------------------------------------------------------------
 function populateInterfacesList(intfs) {
     e_interfaceList.innerHTML = ""
-        
+
     fixedIntfs = []
     intfs.forEach(function(intf){
         fixedIntfs.push(intf.name)
         Interfaces[intf.name] = intf
-            
+
         if (!intf.methods)    intf.methods    = []
         if (!intf.attributes) intf.attributes = []
     })
-    
+
     intfs = fixedIntfs
-    
+
     intfs.sort()
     intfs.forEach(function(intf){
         var a  = document.createElement("a")
@@ -111,7 +111,7 @@ function populateInterfacesList(intfs) {
         a.innerHTML     = intf
         a.interfaceName = intf
         a.addEventListener("click", el_interfaceClicked, false)
-        
+
         var li = document.createElement("li")
         li.appendChild(a)
         e_interfaceList.appendChild(li)
@@ -128,17 +128,17 @@ function el_interfaceClicked(event) {
 //-----------------------------------------------------------------------------
 function showInterface(interfaceName) {
     var intf = Interfaces[interfaceName]
-    
+
     e_interfaceName.innerHTML = interfaceName
-    
+
     var html = []
 
     showInterfaceIdl(intf, html)
     showInterfaceJavaScript(intf, html)
     showInterfaceJava(intf, html)
-    
+
     e_interfaceBody.innerHTML = html.join("\n")
-    
+
     reapplyDisplayStyles()
 }
 
@@ -148,17 +148,17 @@ window.showInterface = showInterface
 function showInterfaceIdl(intf, html) {
     html.push("<div class='show-Idl'><h3>IDL</h3><pre>")
     html.push("interface {")
-    
+
     intf.methods.forEach(function(method){
         showInterfaceIdlMethod(method, html)
     })
-    
+
     if (intf.attributes.length > 0) html.push("<table>")
     intf.attributes.forEach(function(attribute){
         showInterfaceIdlAttribute(attribute, html)
     })
     if (intf.attributes.length > 0) html.push("</table>")
-    
+
     html.push("};")
     html.push("</pre></div>")
 }
@@ -166,9 +166,9 @@ function showInterfaceIdl(intf, html) {
 //-----------------------------------------------------------------------------
 function showInterfaceIdlMethod(method, html) {
     var line = "\n   "
-    
+
     var allParameters = method.parameters.concat(method.callbackParameters)
-    
+
     line += getIdlType(method.returns)
     line += " <span class='methodName'>" + method.name + "</span> (" + getIdlParameterList(allParameters) + ");"
     html.push(line)
@@ -177,9 +177,9 @@ function showInterfaceIdlMethod(method, html) {
 //-----------------------------------------------------------------------------
 function getIdlParameterList(parameters) {
     var result = []
-    
+
     if (parameters.length == 0) return "";
-    
+
     result.push("<table>")
     parameters.forEach(function(parameter, index, list){
         var comma = (index == list.length-1) ? "" : ","
@@ -188,7 +188,7 @@ function getIdlParameterList(parameters) {
         result.push("<td>" + getIdlType(parameter.type))
         result.push("<td>" + "<span class='parameterName tdIndent'>" + parameter.name + comma + "</span>")
     })
-    
+
     result.push("</table>")
     return result.join("\n") + Indent
 }
@@ -196,19 +196,19 @@ function getIdlParameterList(parameters) {
 //-----------------------------------------------------------------------------
 function getIdlType(type) {
     var result
-    
-    
+
+
     if (-1 == NativeTypes.indexOf(type.name)) {
         result = "<a href='javascript:showInterface(\"" + type.name + "\"); void(0);'>" + type.name + "</a>"
     }
     else {
         result = type.name
     }
-    
+
     for (var i=0; i<type.rank; i++) {
         result += "[]"
     }
-    
+
     return "<span class='type'>" + result + "</span>"
 }
 
@@ -224,8 +224,8 @@ IDL2Java = {
 //-----------------------------------------------------------------------------
 function getJavaType(type) {
     var result
-    
-    
+
+
     if (-1 == NativeTypes.indexOf(type.name)) {
         result = "<a href='javascript:showInterface(\"" + type.name + "\"); void(0);'>" + type.name + "</a>"
     }
@@ -236,11 +236,11 @@ function getJavaType(type) {
             console.log("Unable to translate IDL type to Java: " + type.name)
         }
     }
-    
+
     for (var i=0; i<type.rank; i++) {
         result += "[]"
     }
-    
+
     return "<span class='type'>" + result + "</span>"
 }
 
@@ -248,34 +248,34 @@ function getJavaType(type) {
 //-----------------------------------------------------------------------------
 function showInterfaceIdlAttribute(attribute, html) {
     var line = "<tr><td>" + Indent + "attribute "
-        
+
     line += getIdlType(attribute.type)
     line += "<td><span class='attributeName tdIndent'>" + attribute.name + "</span>;"
     html.push(line)
-    
+
 }
 
 //-----------------------------------------------------------------------------
 function showInterfaceJavaScript(intf, html) {
     html.push("<div class='show-JavaScript'><h3>JavaScript</h3><pre>")
-    
+
     var line = ""
-        
+
     line += "\n//-----------------------------------------------------------------------------"
-    line += "\n<span class='interfaceName'>class " + intf.name + "</span>"        
+    line += "\n<span class='interfaceName'>class " + intf.name + "</span>"
     html.push(line)
-    
+
     intf.methods.forEach(function(method){
         showInterfaceJavaScriptMethod(intf, method, html)
     })
-    
+
     html.push("</pre></div>")
 }
 
 //-----------------------------------------------------------------------------
 function showInterfaceJavaScriptMethod(intf, method, html) {
     var line = ""
-        
+
     line += "\n//-----------------------------------------------------------------------------"
     line += "\n<span class='methodName'>method " + method.name + "</span>(" + getJavaScriptParameterListSimple(method.parameters, method.returns) + ")"
     line += "\n    // callback: function(" + getJavaScriptCallbackParameterListSimple(method.callbackParameters) + ")"
@@ -287,7 +287,7 @@ function showInterfaceJavaScriptMethod(intf, method, html) {
 //-----------------------------------------------------------------------------
 function getJavaScriptParameterList(parameters, returnType) {
     var result = []
-    
+
     result.push("<table>")
     parameters.forEach(function(parameter){
         result.push("<tr>")
@@ -298,7 +298,7 @@ function getJavaScriptParameterList(parameters, returnType) {
     result.push("<tr>")
     result.push("<td>" + Indent2 + "<span class='parameterName'>callback</span>")
     result.push("<td><span class='tdIndent'>// function(error, " + getIdlType(returnType) + ")</span>")
-    
+
     result.push("</table>")
     return result.join("\n") + Indent
 }
@@ -306,7 +306,7 @@ function getJavaScriptParameterList(parameters, returnType) {
 //-----------------------------------------------------------------------------
 function getJavaScriptParameterListSimple(parameters, returnType) {
     var result = []
-    
+
     parameters.forEach(function(parameter){
         if (parameter.out) return
         result.push("<span class='type'>/*" + getIdlType(parameter.type) + "*/ </span><span class='parameterName'>" + parameter.name + "</span>")
@@ -319,7 +319,7 @@ function getJavaScriptParameterListSimple(parameters, returnType) {
 //-----------------------------------------------------------------------------
 function getJavaScriptCallbackParameterListSimple(parameters) {
     var result = []
-    
+
     parameters.forEach(function(parameter){
         if (!parameter.out) return
         result.push("/*" + getIdlType(parameter.type) + "*/ "+ parameter.name)
@@ -342,7 +342,7 @@ function showInterfaceJava(intf, html) {
 //-----------------------------------------------------------------------------
 function showInterfaceJavaMethod(intf, method, html) {
     var line = ""
-        
+
     line += "\n    /**"
     line += "\n     * "
     line += "\n     */"
@@ -358,7 +358,7 @@ function showInterfaceJavaMethod(intf, method, html) {
 //-----------------------------------------------------------------------------
 function getJavaParameterList(parameters, returnType) {
     var result = []
-    
+
     result.push("<table>")
     parameters.forEach(function(parameter){
         result.push("<tr>")
@@ -369,7 +369,7 @@ function getJavaParameterList(parameters, returnType) {
     result.push("<tr>")
     result.push("<td>" + Indent2 + "<span class='parameterName'>callback</span>")
     result.push("<td><span class='tdIndent'>// function(error, " + getIdlType(returnType) + ")</span>")
-    
+
     result.push("</table>")
     return result.join("\n") + Indent
 }
@@ -392,16 +392,16 @@ function getJavaParameterListSimple(parameters, returnType) {
 //-----------------------------------------------------------------------------
 function getJavaCallbackParameterListSimple(parameters) {
     var result = []
-    
+
     parameters.forEach(function(parameter){
         if (!parameter.out) return
         result.push("/*" + getJavaType(parameter.type)  + " " + parameter.name + "*/ (Object) null")
     })
 
     result = result.join(", ")
-    
+
     if (result != "") result = ", " + result
-    
+
     return result
 }
 
