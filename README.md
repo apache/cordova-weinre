@@ -1,2 +1,2 @@
-For more information on weinre, please visit
-[https://github.com/callback/callback-weinre/](https://github.com/callback/callback-weinre/)
+For more information on weinre:
+[http://callback.github.com/callback-weinre/](http://callback.github.com/callback-weinre/)
