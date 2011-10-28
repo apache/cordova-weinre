@@ -52,12 +52,12 @@ instrumentedCallback = (code, callSite) ->
         try
             return code.apply(this, arguments)
         catch e
-            console.log "exception in callback: #{e}"
-            console.log "  callsite: #{callSite}"
+            console.error "exception in callback: #{e}"
+            console.error "  callsite: #{callSite}"
 
             if e.stack
-                console.log "stack at time of exception:"
-                console.log e.stack
+                console.error "stack at time of exception:"
+                console.error e.stack
 
             throw e
 

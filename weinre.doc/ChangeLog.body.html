@@ -11,6 +11,66 @@
 <p><a href="https://github.com/callback/callback-weinre/downloads">https://github.com/callback/callback-weinre/downloads</a>
 
 <!-- ======================================================================= -->
+<h2>2011/10/28 - version 1.6.0</h2>
+
+<ul>
+
+<li><p>The Network panel has been added to weinre, which will display information
+for any XHRs that you issue.
+
+<li><p>Error handling for some built-in callbacks has been added.  The support
+is very similar to what's provided in the
+<a href="https://github.com/pmuellr/log-callback-error">log-callback-error project</a>,
+though the implementation is different.
+
+<li><p>The element highlighter has been modified to show brighter colors.
+The colors also now more closely match the Web Inspector colors.
+Currently, there are some artifacts in the corners in some cases, but it's not
+clear to me this is a huge problem - in fact, maybe it's a feachur.  ~shrug~
+As part of this clean up, I've made the element highlighter pluggable.  If you
+think you can do better, it should be pretty straight-forward to code up a
+new one.  Bring it on.
+
+<li><p>The JavaScript code for weinre has been converted from the "scoop" DSL
+format to CoffeeScript.  You no longer have a valid excuse for not hacking the
+code.
+
+<li><p>The "Test Drive" page of the doc has been removed and replaced with
+the new "User Interface" page.
+
+<li><p>weinre now adds an "error" listener to window.  For JavaScript engines
+that support "window onerror", you will now see a message logged to the console
+when an error occurs anywhere in your JavaScript code.  Unfortunately, just
+as support for "window onerror" is becoming available in JavaScript, the browsers
+are neutering it's support.  Depending on your browser, you may or may not
+see these errors reported, and even if you do, they may not give you <b>any</b>
+useful information.  Thanks to Ryan Seddon for supplying the following
+backgrounder links for your enjoyment:
+
+<ul>
+<li><a href="http://lists.whatwg.org/htdig.cgi/whatwg-whatwg.org/2011-September/033252.html">http://lists.whatwg.org/htdig.cgi/whatwg-whatwg.org/2011-September/033252.html</a>
+<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=568564">https://bugzilla.mozilla.org/show_bug.cgi?id=568564</a>
+<li><a href="http://www.w3.org/Bugs/Public/show_bug.cgi?id=14177">http://www.w3.org/Bugs/Public/show_bug.cgi?id=14177</a>
+<li><a href="https://bugs.webkit.org/show_bug.cgi?id=70574">https://bugs.webkit.org/show_bug.cgi?id=70574</a>
+</ul>
+
+</ul>
+
+<p>issues resolved:
+<ul>
+<li> <a href="https://issues.apache.org/jira/browse/CB-1">   issue apache/callback issue 1</a> - update the doc
+<li> <a href="https://github.com/phonegap/weinre/issues/41"> issue phonegap/weinre 41</a> - add support for XHRs on Network panel
+<li> <a href="https://github.com/phonegap/weinre/issues/40"> issue phonegap/weinre 40</a> - clean up spurious messages in the server console
+<li> <a href="https://github.com/phonegap/weinre/issues/38"> issue phonegap/weinre 38</a> - cleanup some of the exception handler bits
+<li> <a href="https://github.com/phonegap/weinre/issues/37"> issue phonegap/weinre 37</a> - Timeout function does not pass arguments
+<li> <a href="https://github.com/phonegap/weinre/issues/35"> issue phonegap/weinre 35</a> - convert JavaScript in weinre from scoop to CoffeeScript
+<li> <a href="https://github.com/phonegap/weinre/issues/20"> issue phonegap/weinre 20</a> - add support for window.onerror
+<li> <a href="https://github.com/phonegap/weinre/issues/19"> issue phonegap/weinre 19</a> - 404 error on /client/index.html in Mac app (incomplete build?)
+<li> <a href="https://github.com/phonegap/weinre/issues/11"> issue phonegap/weinre 11</a> - provide better error handling - by hook or by crook
+<li> <a href="https://github.com/phonegap/weinre/issues/10"> issue phonegap/weinre 10</a> - element highlighter code in the target is just awful
+</ul>
+
+<!-- ======================================================================= -->
 <h2>2011/07/22 - version 1.5.0</h2>
 
 <ul>

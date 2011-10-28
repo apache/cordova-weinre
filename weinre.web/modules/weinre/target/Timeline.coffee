@@ -138,32 +138,29 @@ module.exports = class Timeline
     @addRecord_XHRReadyStateChange: (method, url, id, xhr) ->
         return unless Timeline.isRunning()
 
+        record = {}
+        record.startTime = Date.now()
+        record.category  = name: "loading"
+
         if xhr.readyState == XMLHttpRequest.OPENED
-            record =
-                type:      TimelineRecordType.ResourceSendRequest
-                category:  name: "loading"
-                startTime: Date.now()
-                data:
-                    identifier:    id
-                    url:           url
-                    requestMethod: method
+            record.type = TimelineRecordType.ResourceSendRequest
+            record.data =
+                identifier:    id
+                url:           url
+                requestMethod: method
 
         else if xhr.readyState == XMLHttpRequest.DONE
-            record =
-                type: TimelineRecordType.ResourceReceiveResponse
-                category: name: "loading"
-                startTime: Date.now()
-                data:
-                    identifier:            id
-                    statusCode:            xhr.status
-                    mimeType:              xhr.getResponseHeader("Content-Type")
-                    expectedContentLength: xhr.getResponseHeader("Content-Length")
-                    url:                   url
+            record.type = TimelineRecordType.ResourceReceiveResponse
+            record.data =
+                identifier:            id
+                statusCode:            xhr.status
+                mimeType:              xhr.getResponseHeader("Content-Type")
+                expectedContentLength: xhr.getResponseHeader("Content-Length")
+                url:                   url
         else
             return
 
         Weinre.wi.TimelineNotify.addRecordToTimeline record
-
 
     #---------------------------------------------------------------------------
     @installGlobalListeners: ->

@@ -57,6 +57,7 @@
         <delete dir="${TMP}"/>
         <delete dir="${CACHED}"/>
         <delete dir="${VENDOR}"/>
+        <delete dir="node_modules"/>
     </target>
 
     <!-- ============================================================
@@ -528,7 +529,7 @@
         <mkdir  dir="${OUT}/files/weinre-src"/>
         <copy todir="${OUT}/files/weinre-src" file="${OUT}/build-info.txt" />
         <copy todir="${OUT}/files/weinre-src/weinre.application"> <fileset dir="../weinre.application" excludes="**/bin/"/></copy>
-        <copy todir="${OUT}/files/weinre-src/weinre.build">       <fileset dir="../weinre.build"       excludes="**/bin/, **/out/, **/cached/, **/vendor/, **/tmp/"/></copy>
+        <copy todir="${OUT}/files/weinre-src/weinre.build">       <fileset dir="../weinre.build"       excludes="**/bin/, **/out/, **/cached/, **/vendor/, **/tmp/, **/node_modules/"/></copy>
         <copy todir="${OUT}/files/weinre-src/weinre.doc">         <fileset dir="../weinre.doc"         excludes="**/bin/"/></copy>
         <copy todir="${OUT}/files/weinre-src/weinre.server">      <fileset dir="../weinre.server"      excludes="**/bin/"/></copy>
         <copy todir="${OUT}/files/weinre-src/weinre.web">         <fileset dir="../weinre.web"         excludes="**/bin/"/></copy>
