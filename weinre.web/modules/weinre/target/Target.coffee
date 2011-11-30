@@ -17,7 +17,6 @@ CheckForProblems              = require('./CheckForProblems')
 NodeStore                     = require('./NodeStore')
 CSSStore                      = require('./CSSStore')
 ElementHighlighter            = require('./ElementHighlighter')
-ExceptionalCallbacks          = require('./ExceptionalCallbacks')
 InjectedScriptHostImpl        = require('./InjectedScriptHostImpl')
 NetworkRequest                = require('./NetworkRequest')
 WeinreTargetEventsImpl        = require('./WeinreTargetEventsImpl')
@@ -155,7 +154,6 @@ module.exports = class Target
             Target.handleError e
         ), false
 
-        ExceptionalCallbacks.addHooks()
         NetworkRequest.installNativeHooks()
 
     #---------------------------------------------------------------------------

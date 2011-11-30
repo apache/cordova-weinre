@@ -10,11 +10,6 @@ var started = false
 
 var buttonStartStuff
 var buttonClearOutput
-var buttonErrorDOMEvent
-var buttonErrorWindowEvent
-var buttonErrorXHREvent
-var buttonErrorSetTimeout
-var buttonErrorSetInterval
 var outputElement
 var storageIndex = 0
 var db
@@ -29,11 +24,6 @@ window.WeinreServerId = hash
 function onLoad() {
     if (!buttonStartStuff)       buttonStartStuff       = document.getElementById("button-start-stuff")
     if (!buttonClearOutput)      buttonClearOutput      = document.getElementById("button-clear-output")
-    if (!buttonErrorDOMEvent)    buttonErrorDOMEvent    = document.getElementById("button-error-DOM-event")
-    if (!buttonErrorWindowEvent) buttonErrorWindowEvent = document.getElementById("button-error-window-event")
-    if (!buttonErrorXHREvent)    buttonErrorXHREvent    = document.getElementById("button-error-XHR-event")
-    if (!buttonErrorSetTimeout)  buttonErrorSetTimeout  = document.getElementById("button-error-setTimeout")
-    if (!buttonErrorSetInterval) buttonErrorSetInterval = document.getElementById("button-error-setInterval")
     if (!outputElement)          outputElement          = document.getElementById("output")
 
     buttonStartStuff.addEventListener("click", function() {
@@ -53,52 +43,11 @@ function onLoad() {
         started = !started
     })
 
-    buttonErrorDOMEvent.addEventListener("click", function buttonClicked() {
-        willThrowError()
-    })
-
-    buttonErrorWindowEvent.addEventListener("click", function() {
-        var event = document.createEvent("Events")
-        event.initEvent("demo", true, true)
-        window.dispatchEvent(event)
-    })
-
-    window.addEventListener("demo", willThrowError)
-
-    buttonErrorXHREvent.addEventListener("click", function() {
-        var xhr = new XMLHttpRequest()
-        xhr.addEventListener("readystatechange", willThrowError)
-        xhr.open("GET", "something.that.doesn't.exist")
-        xhr.send()
-    })
-
-    buttonErrorSetTimeout.addEventListener("click", function() {
-        setTimeout(willThrowError, 1000)
-    })
-
-    buttonErrorSetInterval.addEventListener("click", function() {
-        var intervalID
-
-        setTimeout(function() {clearInterval(intervalID)}, 3000)
-
-        intervalID = setInterval(willThrowError, 1000)
-    })
-
     buttonClearOutput.addEventListener("click", function() {
         outputElement.innerHTML = ""
     })
 
     openTheDatabase()
-}
-
-//------------------------------------------------------------------------------
-function willThrowError() {
-    throwsError()
-}
-
-function throwsError() {
-    x = null
-    x.doSomething()
 }
 
 //------------------------------------------------------------------------------
