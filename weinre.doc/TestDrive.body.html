@@ -1,16 +1,28 @@
 <!--
- * weinre is available under *either* the terms of the modified BSD license *or* the
- * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
- * Copyright (c) 2010, 2011 IBM Corporation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
 -->
 
-<p>This page gives a walk through of using <span class="weinre">weinre</span> to 
+<p>This page gives a walk through of using <span class="weinre">weinre</span> to
 debug a sample page that is provided with <span class="weinre">weinre</span> itself.  Read
 this walk through first, then follow along and run <span class="weinre">weinre</span> yourself
-to make sure it's installed and running correctly.  
+to make sure it's installed and running correctly.
 
-<p>You may also want to check out 
+<p>You may also want to check out
 <a href="http://www.youtube.com/watch?v=gaAI29UkVCc">the movie</a>, which
 shows a walk through with the demo page.
 
@@ -21,7 +33,7 @@ demo page, but are close enough.
 
 <p>After you're done with the
 walk through, if you want to learn how to debug your own web pages with
-<span class="weinre">weinre</span>, 
+<span class="weinre">weinre</span>,
 head to the
 <a href="Running.html">Running page</a> for more information.
 
@@ -39,26 +51,26 @@ server.  To debug a web page on a remote device (later), you'll need to
 bind to something other than just localhost.  The default configuration
 is the safe one, and good enough to run this walk through.
 
-<p>To start the server,  
+<p>To start the server,
 <a href="Installing.html">install the <tt>weinre.jar</tt> file</a>,
 then run the following command:
 
 <pre>
 java -jar weinre.jar -httpPort 8081
-</pre> 
+</pre>
 
 <p><img src="images/weinre-con-01-h.jpg">
 
-<p>You should see some output in your console, 
+<p>You should see some output in your console,
 like this:
 
 <p><img src="images/weinre-con-02-h.jpg">
 
-<p>If you see messages about "Address in use", 
+<p>If you see messages about "Address in use",
 that means that some other program is using port 8081, and so you'll need to
 use a different one.
 
-<p>Note that the server is now running.  
+<p>Note that the server is now running.
 When you are ready to stop the server, kill the
 program with Ctrl-C or whatever.
 
@@ -90,7 +102,7 @@ We'll click that link a little later.
 Note that you probably want to open this page in
 another window (not just another tab, and not
 replacing this page).
-The link should be 
+The link should be
 <tt><a href="http://localhost:8081/client">http://localhost:8081/client</a></tt>.
 
 <p>You should see the following page in your browser:
@@ -103,12 +115,12 @@ landed on the "Remote" panel; there are tabs for three panels
 shown, at the
 top of the web page - "Remote", "Elements", and "Console".
 
-<p>The "Remote" panel 
+<p>The "Remote" panel
 provides information about what clients and targets
 are connected to the server, and other goodies.
 
 <p>The "Remote" panel is not included with the desktop browser's
-version of Web Inspector.  But the other two panels, 
+version of Web Inspector.  But the other two panels,
 "Elements" and "Console" are the exact same panels from the
 desktop browser version of Web Inspector.
 
@@ -138,7 +150,7 @@ the debug server.  How would you know?
 <p><img src="images/weinre-cli-03-p.jpg">
 
 <p>You should now see that there's a target connected, as indicated
-by the entry in the Targets section.  That's 
+by the entry in the Targets section.  That's
 your demo page - you know because it shows the URL.
 
 <p>It's also green, meaning that a client is connected to it.  That's you!
@@ -146,7 +158,7 @@ The entry for your client also turned green, indicating that it's connected
 to a target.
 
 <p>The debug client will always attempt to connect to the most recently
-connected debug target.  But you can also click on a target to 
+connected debug target.  But you can also click on a target to
 explicitly switch to it.
 
 <p>Now what?  Try clicking the Elements tab, as indicated
@@ -164,7 +176,7 @@ expander, as indicated by the red arrow below.
 
 <p><img src="images/weinre-cli-04-h.jpg">
 
-<p>The console is now open, as shown below.  
+<p>The console is now open, as shown below.
 
 <p><img src="images/weinre-cli-05-h.jpg">
 
@@ -177,7 +189,7 @@ following line in the console:
 document.body.style.background = "green"
 </pre>
 
-<p>Guess what that does? 
+<p>Guess what that does?
 
 <p><img src="images/weinre-cli-06-h.jpg">
 

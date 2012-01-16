@@ -1,10 +1,22 @@
 #!/usr/bin/env python
 
 # ---
-# weinre is available under *either* the terms of the modified BSD license *or* the
-# MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
-# 
-# Copyright (c) 2010, 2011 IBM Corporation
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
 # ---
 
 import os
@@ -19,34 +31,34 @@ import optparse
 
 #--------------------------------------------------------------------
 def main():
-    
+
     # parse args
     parser = optparse.OptionParser()
     parser.add_option("--validate",  action="store_true",                 help="validate types")
     parser.add_option("--anyType",   action="append",     metavar="TYPE", help="treat TYPE as an any")
     (options, args) = parser.parse_args()
-    
+
     if options.anyType:
         AnyTypes.extend(options.anyType)
-    
+
     if len(args) <= 0: error("no input files specified")
     iFileName = args[0]
-    
-    if len(args) <= 1: 
+
+    if len(args) <= 1:
         oFileName = "<stdout>"
     else:
         oFileName = args[1]
-    
+
     # read input
     iFile = file(iFileName)
     content = iFile.read()
     iFile.close()
-        
+
     # convert to JSONable
     module = parseIDL(content)
-    
+
     splitNotifyInterfaces(module)
-    
+
 #    if module["name"] == "core":
 #        if len(module["interfaces"]) == 1:
 #            if module["interfaces"][0]["name"] == "Inspector":
@@ -54,57 +66,57 @@ def main():
 
     # convert out parms to callback parms
     convertOutParms(module)
-    
+
     # validate
     if options.validate: validate(module)
 
     # convert to JSON
     jsonModule = json.dumps(module, indent=3)
-    
+
     # write output
-    if oFileName == "<stdout>": 
+    if oFileName == "<stdout>":
         oFile = sys.stdout
     else:
         oFile = file(oFileName,"w")
-        
+
     oFile.write(jsonModule)
 
     # close file
-    if oFileName != "<stdout>": 
+    if oFileName != "<stdout>":
         oFile.close()
         log("generated json file '%s'" %oFileName)
 
 #--------------------------------------------------------------------
 def convertOutParms(module):
     for interface in module["interfaces"]:
-        
+
         if "methods" in interface:
             for method in interface["methods"]:
                 method["callbackParameters"] = []
                 newParameters = []
-                
+
                 for parameter in method["parameters"]:
                     if "out" in parameter:
                         method["callbackParameters"].append(parameter)
                     else:
                         newParameters.append(parameter)
-                        
+
                 method["parameters"] = newParameters
 
 #--------------------------------------------------------------------
 def splitNotifyInterfaces(module):
     newInterfaces = {}
-    
+
     for interface in module["interfaces"][:]:
 
         if "methods" in interface:
             for method in interface["methods"][:]:
                 if "extendedAttributes" not in method: continue
                 if "notify" not in method["extendedAttributes"]: continue
-                
+
                 newInterfaceName = interface["name"] + "Notify"
                 newInterface     = newInterfaces.get(newInterfaceName)
-                
+
                 if not newInterface:
                     newInterface = {
                         "name": newInterfaceName,
@@ -126,16 +138,16 @@ def splitNotifyInterfaces(module):
 def splitInspectorInterfaces(module):
     intfOrig      = module["interfaces"][0]
     newInterfaces = {}
-    
+
     module["interfaces"] = []
 
     for method in intfOrig["methods"]:
         if "domain" not in method["extendedAttributes"]:
             log("Inspector method %s does not have a 'domain' extended attribute" % (method["name"]))
             continue
-            
+
         intfName = method["extendedAttributes"]["domain"]
-        
+
         if "notify" in method["extendedAttributes"]:
             intfName += "Notify"
 
@@ -153,15 +165,15 @@ def splitInspectorInterfaces(module):
             }
             newInterfaces[intfName] = intf
             module["interfaces"].append(intf)
-            
+
         intf["methods"].append(method)
-            
+
 #        for parameter in method["parameters"]:
 #            if "out" not in parameter:
 #                log("Inspector method %s has an unexpected non-out parameter %s" % (method["name"], parameter["name"]))
 #            else:
 #                del parameter["out"]
-        
+
 #        intfWebInspector["methods"].append(method)
 
 #--------------------------------------------------------------------
@@ -169,23 +181,23 @@ def validate(module):
     interfaces = {}
 
     errors = False
-    
+
     # build table of interface names
     for interface in module["interfaces"]:
         interfaces[interface["name"]] = interface
-        
+
     # check interfaces
     for interface in module["interfaces"]:
-        
+
         if "methods" in interface:
             for method in interface["methods"]:
                 location = "%s.%s" % (interface["name"], method["name"])
                 errors = checkType(location, interfaces, method["returns"]) or errors
-                
+
                 for parameter in method["parameters"]:
                     errors = checkType(location, interfaces, parameter["type"]) or errors
-                
-    
+
+
         if "attributes" in interface:
             for attribute in interface["attributes"]:
                 location = "%s.%s" % (interface["name"], attribute["name"])
@@ -195,14 +207,14 @@ def validate(module):
 #--------------------------------------------------------------------
 def checkType(location, interfaces, type):
     typeName = type["name"]
-    
+
     if typeName in BuiltInTypes: return False
     if typeName in interfaces: return False
-    
+
     log("type '%s' is not valid in %s" % (typeName, location))
-    
+
     return True
-    
+
 
 #--------------------------------------------------------------------
 def parseIDL(content):
@@ -211,20 +223,20 @@ def parseIDL(content):
 
     match = PatternModule.match(content)
     if not match: error("no module found in input")
-    
+
     moduleName = match.group(1).strip()
     content    = match.group(2)
-    
+
     module = {}
     module["name"] = moduleName
-    
+
     interfaces = []
     module["interfaces"] = interfaces
-    
+
     while True:
         match = PatternInterface.match(content)
         if not match: break
-        
+
         interfaceEAs  = match.group(1)
         interfaceName = match.group(2).strip()
         interfaceBody = match.group(3)
@@ -233,19 +245,19 @@ def parseIDL(content):
         interface = {}
         interface["name"] = interfaceName
         parseExtendedAttributes(interface, interfaceEAs)
-        
+
         interfaces.append(interface)
-        
+
         while True:
             match = PatternMethod.match(interfaceBody)
             if match:
                 method = parseMethod(match)
                 if not "methods" in interface: interface["methods"] = []
                 interface["methods"].append(method)
-                
+
                 interfaceBody = match.group(6)
                 continue
-                
+
             match = PatternAttribute.match(interfaceBody)
             if match:
                 attribute = parseAttribute(match)
@@ -255,54 +267,54 @@ def parseIDL(content):
                 interfaceBody = match.group(5)
                 continue
 
-            if interfaceBody.strip() != "": 
+            if interfaceBody.strip() != "":
                 error("unexpected input: '%s'" % interfaceBody)
-                
+
             break
-        
+
     if content.strip() != "}": error("unexpected input: '%s'" % content)
-    
+
     return module
 
 #--------------------------------------------------------------------
 def parseExtendedAttributes(object, eaStrings):
     if not eaStrings: return
     if eaStrings == "": return
-    
+
     eaStrings = eaStrings[1:-1]
     eaStrings = eaStrings.split(",")
-    
+
     eas = {}
     for eaString in eaStrings:
         match = PatternExtendedAttribute.match(eaString)
         if not match:
             error("invalid extended attribute: '%s'" % eaString)
-        
+
         if match.group(3):
             eas[match.group(1)] = match.group(3)
         else:
             eas[match.group(1)] = True
-    
+
     if len(eas):
         object["extendedAttributes"] = eas
 
 #--------------------------------------------------------------------
 def parseMethod(match):
     method = {}
-    
+
     eas                  = match.group(1)
     method["returns"]    = getType(match.group(2), match.group(3))
     method["name"]       = match.group(4)
     method["parameters"] = parseMethodParameters(match.group(5))
-    
+
     parseExtendedAttributes(method, eas)
-    
+
     return method
 
 #--------------------------------------------------------------------
 def parseAttribute(match):
     attribute = {}
-    
+
     eas               = match.group(1)
     attribute["type"] = getType(match.group(2), match.group(3))
     attribute["name"] = match.group(4)
@@ -314,43 +326,43 @@ def parseAttribute(match):
 #--------------------------------------------------------------------
 def parseMethodParameters(parameterString):
     parameters = []
-    
+
     parameterString = parameterString.strip()
     if "" == parameterString: return parameters
-    
+
     parmStrings = parameterString.split(",")
     for parmString in parmStrings:
         parameter = {}
-        
+
         parts = parmString.split()
         if parts[0] in ["in", "out"]:
             parmString = " ".join(parts[1:])
             if parts[0] == "out":
                 parameter["out"] = True
-                
+
         match = PatternParameter.match(parmString)
         if not match:
             error("error parsing parameter in '" + parameterString + "'")
-            
-        
+
+
         parameter["type"] = getType(match.group(1), match.group(2))
-        
+
         if match.group(5):
             parameter["name"] = match.group(5)
         else:
             parameter["name"] = match.group(3)
-        
+
         parameters.append(parameter)
-        
+
     return parameters
 
 #--------------------------------------------------------------------
 def getType(name, rank):
     name = name.strip()
     rank = PatternWhiteSpace.sub("", rank)
-    
+
     origName = name
-    
+
     if name == "long":      name = "int"
     if name == "int":       name = "int"
     if name == "double":    name = "float"
@@ -358,24 +370,24 @@ def getType(name, rank):
     if name == "DOMString": name = "string"
     if name == "String":    name = "string"
     if name in AnyTypes:    name = "any"
-    
+
     if name == "Array":
         return {
             "name": "any",
             "rank": 1
         }
-    
+
     result = {}
     result["name"] = name
-    
+
     if name != origName: result["originalName"] = origName
-    
+
     if rank:
-        if (rank == "[]"): 
+        if (rank == "[]"):
             result["rank"] = 1
         else:
             error("currently only one dimensional arrays are supported: %s" % name)
-        
+
     return result
 
 #--------------------------------------------------------------------
@@ -384,7 +396,7 @@ def clean(content):
     content = PatternPreprocessor.sub("", content)
     content = PatternNewLine.sub("", content)
     content = PatternComments.sub("", content)
-    
+
     return content
 
 #--------------------------------------------------------------------

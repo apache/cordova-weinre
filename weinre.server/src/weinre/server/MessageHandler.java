@@ -1,8 +1,20 @@
 /*
- * weinre is available under *either* the terms of the modified BSD license *or* the
- * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
- * Copyright (c) 2010, 2011 IBM Corporation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package weinre.server;
@@ -24,40 +36,40 @@ public class MessageHandler {
     //---------------------------------------------------------------
     static public void start() {
         final MessageHandler messageHandler = new MessageHandler();
-        
+
         Runnable runnable = new Runnable() {
             public void run() {
                 while (true) {
-                    try { 
+                    try {
                         messageHandler.handleMessages();
-                        Thread.sleep(250); 
-                    } 
+                        Thread.sleep(250);
+                    }
                     catch(InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                 }
             }
         };
-        
+
         Thread thread = new Thread(runnable, messageHandler.getClass().toString());
         thread.start();
     }
-    
+
     //---------------------------------------------------------------
     private MessageHandler() {
         messageLog = Main.getSettings().getMessageLog();
     }
-    
+
     //---------------------------------------------------------------
     private void handleMessages() throws InterruptedException {
         List<Channel> channels = ChannelManager.$.getChannels();
-        
+
         for (Channel channel: channels) {
             List<String> requestss = channel.getRequests(0);
-            
+
             for (String requests: requestss) {
                 JSONArray acc;
-                
+
                 try {
                     acc = new JSONArray(requests);
                 }
@@ -65,7 +77,7 @@ public class MessageHandler {
                     Main.warn("error parsing requests: " + e + ": '" + requests + "'");
                     continue;
                 }
-                
+
                 int size = acc.length();
                 for (int i=0; i<size; i++) {
                     JSONObject accRequest;
@@ -74,18 +86,18 @@ public class MessageHandler {
                         request = acc.getString(i);
                         accRequest = new JSONObject(request);
                         accRequest.put("_from", channel.getName() + "#" + channel.getId());
-                        
+
                         if (null != messageLog) {
                             messageLog.print(accRequest.toString(true));
                             messageLog.println(",");
                         }
-                        
+
                     }
                     catch (JSONException e) {
                         Main.warn("error parsing request: " + e + ": '" + request + "'");
                         continue;
                     }
-                        
+
                     String intfName;
                     String methodName;
                     JSONArray args;
@@ -96,22 +108,22 @@ public class MessageHandler {
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
-                    
+
                     if (null == intfName) {
                         Main.warn("no interface specified in request: " + request);
                         continue;
                     }
-                    
+
                     if (null == methodName) {
                         Main.warn("no methodName specified in request: " + request);
                         continue;
                     }
-                    
+
                     if (null == args) {
                         Main.warn("no args specified in request: " + request);
                         continue;
                     }
-       
+
                     serviceMethodInvoker(channel, intfName, methodName, args);
                 }
             }
@@ -129,7 +141,7 @@ public class MessageHandler {
             String methodSignatureParms = intfName + "." + methodName + "(" + argsJSON.toString() + ")";
             Main.debug(channel.getName() + ": recv " + methodSignatureParms);
         }
-        
+
         try {
             service = channel.getService(intfName);
         }
@@ -137,35 +149,35 @@ public class MessageHandler {
             Main.warn("unable to get service object for: " + methodSignature + "; " + e);
             return;
         }
-        
+
         if (null == service) {
             redirectToConnections(channel, intfName, methodName, argsJSON);
             return;
         }
-        
+
         Class serviceClass = service.getClass();
-        
+
         List<Object> args = new ArrayList<Object>(argsJSON);
-        
+
         for (Method method: serviceClass.getMethods()) {
             if (!method.getName().equals(methodName)) continue;
-            
+
             if (method.getParameterTypes().length != args.size() + 1) {
                 Main.warn("invalid number of parameters specified for : " + methodSignature);
                 return;
             }
-            
+
             args.add(0, channel);
-            
+
             try {
                 method.invoke(service, args.toArray());
-            } 
+            }
             catch (IllegalArgumentException e) {
                 Main.warn("illegal argument exception invoking : " + methodSignature + "; " + e);
-            } 
+            }
             catch (IllegalAccessException e) {
                 Main.warn("illegal access exception invoking : " + methodSignature + "; " + e);
-            } 
+            }
             catch (InvocationTargetException e) {
                 Throwable te = e.getTargetException();
                 Main.warn("invocation target exception invoking : " + methodSignature + "; " + te);
@@ -174,7 +186,7 @@ public class MessageHandler {
             catch (RuntimeException e) {
                 Main.warn("invocation runtime exception invoking : " + methodSignature + "; " + e);
             }
-            
+
             return;
         }
 
@@ -185,13 +197,13 @@ public class MessageHandler {
     private void redirectToConnections(Channel channel, String interfaceName, String methodName, JSONArray args) {
         Connector connector = channel.getConnector();
         if (null == connector) return;
-        
+
         List<Connector> connections = connector.getConnections();
-        
+
         for (Connector connection: connections) {
             connection.getChannel().sendEvent(interfaceName, methodName, args.toArray());
-        } 
+        }
     }
 
-    
+
 }

@@ -1,8 +1,20 @@
 /*
- * weinre is available under *either* the terms of the modified BSD license *or* the
- * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
- * Copyright (c) 2010, 2011 IBM Corporation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package weinre.server.http;
@@ -31,28 +43,28 @@ import weinre.server.Utility;
 
 //-------------------------------------------------------------------
 public class HttpSocketHandler extends AbstractHandler {
-    private String pathPrefix; 
+    private String pathPrefix;
     private int    pathPrefixParts;
-    
+
     //---------------------------------------------------------------
     public HttpSocketHandler(String pathPrefix) {
         super();
-        
+
         this.pathPrefix      = pathPrefix;
         this.pathPrefixParts = pathPrefix.split("/").length;
     }
-    
+
     //---------------------------------------------------------------
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // ! * pathPrefix*
         if (!target.startsWith(pathPrefix)) return;
-        
+
         String method = baseRequest.getMethod();
-        
+
         setCORSHeaders(response);
         setCacheHeaders(response);
-        
+
         // OPTIONS pathPrefix
         if (target.equals(pathPrefix) && method.equals("OPTIONS")) {
             baseRequest.setHandled(true);
@@ -73,43 +85,43 @@ public class HttpSocketHandler extends AbstractHandler {
             response.sendError(405);
             return;
         }
-        
+
         // * pathPrefix/x/*
         String[] parts = target.split("/");
         if (parts.length != pathPrefixParts + 1) {
             baseRequest.setHandled(true);
             response.sendError(404);
         }
-        
-        // 
+
+        //
         if (parts.length <= pathPrefixParts) {
             baseRequest.setHandled(true);
             response.sendError(405);
         }
-        
+
         String channel = parts[pathPrefixParts];
-        
+
         // OPTIONS pathPrefix/x
         if (method.equals("OPTIONS")) {
             baseRequest.setHandled(true);
             handleOptions(target, baseRequest, request, response);
             return;
         }
-        
+
         // GET pathPrefix/x
         if (method.equals("GET")) {
             baseRequest.setHandled(true);
             handleGet(channel, target, baseRequest, request, response);
             return;
         }
-        
+
         // POST pathPrefix/x
         if (method.equals("POST")) {
             baseRequest.setHandled(true);
             handlePost(channel, target, baseRequest, request, response);
             return;
         }
-        
+
         // * pathPrefix/x
         baseRequest.setHandled(true);
         response.sendError(405);
@@ -121,7 +133,7 @@ public class HttpSocketHandler extends AbstractHandler {
         response.setHeader("Access-Control-Max-Age", "600");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST");
     }
-    
+
     //---------------------------------------------------------------
     private void setCacheHeaders(HttpServletResponse response) {
         response.setHeader("Pragma",        "no-cache");
@@ -129,7 +141,7 @@ public class HttpSocketHandler extends AbstractHandler {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Cache-Control", "no-store");
     }
-    
+
     //---------------------------------------------------------------
     public void handleOptions(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setStatus(200);
@@ -144,7 +156,7 @@ public class HttpSocketHandler extends AbstractHandler {
         if (0 == baseRequest.getContentLength()) {
             id = Channel.AnonymousId;
         }
-        
+
         else {
             try {
                 String json = readRequestBody(request.getInputStream());
@@ -168,15 +180,15 @@ public class HttpSocketHandler extends AbstractHandler {
                 return;
             }
         }
-        
+
         ChannelManager.$.registerChannel(pathPrefix, channelName, id, request.getRemoteHost(), request.getRemoteAddr());
-        
+
         response.setStatus(200);
         response.setContentType("application/json");
-        
+
         ServletOutputStream oStream = response.getOutputStream();
         JSONObject obj = new JSONObject();
-        
+
         try {
             obj.put("channel", channelName);
             obj.put("id", id);
@@ -184,7 +196,7 @@ public class HttpSocketHandler extends AbstractHandler {
         catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        
+
         String result = obj.toString();
         oStream.print(result);
         oStream.close();
@@ -199,15 +211,15 @@ public class HttpSocketHandler extends AbstractHandler {
         }
 
         channel.updateLastRead();
-        
-        List<String> json; 
+
+        List<String> json;
         try {
             json = channel.getResponses(Main.getSettings().getReadTimeoutSeconds());
-        } 
+        }
         catch (InterruptedException e) {
             throw new IOException(e);
         }
-        
+
         response.setStatus(200);
         response.setContentType("application/json");
 
@@ -221,12 +233,12 @@ public class HttpSocketHandler extends AbstractHandler {
     private void printJSONList(ServletOutputStream oStream, List<String> json) throws IOException {
         try {
             oStream.print(new JSONArray(json).toString());
-        } 
+        }
         catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
-    
+
     //---------------------------------------------------------------
     public void handlePost(String channelName, String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Channel channel = ChannelManager.$.getChannel(channelName, request.getRemoteAddr());
@@ -244,7 +256,7 @@ public class HttpSocketHandler extends AbstractHandler {
             response.setStatus(400);
             return;
         }
-        
+
         try {
             String json = readRequestBody(request.getInputStream());
             channel.postRequest(json);
@@ -253,23 +265,23 @@ public class HttpSocketHandler extends AbstractHandler {
             response.setStatus(400);
             return;
         }
-        
+
         response.setStatus(200);
         response.setContentType("text/plain");
         response.getOutputStream().close();
     }
-    
+
     //---------------------------------------------------------------
     private String readRequestBody(InputStream is) throws IOException {
         StringBuffer stringBuffer = new StringBuffer();
         Reader       reader       = new InputStreamReader(is, "UTF-8");
         char[]       buffer       = new char[4096];
-        
+
         int read;
         while ((read = reader.read(buffer)) > 0) {
             stringBuffer.append(buffer, 0, read);
         }
-        
+
         return stringBuffer.toString();
     }
 }

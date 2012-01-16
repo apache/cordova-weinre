@@ -1,8 +1,20 @@
 /*
- * weinre is available under *either* the terms of the modified BSD license *or* the
- * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- * 
- * Copyright (c) 2010, 2011 IBM Corporation
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package weinre.server;
@@ -33,7 +45,7 @@ import org.apache.commons.cli.PosixParser;
 public class ServerSettings {
 
     final static private String BoundHostAllConstant = "-all-";
-    
+
     private int         httpPort           = 8080;
     private String      boundHost          = "localhost";
 //  private boolean     useProxy           = false;
@@ -43,7 +55,7 @@ public class ServerSettings {
     private int         deathTimeoutSeconds;
     private Properties  fileProperties;
     private PrintWriter messageLog;
-    
+
     //---------------------------------------------------------------
     static public ServerSettings getOptions(String[] commandLine) {
         ServerSettings settings = new ServerSettings();
@@ -53,14 +65,14 @@ public class ServerSettings {
     //---------------------------------------------------------------
     private ServerSettings() {
         super();
-        
+
         fileProperties = fromPropertiesFile();
     }
 
     //---------------------------------------------------------------
     private Options getOptions() {
         Options options = new Options();
-       
+
         options.addOption("?",            false, "display help");
         options.addOption("h", "help",    false, "display help");
         options.addOption("httpPort",     true,  "tcp/ip port to use for the http server");
@@ -71,7 +83,7 @@ public class ServerSettings {
         options.addOption("readTimeout",  true,  "seconds before timing out HTTP GETs");
         options.addOption("deathTimeout", true,  "seconds before considering connector dead");
         options.addOption("messageLog",   true,  "file to log messages to");
-       
+
         return options;
     }
 
@@ -87,20 +99,20 @@ public class ServerSettings {
         result.put("reuseAddr",    this.reuseAddr + "");
         result.put("readTimeout",  this.readTimeoutSeconds + "");
         result.put("deathTimeout", this.deathTimeoutSeconds + "");
-        
+
         return result;
     }
 
     //---------------------------------------------------------------
     private Properties fromPropertiesFile() {
         Properties result = Utility.readPropertiesFile("server.properties");
-        
+
         // ya, Properties doesn't trim space off values
         for (String key: result.stringPropertyNames()) {
             String val = result.getProperty(key);
             result.setProperty(key, val.trim());
         }
-        
+
         return result;
     }
 
@@ -112,7 +124,7 @@ public class ServerSettings {
         CommandLine       commandLine;
         try {
             commandLine = parser.parse(options, commandLineArgs);
-        } 
+        }
         catch (ParseException e) {
             error(e.getMessage());
             return null;
@@ -145,14 +157,14 @@ public class ServerSettings {
     //---------------------------------------------------------------
     private int getIntFromOption(CommandLine commandLine, String name, int defaultValue, int min, int max) {
         int result = defaultValue;
-        
+
         String stringValue = commandLine.getOptionValue(name);
         if (null == stringValue) {
             stringValue = fileProperties.getProperty(name);
         }
 
         if (null == stringValue) return defaultValue;
-            
+
         try {
             result = Integer.parseInt(stringValue);
         }
@@ -160,14 +172,14 @@ public class ServerSettings {
             error(name + " parameter must be numeric");
             return result;
         }
-        
+
         if ((result < min) || (result > 0x00FFFF)) {
             error(name + " parameter must be between " + min + " and " + max);
         }
 
         return result;
     }
-    
+
     //---------------------------------------------------------------
     private String getStringFromOption(CommandLine commandLine, String name, String defaultValue) {
         String stringValue = commandLine.getOptionValue(name);
@@ -176,21 +188,21 @@ public class ServerSettings {
         }
 
         if (null == stringValue) return defaultValue;
-        
+
         return stringValue;
     }
-    
+
     //---------------------------------------------------------------
     private boolean getBooleanFromOption(CommandLine commandLine, String name, boolean defaultValue) {
         boolean result = defaultValue;
-        
+
         String stringValue = commandLine.getOptionValue(name);
         if (null == stringValue) {
             stringValue = fileProperties.getProperty(name);
         }
 
         if (null == stringValue) return defaultValue;
-            
+
         result = Boolean.parseBoolean(stringValue);
 
         return result;
@@ -198,20 +210,20 @@ public class ServerSettings {
 
     //---------------------------------------------------------------
     private PrintWriter getPrintWriterFromOption(CommandLine commandLine, String name) {
-        
+
         String fileName = commandLine.getOptionValue(name);
         if (null == fileName) {
             fileName = fileProperties.getProperty(name);
         }
 
         if (null == fileName) return null;
-        
+
         File file = new File(fileName);
-        
+
         try {
             FileWriter fileWriter = new FileWriter(file);
             return new PrintWriter(fileWriter);
-        } 
+        }
         catch (IOException e) {
             error(name + " parameter file name '" + fileName + "' cannot be opened for writing.");
             return null;
@@ -222,28 +234,28 @@ public class ServerSettings {
     private void error(String message) {
         System.out.println("error with command-line option: " + message);
     }
-    
+
     //---------------------------------------------------------------
     private void printHelp(Options options) {
         new HelpFormatter().printHelp("java -jar weinre.jar [options]", options);
     }
-    
+
     //---------------------------------------------------------------
     public int getHttpPort() {
         return httpPort;
     }
-    
+
     //---------------------------------------------------------------
     public String getBoundHost() {
         return boundHost;
     }
-    
+
     //---------------------------------------------------------------
     public String[] getBoundHosts() {
         if (getBoundHostValue() != null) {
             return new String[] { getBoundHost() };
         }
-        
+
         ArrayList<String> hosts = new ArrayList<String>();
         List<NetworkInterface> networkInterfaces;
         try {
@@ -252,45 +264,45 @@ public class ServerSettings {
         catch (SocketException e) {
             return new String[]{"localhost"};
         }
-    
+
         for (NetworkInterface networkInterface: networkInterfaces) {
             List<InetAddress> inetAddresses = Collections.list(networkInterface.getInetAddresses());
-            
+
             for (InetAddress inetAddress: inetAddresses) {
                 hosts.add(inetAddress.getHostName());
             }
         }
-        
+
         return hosts.toArray(new String[]{});
     }
-    
+
     //---------------------------------------------------------------
     public String getBoundHostValue() {
         if (BoundHostAllConstant.equals(boundHost)) return null;
-        
+
         return boundHost;
     }
-    
+
     //---------------------------------------------------------------
     public boolean getVerbose() {
         return verbose;
     }
-    
+
     //---------------------------------------------------------------
     public int getReadTimeoutSeconds() {
         return readTimeoutSeconds;
     }
-    
+
     //---------------------------------------------------------------
     public int getDeathTimeoutSeconds() {
         return deathTimeoutSeconds;
     }
-    
+
     //---------------------------------------------------------------
     public boolean useProxy() {
         return false; // useProxy;
     }
-    
+
     //---------------------------------------------------------------
     public boolean reuseAddr() {
         return reuseAddr;
@@ -307,12 +319,12 @@ public class ServerSettings {
         if (null == hostName) return "localhost";
         return hostName;
     }
-        
+
     //---------------------------------------------------------------
     @SuppressWarnings("unused")
     private String getSuperNiceHostName() {
         String hostName = getBoundHost();
-        
+
         // get the host address used
         InetAddress inetAddress;
         try {
