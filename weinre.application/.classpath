@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/weinre.server"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry exported="true" kind="lib" path="/weinre.build/vendor/swt/cocoa-macosx-x86_64/swt.jar" sourcepath="/weinre.build/vendor/swt/cocoa-macosx-x86_64/swt-src.jar"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>

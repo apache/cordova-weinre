@@ -21,13 +21,5 @@
 
  Weinre.Versions = {
     weinre:   "@WEINRE_VERSION@",
-    build:    "@BUILD_NUMBER_DATE@",
-    jetty:    "@JETTY_VERSION@",
-    servlet:  "@JAVAX_SERVLET_VERSION@-@JAVAX_SERVLET_VERSION_IMPL@",
-    webkit:   "@WEBKIT_VERSION@",
-    cli:      "@CLI_VERSION@",
-    json4j:   "@JSON4J_VERSION@",
-    json2:    "@JSON2_VERSION@",
-    swt:      "@SWT_VERSION@",
-    modjewel: "@MODJEWEL_VERSION@"
+    build:    "@BUILD_DATE@",
  };

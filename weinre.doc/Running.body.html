@@ -31,8 +31,8 @@ each other.
 <dl class="spaced">
 
 <dt>Debug Server
-<dd>This is the HTTP server that you run from the <tt>weinre.jar</tt> file
-or the Mac application.  It's the HTTP server that's used by the
+<dd>This is the HTTP server that you run from the <tt>weinre-node</tt> distribution.
+It's the HTTP server that's used by the
 <b>Debug Client</b> and <b>Debug Target</b>.
 
 <dt>Debug Client
@@ -56,42 +56,19 @@ the <b>Debug Server</b> via HTTP using <tt>XMLHttpRequest</tt> (XHR).
 <p>Typically, you run both the <b>Debug Client</b> and the <b>Debug Server</b>
 on your desktop/laptop, and the <b>Debug Target</b> on your mobile device.
 
-<p>When using the Mac application, the
-<b>Debug Client</b> and <b>Debug Server</b> are running
-in the same process.
-When you launch the application,
-the server starts, and then the browser included in the
-application is launched
-on the appropriate URL automagically.
-
-<p>When using the <tt>weinre.jar</tt> program instead
-of the Mac application, only the <b>Debug Server</b>
-is started.  You will need to launch the <b>Debug Client</b>
-in a web browser.
-
 <p>The <b>Debug Target</b> is the squirrelliest bit.  You
 will need to arrange to inject some JavaScript code, provided
 by the <b>Debug Server</b>, into your web page, in order for it
 to function as a <b>Debug Target</b>.
 
 <!-- ======================================================== -->
-<h2>Starting the debug server</h2>
+<h2>Running the debug server using the weinre-node distribution</h2>
 
-<p>There are two ways to run the <span class="weinre">weinre</span> debug server:
-
-<ul>
-<li>Running the debug server using the weinre.jar file
-<li>Running the debug server using the Mac application
-</ul>
-
-<!-- ======================================================== -->
-<h2>Running the debug server using the weinre.jar file</h2>
-
-<p>To run <span class="weinre">weinre</span> from the jar file,
+<p>To run <span class="weinre">weinre</span> from the weinre-node distribution,
 execute the following command:
 
 <pre>
-java -jar path/to/weinre.jar [options]
+node path-to-weinre-node/weinre [options]
 </pre>
 
 <p>Options available are:
@@ -130,12 +107,10 @@ on Windows, to get the ip addresses available on your machine.
 <p>Default: <tt>false</tt>
 </div>
 
-<li><tt>--reuseAddr [true | false]</tt>
+<li><tt>--debug [true | false]</tt>
 <div class="indent">
-<p>Sets the "reuseAddr" flag for Jetty.
+<p>Causes even more jibberish to be written to stdout
 <p>Default: <tt>false</tt>
-
-<p>May be needed if you restart your server frequently.
 </div>
 
 <li><tt>--readTimeout [seconds]</tt>
@@ -188,30 +163,6 @@ deathTimeout: 5
 <tt>~/.weinre/server.properties</tt> file.
 
 <p>The server will run until you kill it.  Control-C will do the job.
-
-<p>Below is what you should see from the console after running
-<span class="weinre">weinre</span> from the <tt>weinre.jar</tt> file.
-
-<p><img src="images/shell.png">
-
-<!-- ======================================================== -->
-<h2>Running the debug server using the Mac application</h2>
-
-<p>Go back and read the description above about the weinre.jar settings.
-
-<p>Only the <tt>~/.weinre/server.properties</tt>
-file is available to configure the server, as there is no
-traditional command line used to launch Mac "applications".
-
-<p>The server will run until you quit the application.
-
-<p>Since there is no practical way to see the stdout and stdin
-from the server when running a Mac application, these streams
-are intercepted and displayed in the <b>Server Console</b>
-tab in the Mac application.
-
-<p>The Mac application also displays the server's home page
-in a separate tab.
 
 <!-- ======================================================== -->
 <h2>Running the debug server bound to something other than <tt>localhost</tt></h3>

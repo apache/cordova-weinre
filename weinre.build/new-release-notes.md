@@ -24,62 +24,48 @@ steps to create a new release
 
 - update the `WEINRE_VERSION` variable in `weinre.build/build.properties` as appropriate
 
-- add changelog to `weinre.doc/ChangeLog.body.html`, built with
-
-    weinre.build/scripts/changelog.sh [previous-version]
+- add changelog to `weinre.doc/ChangeLog.body.html`
 
 - fix other doc as necessary
 
-- perform full build with one of:
+- perform full build with:
 
    - cd into `weinre.build` and run ant
 
-   - in Eclipse, select `weinre build.xml` from the External Tools menu
-
 - run the smoke test (see below) to ensure delicious smoky flavor
 
-- upload the `weinre-jar-x.y.z.zip` and `weinre-mac-x.y.z.zip` files
+- upload the `weinre-*-x.y.z.zip`
 
 - make sure you can download those zip files!
 
 - commit release changes:
    - `git add .`
-   - `git commit -m update for release x.y.z`
+   - `git commit -m "update for release x.y.z"`
 
 - merge branch onto master:
 
    - `git checkout master`
-   - `git merge --no-ff release-x.y.z`
+   - `git merge release-x.y.z`
    - `git push`
    - `git tag -a x.y.z`
    - `git push --tags`
 
-- merge branch onto develop:
+- update apache cms pages:
 
-   - `git checkout develop`
-   - `git merge --no-ff release-x.y.z`
-   - `git push`
-   - `git branch -d release-x.y.z`
+   - not sure how to do this yet
 
-- update github pages:
+- prepare for blessed Apache version
 
-   - `git checkout gh_pages`
-   - `cp -r ~/Projects/weinre/weinre.build/out/web/doc/* .` (or whatever)
-   - `git add .`
-   - `git commit -m update for release x.y.z`
-   - `git push`
-
-- announce to the world!
+   - not sure how to do this yet
 
 
 smoke test
 ===============================================================================
 
-The smoke test involves testing the three archives:
+The smoke test involves testing the archives:
 
 - `weinre-doc.zip`
-- `weinre-mac.zip`
-- `weinre-jar.zip`
+- `weinre-node.zip`
 
 
 smoke test - doc
@@ -89,28 +75,12 @@ smoke test - doc
 - browse all pages
 
 
-smoke test - mac
+smoke test - node
 -------------------------------------------------------------------------------
 
-- unzip `weinre-mac.zip`
+- unzip `weinre-node.zip`
 - make sure `build-info.txt` looks right
-- launch the app
-- open a new browser on [http://localhost:8081/demo/weinre-demo.html](http://localhost:8081/demo/weinre-demo.html)
+- run `weinre --help` make sure help works
+- run `weinre` make sure help works
 - poke around the demo, make sure it works
-- close app
-- start server in eclipse
-- launch the app
-- should get error about port in use
-
-smoke test - jar
--------------------------------------------------------------------------------
-
-- unzip `weinre-jar.zip`
-- make sure `build-info.txt` looks right
-- run `java -jar weinre.jar --help` make sure help works
-- run `java -jar weinre.jar` make sure help works
-- poke around the demo, make sure it works
-- kill server
-- start server in eclipse
-- run `java -jar weinre.jar` make sure help works
-- should get error about port in use
+- should add some variations on starting with used port, etc

@@ -1,0 +1,42 @@
+{
+  "name":              "weinre",
+  "description":       "WEb INspector REmote",
+  "author":            "apache.org",
+  "version":           "@WEINRE_VERSION@",
+  "tags":              [ "debug"],
+  "licenses":
+    [
+      {
+        "type":        "Apache 2.0",
+         "url":        "http://www.apache.org/licenses/LICENSE-2.0"
+      }
+    ],
+  "engines":
+    {
+      "node":          ">=0.6.0"
+    },
+  "directories":
+    {
+      "lib" :          "./lib"
+    },
+  "dependencies":
+    {
+      "coffee-script": "1.2.0",
+      "express":       "2.5.7",
+      "nopt":          "1.0.10",
+      "underscore":    "1.3.1"
+    },
+  "main" :             "./lib/weinre",
+  "bin":
+    {
+      "weinre":        "./bin/weinre"
+    },
+  "homepage":          "http://incubator.apache.org/callback/",
+  "bugs":              "https://issues.apache.org/jira/browse/CB",
+  "repository":
+    {
+      "type":          "git",
+      "url":           "https://git-wip-us.apache.org/repos/asf/incubator-cordova-weinre.git"
+    }
+}
+

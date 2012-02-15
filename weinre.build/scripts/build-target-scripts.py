@@ -47,7 +47,7 @@ def main():
     scriptMin   = {}
 
     includedFiles = []
-    includedFiles.append("modjewel-require.js")
+    includedFiles.append("modjewel.js")
 
     entries = os.listdir(os.path.join(srcDirName, "weinre/common"))
     for entry in entries:
@@ -100,7 +100,7 @@ def writeMergedFile(oFileName, scripts, scriptNames, srcs, useEval):
             src = "%s\n//@ sourceURL=%s" % (src, srcName)
             lines.append(";eval(%s)" % json.dumps(src))
 
-        if srcName == "modjewel-require.js":
+        if srcName == "modjewel.js":
             lines.append("require('modjewel').warnOnRecursiveRequire(true);")
             if not useEval:
                 lines.append("")

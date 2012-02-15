@@ -28,7 +28,7 @@
 
 <body>
 
-<a class="no-decoration" href="https://github.com/callback/callback-weinre"><div class="ribbon">Fork weinre on GitHub</div></a>
+<a class="no-decoration" href="https://git-wip-us.apache.org/repos/asf?p=incubator-cordova-weinre.git"><div class="ribbon">clone weinre at apache</div></a>
 
 <!-- ======================================================================= -->
 <h1 class="page-title">weinre - @PAGE_NAME@</h1>

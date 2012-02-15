@@ -52,13 +52,10 @@ module.exports = class Client
         Weinre.WeinreClientCommands      = messageDispatcher.createProxy('WeinreClientCommands')
         Weinre.WeinreExtraClientCommands = messageDispatcher.createProxy('WeinreExtraClientCommands')
 
-        messageDispatcher.registerInterface(
-            'WeinreExtraTargetEvents', new WeinreExtraTargetEventsImpl(), false
-        )
-
-        messageDispatcher.registerInterface(
-            'WebInspector', WebInspector, false
-        )
+        messageDispatcher.registerInterface 'WeinreExtraTargetEvents', new WeinreExtraTargetEventsImpl(), false
+        messageDispatcher.registerInterface 'WebInspector',            WebInspector,                      false
+        messageDispatcher.registerInterface 'WeinreClientEvents',      new WeinreClientEventsImpl(this),  false
+        messageDispatcher.registerInterface 'InspectorFrontendHost',   InspectorFrontendHost,             false
 
         WebInspector.mainResource = {}
         WebInspector.mainResource.url = location.href
@@ -104,10 +101,6 @@ module.exports = class Client
         Weinre.WeinreClientCommands.registerClient Binding(this, @cb_registerClient)
 
         @_installRemotePanel()
-
-        messageDispatcher = Weinre.messageDispatcher
-        messageDispatcher.registerInterface 'WeinreClientEvents', new WeinreClientEventsImpl(this), false
-        messageDispatcher.registerInterface 'InspectorFrontendHost', InspectorFrontendHost, false
 
     #---------------------------------------------------------------------------
     cb_registerClient: (clientDescription) ->
