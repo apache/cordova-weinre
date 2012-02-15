@@ -31,19 +31,10 @@
         <delete dir="${VENDOR}"/>
         <mkdir  dir="${VENDOR}"/>
 
-        <antcall target="get-coffeescript"/>
         <antcall target="get-web-inspector"/>
     </target>
 
     <!-- ============================================================ -->
-
-    <target name="get-coffeescript">
-        <echo message="coffee-script@${COFFEESCRIPT_VERSION}"/>
-        <exec executable="npm" dir="${VENDOR}">
-            <arg value="install"/>
-            <arg value="coffee-script@${COFFEESCRIPT_VERSION}"/>
-        </exec>
-    </target>
 
     <!-- ============================================================ -->
 

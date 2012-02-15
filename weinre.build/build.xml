@@ -155,19 +155,19 @@
         <echo message="compiling CoffeeScript files in: ${PROJECT_WEB}/modules/weinre/client"/>
         <exec executable="sh" failonerror="true" failifexecutionfails="true">
             <arg value="-c"/>
-            <arg value="${VENDOR}/node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/client ../${PROJECT_WEB}/modules/weinre/client/*.coffee"/>
+            <arg value="../${PROJECT_SERVER}/node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/client ../${PROJECT_WEB}/modules/weinre/client/*.coffee"/>
         </exec>
 
         <echo message="compiling CoffeeScript files in: ${PROJECT_WEB}/modules/weinre/common"/>
         <exec executable="sh" failonerror="true" failifexecutionfails="true">
             <arg value="-c"/>
-            <arg value="${VENDOR}/node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/common ../${PROJECT_WEB}/modules/weinre/common/*.coffee"/>
+            <arg value="../${PROJECT_SERVER}/node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/common ../${PROJECT_WEB}/modules/weinre/common/*.coffee"/>
         </exec>
 
         <echo message="compiling CoffeeScript files in: ${PROJECT_WEB}/modules/weinre/target"/>
         <exec executable="sh" failonerror="true" failifexecutionfails="true">
             <arg value="-c"/>
-            <arg value="${VENDOR}/node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/target ../${PROJECT_WEB}/modules/weinre/target/*.coffee"/>
+            <arg value="../${PROJECT_SERVER}/node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/target ../${PROJECT_WEB}/modules/weinre/target/*.coffee"/>
         </exec>
 
         <echo message="transportd-izing modules"/>
