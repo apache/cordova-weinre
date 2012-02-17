@@ -386,6 +386,12 @@
             <arg value="weinre-node"/>
         </exec>
 
+        <exec executable="tar" dir="${OUT}/files">
+            <arg value="-czf"/>
+            <arg value="../archives/weinre-node-${BUILD_VERSION}.tar.gz"/>
+            <arg value="weinre-node"/>
+        </exec>
+
         <!-- =================================== -->
         <delete dir="${OUT}/files/weinre-doc"/>
         <mkdir  dir="${OUT}/files/weinre-doc"/>

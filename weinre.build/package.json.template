@@ -29,7 +29,7 @@
   "main" :             "./lib/weinre",
   "bin":
     {
-      "weinre":        "./bin/weinre"
+      "weinre":        "./weinre"
     },
   "homepage":          "http://incubator.apache.org/callback/",
   "bugs":              "https://issues.apache.org/jira/browse/CB",
