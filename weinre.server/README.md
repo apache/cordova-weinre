@@ -17,31 +17,43 @@
  * under the License.
 -->
 
-The files contained in this directory are the source for the
-weinre server, implemented using the 
-[express package](http://expressjs.com/)
-on the 
-[node.js](http://nodejs.org) 
-runtime.
+weinre is WEb INspector REmote. 
+Pronounced like the word "winery". 
+Or maybe like the word "weiner". 
+Who knows, really.
 
-The weinre server uses numerous 3rd party libraries, installed in the
-`node_modules` directory, and stored in the SCM.  
-In case these need to be updated, the file
-`package.json` should be updated with the dependencies and versions
-needed, then run
+weinre is a debugger for web pages, 
+like FireBug (for FireFox) and Web Inspector (for WebKit-based browsers), 
+except it's designed to work remotely, and in particular, 
+to allow you debug web pages on a mobile device such as a phone.
 
-	rm -rf node_modules; npm install
+For more information on weinre:
+[http://http://incubator.apache.org/callback/](http://incubator.apache.org/callback/)
 
-to refresh the dependencies.
+running
+-------
 
+For more information about running weinre, you can start the server
+and browse the documentation online.
 
-before running the weinre server
---------------------------------
+Start the server with the following command
 
-Before running the weinre server, after downloading the source,
-you will need to run a 'build'.
+    node weinre
+    
+This will start the server, and display a message with the URL to the
+server.  Browse to that URL in your web browser, and then click on 
+'documentation' link, which will display weinre's online documentation.
+From there click on the 'Running' page to get more information about 
+running weinre.
 
+source
+------
 
-running the weinre server
--------------------------
+Follow the link for more information at the top of this file 
+for instructions on obtaining source.
+
+If you're reading this file as part of the source distribution of weinre,
+you will need to run a 'build' before being able to run weinre.  See the
+`README.md` file in the root directory of the weinre source distribution
+for more information.
 

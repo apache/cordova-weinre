@@ -25,9 +25,11 @@
 
 var path = require('path')
 var fs   = require('fs')
-var lib  = path.join(path.dirname(fs.realpathSync(__filename)), 'lib')
 
-require('coffee-script')
+var rootPath = path.dirname(fs.realpathSync(__filename))
 
-var cli = require(lib + '/cli')
-cli.run()
+var lib          = path.join(rootPath, 'lib')
+var node_modules = path.join(rootPath, 'node_modules')
+
+require(path.join(node_modules, 'coffee-script'))
+require(path.join(lib, '/cli')).run()

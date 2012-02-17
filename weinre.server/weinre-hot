@@ -25,6 +25,6 @@
 # to determine whether to kill and restart the server.
 
 cd `dirname $0`
-supervisor -n -p 1 -e txt -w ../weinre.build/out/build-done.txt ./weinre
+supervisor -n -p 1 -e txt -w ../weinre.build/out/build-done.txt node weinre
 
 # supervisor: https://github.com/isaacs/node-supervisor
