@@ -104,7 +104,7 @@ getDotWeinreServerProperties = () ->
     properties = {}
     
     fileName = replaceTilde '~/.weinre/server.properties'
-    return options if !path.existsSync(fileName) 
+    return properties if !path.existsSync(fileName)
     
     contents = fs.readFileSync(fileName, 'utf8')
     lines    = contents.split('\n')
