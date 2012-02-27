@@ -154,6 +154,9 @@ module.exports = class Timeline
         record.startTime = Date.now()
         record.category  = name: "loading"
 
+        contentLength = xhr.getResponseHeader("Content-Length")
+        contentLength = parseInt(contentLength)
+
         if xhr.readyState == XMLHttpRequest.OPENED
             record.type = TimelineRecordType.ResourceSendRequest
             record.data =
@@ -167,8 +170,10 @@ module.exports = class Timeline
                 identifier:            id
                 statusCode:            xhr.status
                 mimeType:              xhr.getResponseHeader("Content-Type")
-                expectedContentLength: xhr.getResponseHeader("Content-Length")
                 url:                   url
+
+            record.data.expectedContentLength = contentLength if !isNaN(contentLength)
+
         else
             return
 

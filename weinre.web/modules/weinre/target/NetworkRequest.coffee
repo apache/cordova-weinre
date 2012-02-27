@@ -120,15 +120,15 @@ getRequest = (url, method, xhr, data) ->
 
 #-------------------------------------------------------------------------------
 getResponse = (xhr) ->
-    contentType = xhr.getResponseHeader("Content-Type")
+    contentType = xhr.getResponseHeader("Content-Type") 
+    contentType ||= 'application/octet-stream'
 
     [contentType, encoding] = splitContentType(contentType)
 
     headers = getHeaders(xhr)
 
-    return {
-        mimeType: contentType
-        expectedContentLength: contentType
+    result = 
+        mimeType:              contentType
         textEncodingName:      encoding
         httpStatusCode:        xhr.status
         httpStatusText:        xhr.statusText
@@ -136,7 +136,12 @@ getResponse = (xhr) ->
         connectionReused:      false
         connectionID:          0
         wasCached:             false
-    }
+    
+    contentLength = xhr.getResponseHeader("Content-Length")
+    contentLength = parseInt(contentLength)
+    result.expectedContentLength = contentLength if !isNaN(contentLength)
+
+    return result
 
 #-------------------------------------------------------------------------------
 getHeaders = (xhr) ->
