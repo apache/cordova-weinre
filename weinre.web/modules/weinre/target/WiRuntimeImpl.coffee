@@ -53,7 +53,7 @@ module.exports = class WiRuntimeImpl
 
     #---------------------------------------------------------------------------
     releaseWrapperObjectGroup: (injectedScriptId, objectGroup, callback) ->
-        result = Weinre.injectedScript.releaseWrapperObjectGroup(objectGroupName)
+        result = Weinre.injectedScript.releaseWrapperObjectGroup(objectGroup)
         if callback
             Weinre.WeinreTargetCommands.sendClientCallback callback, [ result ]
 

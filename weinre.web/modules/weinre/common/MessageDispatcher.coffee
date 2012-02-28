@@ -149,6 +149,12 @@ module.exports = class MessageDispatcher
 
     #---------------------------------------------------------------------------
     _handleMessage: (message) ->
+        skipErrorForMethods = [
+            'domContentEventFired'
+            'loadEventFired'
+            'childNodeRemoved'
+        ]
+
         try
             data = JSON.parse(message.data)
         catch e
@@ -176,7 +182,8 @@ module.exports = class MessageDispatcher
         try
             method.apply intf, args
         catch e
-            Weinre.logError "weinre: invocation exception on #{methodSignature}: " + e
+            if methodName not in skipErrorForMethods
+                Weinre.logError "weinre: invocation exception on #{methodSignature}: " + e
 
         if Verbose
             Weinre.logDebug @constructor.name + "[#{@_url}]: recv #{intfName}.#{methodName}(#{JSON.stringify(args)})"

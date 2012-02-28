@@ -61,13 +61,14 @@ processOptions = (options, cb) ->
     
     options.staticWebDir = getStaticWebDir()
     
-    utils.logVerbose "version:              #{getVersion()}"
-    utils.logVerbose "option httpPort:      #{options.httpPort}"
-    utils.logVerbose "option boundHost:     #{options.boundHost}"
-    utils.logVerbose "option verbose:       #{options.verbose}"
-    utils.logVerbose "option debug:         #{options.debug}"
-    utils.logVerbose "option readTimeout:   #{options.readTimeout}"
-    utils.logVerbose "option deathTimeout:  #{options.deathTimeout}"
+    utils.logVerbose "pid:                 #{process.pid}"
+    utils.logVerbose "version:             #{getVersion()}"
+    utils.logVerbose "option httpPort:     #{options.httpPort}"
+    utils.logVerbose "option boundHost:    #{options.boundHost}"
+    utils.logVerbose "option verbose:      #{options.verbose}"
+    utils.logVerbose "option debug:        #{options.debug}"
+    utils.logVerbose "option readTimeout:  #{options.readTimeout}"
+    utils.logVerbose "option deathTimeout: #{options.deathTimeout}"
 
     utils.setOptions options
 

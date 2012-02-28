@@ -56,9 +56,10 @@ module.exports = class WeinreClientEventsImpl
 
     #---------------------------------------------------------------------------
     connectionCreated: (clientChannel, targetChannel) ->
-        if @client.uiAvailable()
-            WebInspector.panels.remote.setClientState clientChannel, "connected"
-            WebInspector.panels.remote.setTargetState targetChannel, "connected"
+        return if !@client.uiAvailable()
+
+        WebInspector.panels.remote.setClientState clientChannel, "connected"
+        WebInspector.panels.remote.setTargetState targetChannel, "connected"
 
         return unless clientChannel == Weinre.messageDispatcher.channel
 
@@ -67,6 +68,8 @@ module.exports = class WeinreClientEventsImpl
         WebInspector.panels.resources.reset()
 
         target = WebInspector.panels.remote.getTarget(targetChannel)
+        return if !target
+
         document.title = titleConnectedPrefix + target.url
         WebInspector.inspectedURLChanged target.url
 
@@ -75,9 +78,10 @@ module.exports = class WeinreClientEventsImpl
 
     #---------------------------------------------------------------------------
     connectionDestroyed: (clientChannel, targetChannel) ->
-        if @client.uiAvailable()
-            WebInspector.panels.remote.setClientState clientChannel, "not-connected"
-            WebInspector.panels.remote.setTargetState targetChannel, "not-connected"
+        return if !@client.uiAvailable()
+        
+        WebInspector.panels.remote.setClientState clientChannel, "not-connected"
+        WebInspector.panels.remote.setTargetState targetChannel, "not-connected"
 
         return unless clientChannel == Weinre.messageDispatcher.channel
 

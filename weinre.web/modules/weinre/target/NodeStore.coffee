@@ -202,7 +202,8 @@ handleDOMNodeRemoved = (event) ->
       return unless parentId
 
       if targetId
-          Weinre.wi.DOMNotify.childNodeRemoved parentId, targetId
+          if parentId
+              Weinre.wi.DOMNotify.childNodeRemoved parentId, targetId
       else
           childCount = Weinre.nodeStore.childNodeCount(event.relatedNode)
           Weinre.wi.DOMNotify.childNodeCountUpdated parentId, childCount

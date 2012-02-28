@@ -24,7 +24,7 @@ utils = exports
 utils.Program = Program = path.basename process.argv[1]
 
 SequenceNumberMax = 100 * 1024 * 1024
-SequenceNumber    = Math.floor(Math.random() * SequenceNumberMax)
+SequenceNumber    = 0
 
 #-------------------------------------------------------------------------------
 utils.getNextSequenceNumber = (g) -> 
