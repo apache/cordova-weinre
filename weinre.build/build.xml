@@ -261,6 +261,8 @@
         <copy todir="${WEB}/doc/images">  <fileset dir="../${PROJECT_DOC}/images"/>  </copy>
         <copy todir="${WEB}/doc/scripts"> <fileset dir="../${PROJECT_DOC}/scripts"/> </copy>
 
+        <delete dir="${WEB}/doc/images/orig" />
+
     </target>
 
     <!-- ============================================================
