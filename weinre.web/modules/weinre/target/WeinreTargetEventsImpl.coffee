@@ -32,10 +32,11 @@ module.exports = class WeinreTargetEventsImpl
         message = "weinre: target #{targetChannel} connected to client " + clientChannel
         Weinre.logInfo message
 
-        oldValue = Console.useRemote(true)
-        Weinre.target.setDocument()
-        Weinre.wi.TimelineNotify.timelineProfilerWasStopped()
-        Weinre.wi.DOMStorage.initialize()
+        Weinre.target.whenBodyReady @, [], ->
+            oldValue = Console.useRemote(true)
+            Weinre.target.setDocument()
+            Weinre.wi.TimelineNotify.timelineProfilerWasStopped()
+            Weinre.wi.DOMStorage.initialize()
 
     #---------------------------------------------------------------------------
     connectionDestroyed: (clientChannel, targetChannel) ->

@@ -210,6 +210,16 @@ module.exports = class Target
         nodeData = Weinre.nodeStore.getNodeData(nodeId, 2)
         Weinre.wi.DOMNotify.setDocument nodeData
 
+    #---------------------------------------------------------------------------
+    whenBodyReady: (receiver, args, func) ->
+        if document.body
+            func.apply(receiver, args)
+            return
+        
+        document.addEventListener "DOMContentLoaded", 
+            -> func.apply(receiver, args), 
+            false
+
 #-------------------------------------------------------------------------------
 currentTime = () ->
       (new Date().getMilliseconds()) / 1000.0
