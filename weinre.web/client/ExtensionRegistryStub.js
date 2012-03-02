@@ -18,6 +18,6 @@
  */
 
 (function() {
-    var ExtensionRegistryImpl = require("weinre/client/ExtensionRegistryImpl")
+    var ExtensionRegistryImpl = modjewel.require("weinre/client/ExtensionRegistryImpl")
     window.InspectorExtensionRegistry = new ExtensionRegistryImpl()
 })()

@@ -18,6 +18,6 @@
  */
 
 (function() {
-    var InspectorBackendImpl = require("weinre/client/InspectorBackendImpl")
+    var InspectorBackendImpl = modjewel.require("weinre/client/InspectorBackendImpl")
     window.InspectorBackend = new InspectorBackendImpl()
 })()

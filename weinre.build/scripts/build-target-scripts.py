@@ -86,6 +86,12 @@ def main():
 #--------------------------------------------------------------------
 def writeMergedFile(oFileName, scripts, scriptNames, srcs, useEval):
     lines = []
+    
+    licenseFile = os.path.join(os.path.dirname(__file__), "..", "LICENSE-header.js")
+    
+    with open(licenseFile, "r") as iFile:
+        lines.append(iFile.read())
+            
     lines.append(";(function(){")
 
     for script in scripts:
@@ -101,12 +107,12 @@ def writeMergedFile(oFileName, scripts, scriptNames, srcs, useEval):
             lines.append(";eval(%s)" % json.dumps(src))
 
         if srcName == "modjewel.js":
-            lines.append("require('modjewel').warnOnRecursiveRequire(true);")
+            lines.append("modjewel.require('modjewel').warnOnRecursiveRequire(true);")
             if not useEval:
                 lines.append("")
 
-    lines.append("// require('weinre/common/Weinre').showNotImplemented();")
-    lines.append("require('weinre/target/Target').main()")
+    lines.append("// modjewel.require('weinre/common/Weinre').showNotImplemented();")
+    lines.append("modjewel.require('weinre/target/Target').main()")
     lines.append("})();")
     targetScript = "\n".join(lines)
 

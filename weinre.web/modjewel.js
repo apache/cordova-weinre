@@ -42,7 +42,7 @@
 // some constants
 //----------------------------------------------------------------------------
 var PROGRAM = "modjewel"
-var VERSION = "1.2.0"
+var VERSION = "2.0.0"
 var global  = this
 
 //----------------------------------------------------------------------------
@@ -54,10 +54,6 @@ if (global.modjewel) {
 }
 
 global.modjewel = null
-
-var OriginalRequire = global.require
-var OriginalDefine  = global.define
-var NoConflict      = false
 
 //----------------------------------------------------------------------------
 // "globals" (local to this function scope though)
@@ -174,12 +170,15 @@ function require_reset() {
     ModulePreloadStore = {}
     MainModule         = create_module(null)
 
-    require_define("modjewel", modjewel_module)
+    var require = get_require(MainModule)
+    var define  = require_define
+    
+    define("modjewel", modjewel_module)
 
-    global.require    = get_require(MainModule)
-    global.define     = require_define
-    global.define.amd = true
-    global.modjewel   = require("modjewel")
+    global.modjewel            = require("modjewel")
+    global.modjewel.require    = require
+    global.modjewel.define     = define
+    global.modjewel.define.amd = {implementation: PROGRAM, version: VERSION}
 }
 
 //----------------------------------------------------------------------------
@@ -333,29 +332,17 @@ function modjewel_warnOnRecursiveRequire(value) {
 }
 
 //----------------------------------------------------------------------------
-// relinquish modjewel's control of the require variable
-// - like jQuery's version'
-//----------------------------------------------------------------------------
-function modjewel_noConflict() {
-    NoConflict = true
-
-    global.require = OriginalRequire
-    global.define  = OriginalDefine
-}
-
-//----------------------------------------------------------------------------
 // the modjewel module
 //----------------------------------------------------------------------------
 function modjewel_module(require, exports, module) {
     exports.VERSION                = VERSION
-    exports.require                = require
-    exports.define                 = require.define
+    exports.require                = null // filled in later
+    exports.define                 = null // filled in later
     exports.getLoadedModuleIds     = modjewel_getLoadedModuleIds
     exports.getPreloadedModuleIds  = modjewel_getPreloadedModuleIds
     exports.getModule              = modjewel_getModule
     exports.getModuleIdsRequired   = modjewel_getModuleIdsRequired
     exports.warnOnRecursiveRequire = modjewel_warnOnRecursiveRequire
-    exports.noConflict             = modjewel_noConflict
 }
 
 //----------------------------------------------------------------------------

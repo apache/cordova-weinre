@@ -65,7 +65,7 @@ def createIndexFile(iFileName, oFileName, moduleDir):
                 '<script type="text/javascript" src="weinre/check-for-webkit.js"></script>\n',
                 '<script type="text/javascript" src="weinre/hacks.js"></script>\n',
                 '<script type="text/javascript" src="../modjewel.js"></script>\n',
-                '<script type="text/javascript">require("modjewel").warnOnRecursiveRequire(true)</script>\n',
+                '<script type="text/javascript">modjewel.require("modjewel").warnOnRecursiveRequire(true)</script>\n',
             ])
 
             for module in getModules(moduleDir):
@@ -78,7 +78,7 @@ def createIndexFile(iFileName, oFileName, moduleDir):
             newLines.append("<!-- ========== weinre additions: starting ========== -->\n")
             newLines.append('<link rel="stylesheet" type="text/css" href="weinre/client.css">\n')
             newLines.append('<script type="text/javascript" src="../interfaces/all-json-idls-min.js"></script>\n')
-            newLines.append('<script type="text/javascript">require("weinre/client/Client").main()</script>\n')
+            newLines.append('<script type="text/javascript">modjewel.require("weinre/client/Client").main()</script>\n')
             newLines.append("<!-- ========== weinre additions: done ========== -->\n")
             newLines.append(line)
 

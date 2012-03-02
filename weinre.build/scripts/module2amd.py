@@ -157,7 +157,7 @@ def processDir(dir, path=None, modules=None):
 
         modules.append(moduleName)
 
-        header  = ';define("%s", function(require, exports, module) {' % moduleName
+        header  = ';modjewel.define("%s", function(require, exports, module) {' % moduleName
         trailer = '});'
 
         newContents = "%s %s\n%s\n" % (header, contents, trailer)
