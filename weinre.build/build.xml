@@ -17,7 +17,7 @@
  * under the License.
 -->
 
-<project name="build" default="build" basedir=".">
+<project name="build" default="build-help" basedir=".">
 
     <!-- ============================================================
          set properties
@@ -38,36 +38,73 @@
         <format property="TSTAMP_STARTED" pattern="HH:mm:ss"/>
     </tstamp>
 
+    <!--
     <tstamp>
-        <format property="BUILD_DATE" pattern="yyyy-MM-dd--HH-mm-ss" timezone="GMT"/>
+        <format property="BUILD_DATE" pattern="yyyy-MM-dd__HH-mm-ss" timezone="GMT"/>
     </tstamp>
+    -->
+    
+    <exec executable="node" outputproperty="BUILD_DATE">
+        <arg value="-e"/>
+        <arg value="console.log((new Date()).valueOf().toString(36).toUpperCase())"/>
+    </exec>
 
-    <condition property="BUILD_VERSION" value="${WEINRE_VERSION}-${BUILD_DATE}">
+    <condition property="BUILD_VERSION" value="${WEINRE_VERSION}-${BUILD_DATE}-incubating">
         <matches pattern=".*pre$" string="${WEINRE_VERSION}"/>
     </condition>
     
-    <condition property="BUILD_VERSION" value="${WEINRE_VERSION}">
+    <condition property="BUILD_VERSION" value="${WEINRE_VERSION}-incubating">
         <not>
             <matches pattern=".*pre$" string="${WEINRE_VERSION}"/>
         </not>
     </condition>
+    
+    <property name="ARCH-SRC" value="apache-cordova-weinre-${BUILD_VERSION}-src"/>
+    <property name="ARCH-BIN" value="apache-cordova-weinre-${BUILD_VERSION}-bin"/>
+    <property name="ARCH-DOC" value="apache-cordova-weinre-${BUILD_VERSION}-doc"/>
+
+    <!-- ============================================================
+         print some help
+         ============================================================ -->
+
+    <target name="help">
+        <echo>
+ant targets available:
+   [default]         - runs `build-help`
+   build             - runs a development-time build
+   build-archives    - runs `build-clean`, then builds archives
+   build-archives-ck - runs `build-archives`, then builds
+                       checksum files
+   build-help        - prints a line about available help, then
+                       runs `build`
+   build-clean       - runs `clean` then `build`
+   clean             - removes transient build files
+   
+the file `personal.properties` must be available in the same 
+directory as this ant file.  Use the file
+`sample.personal.properties` as a template.
+
+To update the weinre dependencies, use
+   ant -f update-vendor.xml
+</echo>
+    </target>
+
+    
+    <!-- ============================================================
+         do a build, but print message about help
+         ============================================================ -->
+
+    <target name="build-help">
+        <echo message="to see commands available, use `ant help`"/>
+        <antcall target="build"/>
+    </target>
+
     
     <!-- ============================================================
          do a clean build
          ============================================================ -->
 
     <target name="build-clean" depends="clean,build">
-    </target>
-
-    <!-- ============================================================
-         main entry point
-         ============================================================ -->
-
-    <target name="build" depends="build-dev">
-        <antcall target="build-doc"/>
-        <antcall target="build-archives"/>
-
-        <echo>full ant build completed successfully</echo>
     </target>
 
     <!-- ============================================================
@@ -85,7 +122,7 @@
          development-time build
          ============================================================ -->
 
-    <target name="build-dev">
+    <target name="build">
         <fail>
             <condition>
                 <not>
@@ -104,17 +141,44 @@
             <fileset dir="${OUT}" includes="**/*" excludes="build-done.txt"/>
         </delete>        
         
+        <exec 
+            executable           = "git" 
+            outputproperty       = "git-log" 
+            failifexecutionfails = "false"
+            >
+            <arg line="log -1 --pretty=oneline"/>
+        </exec>
+
+        <condition property="git-log" value="no git status available">
+            <not>
+                <isset property="git-log"/>
+            </not>
+        </condition>
+        
         <property
             name  = "build-info-text"
             value = "weinre build ${BUILD_VERSION} by ${BUILDER}"
         />
-
-        <echo file="${OUT}/build-info.txt" message="${build-info-text}"/>
+        
+        <concat 
+            append      = "no"  
+            destfile    = "${OUT}/build-info.txt"
+            >${build-info-text}
+</concat> <!-- keep this outdented, since Ant is so wonderful -->
+            
+        <concat 
+            append      = "yes" 
+            fixlastline = "yes"  
+            eol         = "lf"
+            destfile    = "${OUT}/build-info.txt"
+            >git: ${git-log}
+</concat> <!-- keep this outdented, since Ant is so wonderful -->
 
         <antcall target="build-web"/>
         <antcall target="build-json-idl"/>
         <antcall target="build-client"/>
         <antcall target="build-target"/>
+        <antcall target="build-doc"/>
 
         <tstamp>
             <format property="TSTAMP_FINISHED" pattern="HH:mm:ss"/>
@@ -153,21 +217,33 @@
         <mkdir  dir="${TMP}/modules/weinre/target" />
 
         <echo message="compiling CoffeeScript files in: ${PROJECT_WEB}/modules/weinre/client"/>
-        <exec executable="sh" failonerror="true" failifexecutionfails="true">
-            <arg value="-c"/>
-            <arg value="../${PROJECT_SERVER}/node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/client ../${PROJECT_WEB}/modules/weinre/client/*.coffee"/>
+        <exec executable="node" failonerror="true" failifexecutionfails="true">
+            <arg value="../${PROJECT_SERVER}/node_modules/coffee-script/bin/coffee"/>
+            <arg value="--compile"/>
+            <arg value="--bare"/>
+            <arg value="--output"/>
+            <arg value="${TMP}/modules/weinre/client"/>
+            <arg value="../${PROJECT_WEB}/modules/weinre/client"/>
         </exec>
 
         <echo message="compiling CoffeeScript files in: ${PROJECT_WEB}/modules/weinre/common"/>
-        <exec executable="sh" failonerror="true" failifexecutionfails="true">
-            <arg value="-c"/>
-            <arg value="../${PROJECT_SERVER}/node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/common ../${PROJECT_WEB}/modules/weinre/common/*.coffee"/>
+        <exec executable="node" failonerror="true" failifexecutionfails="true">
+            <arg value="../${PROJECT_SERVER}/node_modules/coffee-script/bin/coffee"/>
+            <arg value="--compile"/>
+            <arg value="--bare"/>
+            <arg value="--output"/>
+            <arg value="${TMP}/modules/weinre/common"/>
+            <arg value="../${PROJECT_WEB}/modules/weinre/common"/>
         </exec>
 
         <echo message="compiling CoffeeScript files in: ${PROJECT_WEB}/modules/weinre/target"/>
-        <exec executable="sh" failonerror="true" failifexecutionfails="true">
-            <arg value="-c"/>
-            <arg value="../${PROJECT_SERVER}/node_modules/.bin/coffee --compile --bare --output ${TMP}/modules/weinre/target ../${PROJECT_WEB}/modules/weinre/target/*.coffee"/>
+        <exec executable="node" failonerror="true" failifexecutionfails="true">
+            <arg value="../${PROJECT_SERVER}/node_modules/coffee-script/bin/coffee"/>
+            <arg value="--compile"/>
+            <arg value="--bare"/>
+            <arg value="--output"/>
+            <arg value="${TMP}/modules/weinre/target"/>
+            <arg value="../${PROJECT_WEB}/modules/weinre/target"/>
         </exec>
 
         <echo message="transportd-izing modules"/>
@@ -363,7 +439,7 @@
     <!-- ============================================================
          build the archives
          ============================================================ -->
-    <target name="build-archives">
+    <target name="build-archives" depends="build-clean">
 
         <!-- =================================== -->
         <delete dir="${OUT}/archives"/>
@@ -371,75 +447,120 @@
 
         <delete dir="${OUT}/files"/>
 
-        <delete dir="${OUT}/files/weinre-node"/>
-        <mkdir  dir="${OUT}/files/weinre-node"/>
-        <copy todir="${OUT}/files/weinre-node" file="${OUT}/build-info.txt"/>
-        <copy todir="${OUT}/files/weinre-node" file="../LICENSE"/>
-        <copy todir="${OUT}/files/weinre-node" file="../NOTICE"/>
-        <copy todir="${OUT}/files/weinre-node">
-            <fileset dir="../${PROJECT_SERVER}"/>
+        <delete dir="${OUT}/files/${ARCH-BIN}"/>
+        <mkdir  dir="${OUT}/files/${ARCH-BIN}"/>
+        <copy todir="${OUT}/files/${ARCH-BIN}" file="${OUT}/build-info.txt"/>
+        <copy todir="${OUT}/files/${ARCH-BIN}" file="../LICENSE"/>
+        <copy todir="${OUT}/files/${ARCH-BIN}" file="../NOTICE"/>
+        <copy todir="${OUT}/files/${ARCH-BIN}">
+            <fileset dir="../${PROJECT_SERVER}">
+                <exclude name="weinre-hot"/>
+            </fileset>
         </copy>
+        <chmod file="${OUT}/files/${ARCH-BIN}/weinre" perm="+x"/>
 
         <!-- ant's zip task doesn't preserve permission bits -->
         <exec executable="zip" dir="${OUT}/files">
             <arg value="-q"/>
             <arg value="-r"/>
-            <arg value="../archives/weinre-node-${BUILD_VERSION}.zip"/>
-            <arg value="weinre-node"/>
+            <arg value="../archives/${ARCH-BIN}.zip"/>
+            <arg value="${ARCH-BIN}"/>
         </exec>
 
         <exec executable="tar" dir="${OUT}/files">
             <arg value="-czf"/>
-            <arg value="../archives/weinre-node-${BUILD_VERSION}.tar.gz"/>
-            <arg value="weinre-node"/>
+            <arg value="../archives/${ARCH-BIN}.tar.gz"/>
+            <arg value="${ARCH-BIN}"/>
         </exec>
 
         <!-- =================================== -->
-        <delete dir="${OUT}/files/weinre-doc"/>
-        <mkdir  dir="${OUT}/files/weinre-doc"/>
-        <copy todir="${OUT}/files/weinre-doc" file="${OUT}/build-info.txt" />
-        <copy todir="${OUT}/files/weinre-doc" file="../LICENSE"/>
-        <copy todir="${OUT}/files/weinre-doc" file="../NOTICE"/>
-        <copy todir="${OUT}/files/weinre-doc">
+        <delete dir="${OUT}/files/${ARCH-DOC}"/>
+        <mkdir  dir="${OUT}/files/${ARCH-DOC}"/>
+        <copy todir="${OUT}/files/${ARCH-DOC}" file="${OUT}/build-info.txt" />
+        <copy todir="${OUT}/files/${ARCH-DOC}" file="../LICENSE"/>
+        <copy todir="${OUT}/files/${ARCH-DOC}" file="../NOTICE"/>
+        <copy todir="${OUT}/files/${ARCH-DOC}">
             <fileset dir="${WEB}/doc"/>
+        </copy>
+
+        <copy todir="${OUT}/archives/doc">
+            <fileset dir="${OUT}/files/${ARCH-DOC}"/>
         </copy>
 
         <!-- ant's zip task doesn't preserve permission bits -->
         <exec executable="zip" dir="${OUT}/files">
             <arg value="-q"/>
             <arg value="-r"/>
-            <arg value="../archives/weinre-doc-${BUILD_VERSION}.zip"/>
-            <arg value="weinre-doc"/>
+            <arg value="../archives/${ARCH-DOC}.zip"/>
+            <arg value="${ARCH-DOC}"/>
+        </exec>
+
+        <exec executable="tar" dir="${OUT}/files">
+            <arg value="-czf"/>
+            <arg value="../archives/${ARCH-DOC}.tar.gz"/>
+            <arg value="${ARCH-DOC}"/>
         </exec>
 
         <!-- =================================== -->
-        <delete dir="${OUT}/files/weinre-src"/>
-        <mkdir  dir="${OUT}/files/weinre-src"/>
-        <exec executable="git" dir="..">
-            <arg value="archive"/>
-            <arg value="--format=zip"/>
-            <arg value="--prefix=weinre-src/"/>
-            <arg value="--output=${PROJECT_BUILD}/${TMP}/weinre-src.zip"/>
-            <arg value="HEAD"/>
-        </exec>
-
-        <exec executable="unzip" dir="${OUT}/files">
-            <arg value="-q"/>
-            <arg value="../../${TMP}/weinre-src.zip"/>
-        </exec>
+        <delete dir="${OUT}/files/${ARCH-SRC}"/>
+        <mkdir  dir="${OUT}/files/${ARCH-SRC}"/>
+        <copy todir="${OUT}/files/${ARCH-SRC}" file="${OUT}/build-info.txt" />
         
-        <copy todir="${OUT}/files/weinre-src" file="${OUT}/build-info.txt" />
+        <copy todir="${OUT}/files/${ARCH-SRC}" preservelastmodified="yes">
+            <fileset dir="..">
+                <exclude name="weinre.build/bin/**"/>
+                <exclude name="weinre.build/cached/**"/>
+                <exclude name="weinre.build/out/**"/>
+                <exclude name="weinre.build/tmp/**"/>
+                <exclude name="weinre.build/personal.properties"/>
 
-        <!-- ant's zip task doesn't preserve permission bits -->
+                <exclude name="weinre.server/tmp/**"/>
+                <exclude name="weinre.server/web/**"/>
+            </fileset>
+        </copy>
+
         <exec executable="zip" dir="${OUT}/files">
             <arg value="-q"/>
             <arg value="-r"/>
-            <arg value="../archives/weinre-src-${BUILD_VERSION}.zip"/>
-            <arg value="weinre-src"/>
+            <arg value="../archives/${ARCH-SRC}.zip"/>
+            <arg value="${ARCH-SRC}"/>
         </exec>
 
+        <exec executable="tar" dir="${OUT}/files">
+            <arg value="-czf"/>
+            <arg value="../archives/${ARCH-SRC}.tar.gz"/>
+            <arg value="${ARCH-SRC}"/>
+        </exec>
+
+    </target>
+
+
+    <!-- ============================================================
+         build-archives-checksums
+         ============================================================ -->
+
+    <target name="build-archives-ck" depends="build-archives">
+        
+        <checksum file="${OUT}/archives/${ARCH-BIN}.zip"    algorithm="MD5"/>
+        <checksum file="${OUT}/archives/${ARCH-DOC}.zip"    algorithm="MD5"/>
+        <checksum file="${OUT}/archives/${ARCH-SRC}.zip"    algorithm="MD5"/>
+
+        <checksum file="${OUT}/archives/${ARCH-BIN}.tar.gz" algorithm="MD5"/>
+        <checksum file="${OUT}/archives/${ARCH-DOC}.tar.gz" algorithm="MD5"/>
+        <checksum file="${OUT}/archives/${ARCH-SRC}.tar.gz" algorithm="MD5"/>
+
+        <checksum file="${OUT}/archives/${ARCH-BIN}.zip"    algorithm="SHA1"/>
+        <checksum file="${OUT}/archives/${ARCH-DOC}.zip"    algorithm="SHA1"/>
+        <checksum file="${OUT}/archives/${ARCH-SRC}.zip"    algorithm="SHA1"/>
+
+        <checksum file="${OUT}/archives/${ARCH-BIN}.tar.gz" algorithm="SHA1"/>
+        <checksum file="${OUT}/archives/${ARCH-DOC}.tar.gz" algorithm="SHA1"/>
+        <checksum file="${OUT}/archives/${ARCH-SRC}.tar.gz" algorithm="SHA1"/>
+
         <!-- =================================== -->
+        <!--
         <delete dir="${OUT}/files"/>
+        -->
 
     </target>
 

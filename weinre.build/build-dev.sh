@@ -22,4 +22,4 @@
 # this script builds enough of weinre to test at development time
 
 cd `dirname $0`
-ant build-dev
+ant build

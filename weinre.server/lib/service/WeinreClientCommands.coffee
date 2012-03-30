@@ -19,6 +19,7 @@
 
 _ = require('underscore')
 
+weinre             = require '../weinre'
 utils              = require '../utils'
 channelManager     = require '../channelManager'
 serviceManager     = require '../serviceManager'
@@ -38,6 +39,8 @@ module.exports = utils.registerClass class WeinreClientCommands
         for own key, val of options
             if typeof val in ['number', 'boolean']
                 options[key] = "#{val}"
+        
+        options.version = weinre.getVersion()
         
         WeinreClientEvents.serverProperties(channel, options)
 
