@@ -17,39 +17,62 @@
  * under the License.
 -->
 
-<p><span class="weinre">weinre</span> is shipped as archives
+<p><span class="weinre">weinre</span> is shipped as binary packages
 available at Apache.
 
-<p>To install weinre, download a <tt>bin</tt> release, unarchive
+<p>To install <span class="weinre">weinre</span>, download a <tt>bin</tt> package, unarchive
 to wherever you'd wish.  <span class="weinre">weinre</span> is not
 sensitive to the directory it's installed in, and does not 
 write to any files.
 
-<h2>Releases</h2>
+<!-- ======================================================================= -->
+<h2>npm installation</h2>
 
-<p>The distribution releases should be available at:
+<p><span class="weinre">weinre</span> can be installed as an 
+<a href="http://npmjs.org/doc/README.html">npm package</a>.  The
+<tt>*-bin.tar.gz</tt> urls/files can be used as a target of the 
+<a href="http://npmjs.org/doc/install.html"><tt>npm install</tt></a>
+command.  For example, use the following command to install 
+<span class="weinre">weinre</span> locally, from this example URL:
+
+<pre>
+npm install http://example.com/path/to/apache-cordova-weinre-X.Y.Z-bin.tar.gz
+</pre>
+
+<p>weinre is also deployed on
+<a href="http://search.npmjs.org/#/weinre">http://search.npmjs.org/#/weinre</a>
+so that you can install it via:
+
+<pre>
+npm install weinre
+</pre>
+
+<!-- ======================================================================= -->
+<h2>Binary Packages</h2>
+
+<p>The recent source and binary release archives should be available at:
 
 <ul>
 <li><a href="http://www.apache.org/dyn/closer.cgi/incubator/cordova">http://apache.org/dist/incubator/cordova/</a>
-(at the time of this writing, that link does not actually resolve because
-there are no official releases)
+<br><b><i>(at the time of this writing, that link does not actually resolve because
+there are no official releases)</i></b>
 </ul>
 
-<p>The archive releases should be available at:
+<p>All of the source and binary release archives should be available at:
 
 <ul>
 <li><a href="http://archive.apache.org/dist/incubator/cordova/">http://archive.apache.org/dist/incubator/cordova/</a>
-(at the time of this writing, that link does not actually resolve because
-there are no official releases)
+<br><b><i>(at the time of this writing, that link does not actually resolve because
+there are no official releases)</i></b>
 </ul>
 
-<p>Unofficial builds are available here:
+<p>Unofficial binary packages for your convenience:
 
 <ul>
-<li><a href="http://people.apache.org/~pmuellr/">http://people.apache.org/~pmuellr/</a>
+<li><a href="http://people.apache.org/~pmuellr/weinre/">http://people.apache.org/~pmuellr/weinre/</a>
 </ul>
 
-<p>The archives available are:
+<p>The binary packages available are:
 
 <ul>
 <li><tt>apache-cordova-weinre-{version}-bin.tar.gz</tt>
@@ -69,4 +92,5 @@ produce the same files.
 <p>The <tt>bin</tt> archives contain the ready-to-run binaries
 
 <p>If the <tt>{version}</tt> contains a moniker like <tt>pre</tt>, this
-is indicative of a non-final release.
+is indicative of an unofficial, non-final binary package for your convenience,
+as opposed to an official release.

@@ -109,6 +109,11 @@ build the archives.
 * run: `ant clean`
 * perform the build as usual
 
+### other ant goodies: ###
+
+* run: `cd weinre.build`
+* run: `ant help`
+
 ### to run the output of the development build: ###
 
 * run: `cd weinre.server`
@@ -116,14 +121,12 @@ build the archives.
 
 ### other fun development-time hacks ###
 
-If you have the [wr tool](https://github.com/pmuellr/wr) installed, there are
-two `.wr` files available to run the two builds.  If you run `wr` in the 
-top-level directory, a full build is performed when the source changes.  If you 
-run `wr` in the `weinre.build` directory, a development-time build is 
-performed.
+If you have the [wr tool](https://github.com/pmuellr/wr) installed, there is
+a `.wr` file available to run the development builds.
 
 The build is growl-enabled, so you can see a quick message when the build 
-completes.
+completes, as long as the `USE_GROWL` property is set in the 
+`weinre.build/personal.properties` file.
 
 The command `weinre.server/weinre-hot` makes use of
 [node-supervisor](https://github.com/isaacs/node-supervisor) to re-launch the
@@ -151,7 +154,7 @@ directories:
 * `weinre.build/vendor` - contains libraries used in the client and/or target,
 as well as libraries used by the build itself
 
-* `weinre.server/node_modules` - contains npm packages used by the weinre.server
+* `weinre.server/node_modules` - contains npm packages used by the weinre server
 
 To update the files in `weinre.build/vendor`:
 

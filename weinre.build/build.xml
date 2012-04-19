@@ -190,6 +190,7 @@ To update the weinre dependencies, use
         <antcall target="finished-growl"/>
         
         <echo file="${OUT}/build-done.txt" message="${build-info-text} is finished!"/>
+        <echo file="${OUT}/version.txt"    message="${BUILD_VERSION}"/>
         
     </target>
 
