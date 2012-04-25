@@ -27,8 +27,11 @@ like FireBug (for FireFox) and Web Inspector (for WebKit-based browsers),
 except it's designed to work remotely, and in particular, 
 to allow you debug web pages on a mobile device such as a phone.
 
-For more information on weinre:
-[http://http://incubator.apache.org/cordova/](http://incubator.apache.org/cordova/)
+weinre is part of the 
+[Apache Cordova project](http://incubator.apache.org/cordova/).
+
+For descriptive information, and links to downloads, installable things, etc
+see: [http://people.apache.org/~pmuellr/weinre/](http://people.apache.org/~pmuellr/weinre/)
 
 weinre source
 -------------
