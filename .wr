@@ -28,7 +28,6 @@ weinre.build/scripts
 weinre.doc
 weinre.server/interfaces
 weinre.server/lib
-weinre.server/package.json
 weinre.server/README.md
 weinre.server/weinre
 weinre.server/weinre-hot

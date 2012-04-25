@@ -39,6 +39,9 @@ module.exports = class InjectedScriptHostImpl
         children = Weinre.nodeStore.serializeNode(node, 1)
         Weinre.wi.DOMNotify.setChildNodes nodeId, children
         Weinre.WeinreTargetCommands.sendClientCallback callback if callback
+        
+        if selectInUI
+            Weinre.wi.InspectorNotify.updateFocusedNode nodeId
 
     #---------------------------------------------------------------------------
     inspectedNode: (num, callback) ->

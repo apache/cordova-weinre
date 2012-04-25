@@ -42,6 +42,9 @@ module.exports = class Client
 
     #---------------------------------------------------------------------------
     initialize: ->
+    
+        addHack_DOMNotify_setChildNodes()
+        
         window.addEventListener 'load', Binding(this, 'onLoaded'), false
 
         messageDispatcher = new MessageDispatcher('../ws/client', @_getId())
@@ -126,7 +129,27 @@ module.exports = class Client
         Weinre.client.initialize()
 
         window.installWebInspectorAPIsource = installWebInspectorAPIsource
+    
 
+#-------------------------------------------------------------------------------
+old_DOMNotify_setChildNodes = null
+
+#-------------------------------------------------------------------------------
+new_DOMNotify_setChildNodes = (parentId, payloads) ->
+    domNode  = this._domAgent._idToDOMNode[parentId]
+
+    if domNode.children 
+        if domNode.children.length > 0
+            return
+    
+    old_DOMNotify_setChildNodes.call(this, parentId, payloads)
+
+#-------------------------------------------------------------------------------
+addHack_DOMNotify_setChildNodes = ->
+    old_DOMNotify_setChildNodes = WebInspector.DOMDispatcher::setChildNodes
+    
+    WebInspector.DOMDispatcher::setChildNodes = new_DOMNotify_setChildNodes
+    
 #-------------------------------------------------------------------------------
 installWebInspectorAPIsource = () ->
       return if 'webInspector' of window

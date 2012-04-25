@@ -135,7 +135,31 @@ module.exports = class WiDOMImpl
 
     #---------------------------------------------------------------------------
     pushNodeByPathToFrontend: (path, callback) ->
-        Weinre.notImplemented arguments.callee.signature
+        parts = path.split(",")
+        
+        curr   = document
+        currId = null
+        
+        nodeId = Weinre.nodeStore.getNodeId(curr)
+        @getChildNodes(nodeId)
+        
+        for i in [0...parts.length] by 2
+            index    = parseInt(parts[i])
+            nodeName = parts[i+1]
+            
+            return if isNaN(index) 
+            
+            childNodeIds = Weinre.nodeStore.childNodeIds(curr)
+            currId = childNodeIds[index]
+            return if !currId
+            
+            @getChildNodes(currId)
+            curr = Weinre.nodeStore.getNode(currId)
+            
+            return if curr.nodeName != nodeName
+
+        if callback && currId
+            Weinre.WeinreTargetCommands.sendClientCallback callback, [ currId ]
 
     #---------------------------------------------------------------------------
     resolveNode: (nodeId, callback) ->

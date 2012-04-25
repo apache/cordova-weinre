@@ -21,13 +21,15 @@
 Weinre      = require('../common/Weinre')
 IDGenerator = require('../common/IDGenerator')
 
+Debug       = require('../common/Debug')
+
 #-------------------------------------------------------------------------------
 module.exports = class NodeStore
 
     constructor: ->
-        @__nodeMap      = {}
-        @__nodeDataMap  = {}
-        @inspectedNodes = []
+        @_nodeMap      = {}
+        @_childrenSent = {}
+        @_inspectedNodes = []
 
         document.addEventListener "DOMSubtreeModified",       handleDOMSubtreeModified, false
         document.addEventListener "DOMNodeInserted",          handleDOMNodeInserted, false
@@ -37,16 +39,16 @@ module.exports = class NodeStore
 
     #---------------------------------------------------------------------------
     addInspectedNode: (nodeId) ->
-        @inspectedNodes.unshift nodeId
-        @inspectedNodes = @inspectedNodes.slice(0, 5) if @inspectedNodes.length > 5
+        @_inspectedNodes.unshift nodeId
+        @_inspectedNodes = @_inspectedNodes.slice(0, 5) if @_inspectedNodes.length > 5
 
     #---------------------------------------------------------------------------
     getInspectedNode: (index) ->
-        @inspectedNodes[index]
+        @_inspectedNodes[index]
 
     #---------------------------------------------------------------------------
     getNode: (nodeId) ->
-        @__nodeMap[nodeId]
+        @_nodeMap[nodeId]
 
     #---------------------------------------------------------------------------
     checkNodeId: (node) ->
@@ -56,7 +58,7 @@ module.exports = class NodeStore
     getNodeId: (node) ->
         id = @checkNodeId(node)
         return id if id
-        IDGenerator.getId node, @__nodeMap
+        IDGenerator.getId node, @_nodeMap
 
     #---------------------------------------------------------------------------
     getNodeData: (nodeId, depth) ->

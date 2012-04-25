@@ -24,9 +24,17 @@ IDLTools     = require('./IDLTools')
 Binding      = require('./Binding')
 Ex           = require('./Ex')
 Callback     = require('./Callback')
+#Debug        = require('./Debug')
 
 Verbose = false
 InspectorBackend = null
+
+#-------------------------------------------------------------------------------
+#Debug.logCallArgs "DOM", "addInspectedNode"
+#Debug.logCallArgs "DOM", "pushNodeByPathToFrontend"
+#Debug.logCallArgs "DOM",  "getChildNodes"
+#Debug.logCallArgs "DOMNotify", "setChildNodes"
+#Debug.logCallArgs "DOMNotify", "setDocument"
 
 #-------------------------------------------------------------------------------
 module.exports = class MessageDispatcher
@@ -112,6 +120,7 @@ module.exports = class MessageDispatcher
             method:    methodName
             args:      args
 
+        #Debug.logCall "send", intfName, methodName, args
         data = JSON.stringify(data)
         @_socket.send data
 
@@ -163,7 +172,7 @@ module.exports = class MessageDispatcher
         intfName = data["interface"]
         methodName = data.method
         args = data.args
-        methodSignature = intfName + ".#{methodName}()"
+        methodSignature = "#{intfName}.#{methodName}()"
         intf = @_interfaces.hasOwnProperty(intfName) and @_interfaces[intfName]
 
         if not intf and InspectorBackend and intfName.match(/.*Notify/)
@@ -179,6 +188,8 @@ module.exports = class MessageDispatcher
         unless typeof method == "function"
             Weinre.notImplemented methodSignature
             return
+            
+        #Debug.logCall "hand", intfName, methodName, args
         try
             method.apply intf, args
         catch e
