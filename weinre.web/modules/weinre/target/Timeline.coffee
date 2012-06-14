@@ -150,12 +150,17 @@ module.exports = class Timeline
     @addRecord_XHRReadyStateChange: (method, url, id, xhr) ->
         return unless Timeline.isRunning()
 
+        try 
+            contentLength = xhr.getResponseHeader("Content-Length")
+            contentLength = parseInt(contentLength)
+            contentType   = xhr.getResponseHeader("Content-Type")
+        catch e
+            contentLength = 0
+            contentType   = "unknown"
+
         record = {}
         record.startTime = Date.now()
         record.category  = name: "loading"
-
-        contentLength = xhr.getResponseHeader("Content-Length")
-        contentLength = parseInt(contentLength)
 
         if xhr.readyState == XMLHttpRequest.OPENED
             record.type = TimelineRecordType.ResourceSendRequest
@@ -169,7 +174,7 @@ module.exports = class Timeline
             record.data =
                 identifier:            id
                 statusCode:            xhr.status
-                mimeType:              xhr.getResponseHeader("Content-Type")
+                mimeType:              contentType
                 url:                   url
 
             record.data.expectedContentLength = contentLength if !isNaN(contentLength)
@@ -217,6 +222,8 @@ module.exports = class Timeline
                 @userData.interval = interval
 
             after: (receiver, args, result) ->
+                return if !@userData
+                
                 code = @userData.code
                 return unless typeof(code) is "function"
 
@@ -247,6 +254,8 @@ module.exports = class Timeline
                 @userData.interval = interval
 
             after: (receiver, args, result) ->
+                return if !@userData
+                
                 code = @userData.code
                 return unless typeof(code) is "function"
 

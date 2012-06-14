@@ -162,19 +162,7 @@ module.exports = class Target
         Weinre.nodeStore = new NodeStore()
         Weinre.cssStore  = new CSSStore()
 
-        window.addEventListener "error", ((e) ->
-            Target.handleError e
-        ), false
-
         NetworkRequest.installNativeHooks()
-
-    #---------------------------------------------------------------------------
-    @handleError: (event) ->
-        filename = event.filename or "[unknown filename]"
-        lineno   = event.lineno   or "[unknown lineno]"
-        message  = event.message  or "[unknown message]"
-
-        console.error "error occurred: #{filename}:#{lineno}: #{message}"
 
     #---------------------------------------------------------------------------
     cb_webSocketOpened: () ->
