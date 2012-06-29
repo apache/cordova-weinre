@@ -22,6 +22,7 @@ net  = require 'net'
 dns  = require 'dns'
 path = require 'path'
 
+_       = require 'underscore'
 express = require 'express'
 
 utils              = require './utils'
@@ -63,12 +64,22 @@ processOptions = (options, cb) ->
     
     utils.logVerbose "pid:                 #{process.pid}"
     utils.logVerbose "version:             #{getVersion()}"
-    utils.logVerbose "option httpPort:     #{options.httpPort}"
-    utils.logVerbose "option boundHost:    #{options.boundHost}"
-    utils.logVerbose "option verbose:      #{options.verbose}"
-    utils.logVerbose "option debug:        #{options.debug}"
-    utils.logVerbose "option readTimeout:  #{options.readTimeout}"
-    utils.logVerbose "option deathTimeout: #{options.deathTimeout}"
+    utils.logVerbose "node versions:"
+    
+    names   = _.keys(process.versions)
+    reducer = (memo, name) -> Math.max(memo, name.length)
+    nameLen = _.reduce(names, reducer, 0)
+    
+    for name in names
+        utils.logVerbose "   #{utils.alignLeft(name, nameLen)}: #{process.versions[name]}"
+    
+    utils.logVerbose "options:"
+    utils.logVerbose "   httpPort:     #{options.httpPort}"
+    utils.logVerbose "   boundHost:    #{options.boundHost}"
+    utils.logVerbose "   verbose:      #{options.verbose}"
+    utils.logVerbose "   debug:        #{options.debug}"
+    utils.logVerbose "   readTimeout:  #{options.readTimeout}"
+    utils.logVerbose "   deathTimeout: #{options.deathTimeout}"
 
     utils.setOptions options
 
@@ -157,7 +168,7 @@ startServer = () ->
 #-------------------------------------------------------------------------------
 getStaticWebDir = () ->
     webDir = path.normalize path.join(__dirname,'../web')
-    return webDir if path.existsSync webDir
+    return webDir if utils.fileExistsSync webDir
     
     utils.exit 'unable to find static files to serve in #{webDir}; did you do a build?'
     

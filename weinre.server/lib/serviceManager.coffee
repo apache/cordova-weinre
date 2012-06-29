@@ -83,7 +83,7 @@ getServiceInterface = (name) ->
     jsonName = "#{name}.json"
     fileName = path.join utils.options.staticWebDir, 'interfaces', jsonName
     
-    return null if !path.existsSync(fileName) 
+    return null if !utils.fileExistsSync(fileName) 
     
     contents = fs.readFileSync(fileName, 'utf8')
     

@@ -17,6 +17,7 @@
 # under the License.
 #-------------------------------------------------------------------------------
 
+fs   = require 'fs'
 path = require 'path'
 
 utils = exports
@@ -123,6 +124,28 @@ utils.registerClass = (aClass) ->
     aClass
 
 #-------------------------------------------------------------------------------
+utils.alignLeft = (string, length) ->
+    while string.length < length
+        string = "#{string} "
+        
+    string
+
+#-------------------------------------------------------------------------------
+utils.alignRight = (string, length) ->
+    while string.length < length
+        string = " #{string}"
+
+    string
+
+#-------------------------------------------------------------------------------
+utils.fileExistsSync = (name) ->
+    
+    if fs.existsSync
+        return fs.existsSync name
+        
+    return path.existsSync(name)
+
+#-------------------------------------------------------------------------------
 Error.prepareStackTrace = (error, structuredStackTrace) ->
     result = []
     result.push "---------------------------------------------------------"
@@ -154,8 +177,8 @@ Error.prepareStackTrace = (error, structuredStackTrace) ->
         file = path.basename(file)
         line = "#{line}"
         
-        file = alignRight(file, longestFile)
-        line = alignLeft( line, longestLine)
+        file = utils.alignRight(file, longestFile)
+        line = utils.alignLeft( line, longestLine)
         
         funcName = func.displayName ||
                    func.name || 
@@ -171,17 +194,3 @@ Error.prepareStackTrace = (error, structuredStackTrace) ->
         result.push "   #{file}:#{line} - #{funcName}()"
         
     result.join "\n"
-
-#-------------------------------------------------------------------------------
-alignLeft = (string, length) ->
-    while string.length < length
-        string = "#{string} "
-        
-    string
-
-#-------------------------------------------------------------------------------
-alignRight = (string, length) ->
-    while string.length < length
-        string = " #{string}"
-
-    string
