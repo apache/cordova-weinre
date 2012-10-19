@@ -57,7 +57,12 @@ module.exports = class NetworkRequest
 
     #---------------------------------------------------------------------------
     handleDone: ->
-        sourceString = @xhr.responseText
+        sourceString = ""
+        try
+            sourceString = @xhr.responseText
+        catch e
+            # leave sourceString as ""
+
         Weinre.wi.NetworkNotify.setInitialContent(@id, sourceString, "XHR")
 
         time       = Date.now() / 1000.0
@@ -120,14 +125,14 @@ getRequest = (url, method, xhr, data) ->
 
 #-------------------------------------------------------------------------------
 getResponse = (xhr) ->
-    contentType = xhr.getResponseHeader("Content-Type") 
+    contentType = xhr.getResponseHeader("Content-Type")
     contentType ||= 'application/octet-stream'
 
     [contentType, encoding] = splitContentType(contentType)
 
     headers = getHeaders(xhr)
 
-    result = 
+    result =
         mimeType:              contentType
         textEncodingName:      encoding
         httpStatusCode:        xhr.status
@@ -136,7 +141,7 @@ getResponse = (xhr) ->
         connectionReused:      false
         connectionID:          0
         wasCached:             false
-    
+
     contentLength = xhr.getResponseHeader("Content-Length")
     contentLength = parseInt(contentLength)
     result.expectedContentLength = contentLength if !isNaN(contentLength)
@@ -186,8 +191,11 @@ getXhrEventHandler = (xhr) ->
         nr = xhr.__weinreNetworkRequest__
         return unless nr
 
-        switch xhr.readyState
-            when 2 then nr.handleHeadersReceived()
-            when 3 then nr.handleLoading()
-            when 4 then nr.handleDone()
+        try
+            switch xhr.readyState
+                when 2 then nr.handleHeadersReceived()
+                when 3 then nr.handleLoading()
+                when 4 then nr.handleDone()
+        catch e
+            # do nothing
 
