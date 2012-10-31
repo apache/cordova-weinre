@@ -17,7 +17,7 @@
  * under the License.
  */
 
-// "use liberal"
+"use strict"
 
 //------------------------------------------------------------------------------
 var started = false
