@@ -17,39 +17,50 @@
  * under the License.
 -->
 
-<p><span class="weinre">weinre</span> is shipped as binary packages
-available at Apache.
+<p><span class="weinre">weinre</span> is implemented as a
+<a href="http://nodejs.org/">node.js</a> application, and so you'll
+need to <a href="http://nodejs.org/download/">download and install
+a node runtime</a> to run <span class="weinre">weinre</span>.
 
-<p>To install <span class="weinre">weinre</span>, download a <tt>bin</tt> package, unarchive
-to wherever you'd wish.  <span class="weinre">weinre</span> is not
-sensitive to the directory it's installed in, and does not 
+<p>To install <span class="weinre">weinre</span>, use <tt>npm</tt>,
+or download a binary package. <span class="weinre">weinre</span> is not
+sensitive to the directory it's installed in, and does not
 write to any files.
 
 <!-- ======================================================================= -->
 <h2>npm installation</h2>
 
-<p><span class="weinre">weinre</span> can be installed as an 
+<p><span class="weinre">weinre</span> can be installed as an
 <a href="http://npmjs.org/doc/README.html">npm package</a>.  The
-<tt>*-bin.tar.gz</tt> urls/files can be used as a target of the 
+<tt>*-bin.tar.gz</tt> urls/files for binary packages
+can be used as a target of the
 <a href="http://npmjs.org/doc/install.html"><tt>npm install</tt></a>
-command.  For example, use the following command to install 
-<span class="weinre">weinre</span> locally, from this example URL:
+command.
+
+<p>It's likely you will want to install <span class="weinre">weinre</span>
+globally instead of locally (in the <tt>npm</tt> sense), which means you
+will typically want to use the <tt>npm -g</tt> option to install.  For
+*ix and Mac, this also means prefixing your command with sudo.  For Windows,
+AFAIK, you don't need sudo or any equivalent.
+
+<p>Here's an example of installing from a binary package via URL:
 
 <pre>
-npm install http://example.com/path/to/apache-cordova-weinre-X.Y.Z-bin.tar.gz
+sudo npm -g install http://example.com/path/to/apache-cordova-weinre-X.Y.Z-bin.tar.gz
 </pre>
 
-<p>weinre is also deployed on
-<a href="http://search.npmjs.org/#/weinre">http://search.npmjs.org/#/weinre</a>
+<p><span class="weinre">weinre</span> is also deployed on
+<a href="https://npmjs.org/package/weinre">https://npmjs.org/package/weinre</a>
 so that you can install it via:
 
 <pre>
-npm install weinre
+sudo npm -g install weinre
 </pre>
 
 <!-- ======================================================================= -->
 <h2>Binary Packages</h2>
 
+<!--
 <p>The recent source and binary release archives should be available at:
 
 <ul>
@@ -65,6 +76,7 @@ there are no official releases)</i></b>
 <br><b><i>(at the time of this writing, that link does not actually resolve because
 there are no official releases)</i></b>
 </ul>
+-->
 
 <p>Unofficial binary packages for your convenience:
 

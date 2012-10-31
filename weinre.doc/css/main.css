@@ -26,13 +26,13 @@ body {
 .ribbon {
     position:               absolute;
     top:                    0;
-    left:                   0;
-    border-right:           thin solid #000;
+    right:                  0;
+    border-left:            thin solid #000;
     border-bottom:          thin solid #000;
-    -moz-border-radius-bottomright:     0.5em;
-    -webkit-border-bottom-right-radius: 0.5em;
+    -moz-border-radius-bottomleft:     0.5em;
+    -webkit-border-bottom-left-radius: 0.5em;
     padding:                0.25em 0.5em;
-    background-color:       #FF0;
+    background-color:       #FF8;
     font-style:             italic;
     -webkit-box-shadow:     5px 5px 15px #888;
     -moz-box-shadow:        5px 5px 15px #888;

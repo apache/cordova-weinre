@@ -62,14 +62,17 @@ by the <b>Debug Server</b>, into your web page, in order for it
 to function as a <b>Debug Target</b>.
 
 <!-- ======================================================== -->
-<h2>Running the debug server using the weinre-node distribution</h2>
+<h2>Running the debug server using an <tt>npm</tt> installation</h2>
 
-<p>To run <span class="weinre">weinre</span> from the weinre-node distribution,
-execute the following command:
+<p>To run <span class="weinre">weinre</span> from an <tt>npm</tt>
+installation, assuming you've installed it globally (in the <tt>npm</tt>
+sense), execute the following command:
 
 <pre>
-node path-to-weinre-node/weinre [options]
+weinre [options]
 </pre>
+
+<p>The server will run until you kill it.  Control-C will do the job.
 
 <p>Options available are:
 
@@ -139,12 +142,18 @@ it much longer.
 
 </ul>
 
+<!-- ======================================================== -->
+<h2>The <tt>~/.weinre/server.properties</tt> file</h2>
+
 <p>You may also create a file named
 <tt>server.properties</tt> in the
 directory <tt>.weinre</tt> in your
 home directory (eg.
 <tt>~/.weinre/server.properties</tt>).
-The keys should be
+Your home directory is the determined by the value of either the
+<tt>HOME</tt> or <tt>USERPROFILE</tt> environment variable.
+
+<p>The keys should be
 the same as the name of the options above,
 with the same values.
 
@@ -161,8 +170,6 @@ deathTimeout: 5
 
 <p>Command-line options override the options specified in the
 <tt>~/.weinre/server.properties</tt> file.
-
-<p>The server will run until you kill it.  Control-C will do the job.
 
 <!-- ======================================================== -->
 <h2>Running the debug server bound to something other than <tt>localhost</tt></h3>
