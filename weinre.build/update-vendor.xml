@@ -32,6 +32,10 @@
         <mkdir  dir="${VENDOR}"/>
 
         <antcall target="get-web-inspector"/>
+
+        <copy todir="${VENDOR}" overwrite="true">
+            <fileset dir="${VENDOR-OVERRIDE}/"/>
+        </copy>
     </target>
 
     <!-- ============================================================ -->

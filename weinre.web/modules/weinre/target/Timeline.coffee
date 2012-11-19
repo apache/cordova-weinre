@@ -186,7 +186,7 @@ module.exports = class Timeline
 
     #---------------------------------------------------------------------------
     @installGlobalListeners: ->
-        if applicationCache
+        if window.applicationCache
             applicationCache.addEventListener "checking",    ((e) -> Timeline.addRecord_EventDispatch e, "applicationCache.checking", "loading"    ), false
             applicationCache.addEventListener "error",       ((e) -> Timeline.addRecord_EventDispatch e, "applicationCache.error", "loading"       ), false
             applicationCache.addEventListener "noupdate",    ((e) -> Timeline.addRecord_EventDispatch e, "applicationCache.noupdate", "loading"    ), false

@@ -56,7 +56,8 @@ MessageLevel =
 module.exports = class Console
 
     #---------------------------------------------------------------------------
-    Console::__defineGetter__("original", -> OriginalConsole)
+    Object.defineProperty Console, 'original',
+        get: -> OriginalConsole
 
     #---------------------------------------------------------------------------
     @useRemote: (value) ->

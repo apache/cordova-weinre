@@ -68,8 +68,11 @@ class HookSite
         @target = object[property]
         @hookss = []
 
-        hookedFunction   = getHookedFunction(@target, this)
-        object[property] = hookedFunction
+        if typeof @target == 'undefined'
+            return
+        else
+            hookedFunction   = getHookedFunction(@target, this)
+            object[property] = hookedFunction
 
     #---------------------------------------------------------------------------
     addHooks: (hooks) ->
