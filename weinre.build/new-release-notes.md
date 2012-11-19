@@ -26,8 +26,6 @@ steps to create a new release
 
 - add changelog to `weinre.doc/ChangeLog.body.html`
 
-  - use `weinre.build/scripts/gen-changelog.py` for this
-
 - fix other doc as necessary
 
 - perform full build with:
