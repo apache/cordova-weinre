@@ -32,11 +32,11 @@
       "weinre":        "./weinre"
     },
   "homepage":          "http://people.apache.org/~pmuellr/weinre/",
-  "bugs":              "https://issues.apache.org/jira/secure/IssueNavigator.jspa?jqlQuery=project=CB+and+component=weinre",
+  "bugs":              "https://issues.apache.org/jira/secure/IssueNavigator!executeAdvanced.jspa?jqlQuery=project%3DCB+and+component%3Dweinre&runQuery=true&clear=true",
   "repository":
     {
       "type":          "git",
-      "url":           "https://git-wip-us.apache.org/repos/asf/incubator-cordova-weinre.git"
+      "url":           "https://git-wip-us.apache.org/repos/asf/cordova-weinre.git"
     }
 }
 

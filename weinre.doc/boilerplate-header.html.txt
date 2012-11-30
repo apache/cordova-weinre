@@ -29,7 +29,7 @@
 <body>
 
 <div class="ribbon">clone weinre at
-<a href="https://git-wip-us.apache.org/repos/asf/incubator-cordova-weinre.git">apache</a>
+<a href="https://git-wip-us.apache.org/repos/asf?p=cordova-weinre.git">apache</a>
 </div>
 
 <!-- ======================================================================= -->

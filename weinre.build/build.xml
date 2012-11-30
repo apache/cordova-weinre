@@ -43,22 +43,22 @@
         <format property="BUILD_DATE" pattern="yyyy-MM-dd__HH-mm-ss" timezone="GMT"/>
     </tstamp>
     -->
-    
+
     <exec executable="node" outputproperty="BUILD_DATE">
         <arg value="-e"/>
         <arg value="console.log((new Date()).valueOf().toString(36).toUpperCase())"/>
     </exec>
 
-    <condition property="BUILD_VERSION" value="${WEINRE_VERSION}-${BUILD_DATE}-incubating">
+    <condition property="BUILD_VERSION" value="${WEINRE_VERSION}-${BUILD_DATE}">
         <matches pattern=".*pre$" string="${WEINRE_VERSION}"/>
     </condition>
-    
-    <condition property="BUILD_VERSION" value="${WEINRE_VERSION}-incubating">
+
+    <condition property="BUILD_VERSION" value="${WEINRE_VERSION}">
         <not>
             <matches pattern=".*pre$" string="${WEINRE_VERSION}"/>
         </not>
     </condition>
-    
+
     <property name="ARCH-SRC" value="apache-cordova-weinre-${BUILD_VERSION}-src"/>
     <property name="ARCH-BIN" value="apache-cordova-weinre-${BUILD_VERSION}-bin"/>
     <property name="ARCH-DOC" value="apache-cordova-weinre-${BUILD_VERSION}-doc"/>
@@ -79,8 +79,8 @@ ant targets available:
                        runs `build`
    build-clean       - runs `clean` then `build`
    clean             - removes transient build files
-   
-the file `personal.properties` must be available in the same 
+
+the file `personal.properties` must be available in the same
 directory as this ant file.  Use the file
 `sample.personal.properties` as a template.
 
@@ -89,7 +89,7 @@ To update the weinre dependencies, use
 </echo>
     </target>
 
-    
+
     <!-- ============================================================
          do a build, but print message about help
          ============================================================ -->
@@ -99,7 +99,7 @@ To update the weinre dependencies, use
         <antcall target="build"/>
     </target>
 
-    
+
     <!-- ============================================================
          do a clean build
          ============================================================ -->
@@ -139,11 +139,11 @@ To update the weinre dependencies, use
         <mkdir  dir="${OUT}"/>
         <delete includeemptydirs="true">
             <fileset dir="${OUT}" includes="**/*" excludes="build-done.txt"/>
-        </delete>        
-        
-        <exec 
-            executable           = "git" 
-            outputproperty       = "git-log" 
+        </delete>
+
+        <exec
+            executable           = "git"
+            outputproperty       = "git-log"
             failifexecutionfails = "false"
             >
             <arg line="log -1 --pretty=oneline"/>
@@ -154,21 +154,21 @@ To update the weinre dependencies, use
                 <isset property="git-log"/>
             </not>
         </condition>
-        
+
         <property
             name  = "build-info-text"
             value = "weinre build ${BUILD_VERSION} by ${BUILDER}"
         />
-        
-        <concat 
-            append      = "no"  
+
+        <concat
+            append      = "no"
             destfile    = "${OUT}/build-info.txt"
             >${build-info-text}
 </concat> <!-- keep this outdented, since Ant is so wonderful -->
-            
-        <concat 
-            append      = "yes" 
-            fixlastline = "yes"  
+
+        <concat
+            append      = "yes"
+            fixlastline = "yes"
             eol         = "lf"
             destfile    = "${OUT}/build-info.txt"
             >git: ${git-log}
@@ -188,10 +188,10 @@ To update the weinre dependencies, use
 
         <antcall target="finished"/>
         <antcall target="finished-growl"/>
-        
+
         <echo file="${OUT}/build-done.txt" message="${build-info-text} is finished!"/>
         <echo file="${OUT}/version.txt"    message="${BUILD_VERSION}"/>
-        
+
     </target>
 
     <!-- ============================================================
@@ -506,7 +506,7 @@ To update the weinre dependencies, use
         <delete dir="${OUT}/files/${ARCH-SRC}"/>
         <mkdir  dir="${OUT}/files/${ARCH-SRC}"/>
         <copy todir="${OUT}/files/${ARCH-SRC}" file="${OUT}/build-info.txt" />
-        
+
         <copy todir="${OUT}/files/${ARCH-SRC}" preservelastmodified="yes">
             <fileset dir="..">
                 <exclude name="weinre.build/bin/**"/>
@@ -541,7 +541,7 @@ To update the weinre dependencies, use
          ============================================================ -->
 
     <target name="build-archives-ck" depends="build-archives">
-        
+
         <checksum file="${OUT}/archives/${ARCH-BIN}.zip"    algorithm="MD5"/>
         <checksum file="${OUT}/archives/${ARCH-DOC}.zip"    algorithm="MD5"/>
         <checksum file="${OUT}/archives/${ARCH-SRC}.zip"    algorithm="MD5"/>

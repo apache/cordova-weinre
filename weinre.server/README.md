@@ -17,18 +17,18 @@
  * under the License.
 -->
 
-weinre is WEb INspector REmote. 
-Pronounced like the word "winery". 
-Or maybe like the word "weiner". 
+weinre is WEb INspector REmote.
+Pronounced like the word "winery".
+Or maybe like the word "weiner".
 Who knows, really.
 
-weinre is a debugger for web pages, 
-like FireBug (for FireFox) and Web Inspector (for WebKit-based browsers), 
-except it's designed to work remotely, and in particular, 
+weinre is a debugger for web pages,
+like FireBug (for FireFox) and Web Inspector (for WebKit-based browsers),
+except it's designed to work remotely, and in particular,
 to allow you debug web pages on a mobile device such as a phone.
 
 For more information on weinre:
-[http://http://incubator.apache.org/callback/](http://incubator.apache.org/callback/)
+[http://people.apache.org/~pmuellr/weinre/](http://people.apache.org/~pmuellr/weinre/)
 
 running
 -------
@@ -39,17 +39,17 @@ and browse the documentation online.
 Start the server with the following command
 
     node weinre
-    
+
 This will start the server, and display a message with the URL to the
-server.  Browse to that URL in your web browser, and then click on 
+server.  Browse to that URL in your web browser, and then click on
 'documentation' link, which will display weinre's online documentation.
-From there click on the 'Running' page to get more information about 
+From there click on the 'Running' page to get more information about
 running weinre.
 
 source
 ------
 
-Follow the link for more information at the top of this file 
+Follow the link for more information at the top of this file
 for instructions on obtaining source.
 
 If you're reading this file as part of the source distribution of weinre,

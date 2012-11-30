@@ -26,7 +26,7 @@ nopt  = require 'nopt'
 utils  = require './utils'
 weinre = require './weinre'
 
-optionDefaults = 
+optionDefaults =
     httpPort:     8080
     boundHost:    'localhost'
     verbose:      false
@@ -36,7 +36,7 @@ optionDefaults =
 #-------------------------------------------------------------------------------
 exports.run = ->
 
-    knownOpts = 
+    knownOpts =
         httpPort:     Number
         boundHost:    String
         verbose:      Boolean
@@ -44,14 +44,14 @@ exports.run = ->
         readTimeout:  Number
         deathTimeout: Number
         help:         Boolean
-        
-    shortHands = 
+
+    shortHands =
         '?':  ['--help']
         'h':  ['--help']
-        
+
     nopt.invalidHandler = printNoptError
     parsedOpts = nopt(knownOpts, shortHands, process.argv, 2)
-    
+
     #----
 
     printHelp() if parsedOpts.help
@@ -61,7 +61,7 @@ exports.run = ->
     printHelp() if args.length != 0
 
     #----
-    
+
     delete parsedOpts.argv
     opts = _.extend {}, optionDefaults, getDotWeinreServerProperties(), parsedOpts
 
@@ -69,7 +69,7 @@ exports.run = ->
         opts.deathTimeout = 3 * opts.readTimeout
 
     utils.setOptions opts
-    
+
     weinre.run opts
 
 #-------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ printNoptError = (key, val, types) ->
 #-------------------------------------------------------------------------------
 printHelp = () ->
     version = weinre.getVersion()
-    
+
     console.error """
 usage:   #{utils.Program} [options]
 version: #{version}
@@ -91,21 +91,21 @@ options:
     --debug        print even more diagnostics           default: #{optionDefaults.debug}
     --readTimeout  seconds to wait for a client message  default: #{optionDefaults.readTimeout}
     --deathTimeout seconds to wait to kill client        default: 3*readTimeout
-    
+
 --boundHost can be an ip address, hostname, or -all-, where -all-
 means binding to all ip address on the current machine'
 
-for more info see: http://incubator.apache.org/callback/
+for more info see: http://people.apache.org/~pmuellr/weinre/
 """
     process.exit()
 
 #-------------------------------------------------------------------------------
 getDotWeinreServerProperties = () ->
     properties = {}
-    
+
     fileName = replaceTilde '~/.weinre/server.properties'
     return properties if !utils.fileExistsSync(fileName)
-    
+
     contents = fs.readFileSync(fileName, 'utf8')
     lines    = contents.split('\n')
 
@@ -113,10 +113,10 @@ getDotWeinreServerProperties = () ->
         line = line.replace(/#.*/,'')
         match = line.match /\s*(\w+)\s*:\s*(.+)\s*/
         continue if !match
-        
+
         key = utils.trim match[1]
         val = utils.trim match[2]
-        
+
         properties[key] = val
 
     properties
