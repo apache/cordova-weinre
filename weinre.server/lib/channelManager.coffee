@@ -39,7 +39,7 @@ utils.registerClass class ChannelManager
 
         WeinreClientEvents = serviceManager.get 'WeinreClientEvents'
         WeinreTargetEvents = serviceManager.get 'WeinreTargetEvents'
-        
+
         if !WeinreClientEvents
             utils.exit 'WeinreClientEvents service not registered'
 
@@ -49,7 +49,7 @@ utils.registerClass class ChannelManager
     #---------------------------------------------------------------------------
     created: (channel) ->
         @channels[channel.name] = channel
-        
+
     #---------------------------------------------------------------------------
     destroyed: (channel) ->
         if channel.isClient
@@ -58,44 +58,44 @@ utils.registerClass class ChannelManager
         else
             for connection in channel.connections
                 @disconnectChannels(connection, channel)
-                
+
         clients = @getClientChannels(channel.id)
 
-        if channel.isClient        
+        if channel.isClient
             WeinreClientEvents.clientUnregistered(clients, channel.name)
         else
             WeinreClientEvents.targetUnregistered(clients, channel.name)
 
-        delete @channels[channel.name]    
+        delete @channels[channel.name]
 
     #---------------------------------------------------------------------------
     getChannel: (name, remoteAddress) ->
         return null if !_.has(@channels, name)
-            
+
         channel = @channels[name]
 
         return null if !channel
-        
-        if remoteAddress
-            return null if channel.remoteAddress != remoteAddress
-        
+
+#        if remoteAddress
+#            return null if channel.remoteAddress != remoteAddress
+
         channel
 
     #---------------------------------------------------------------------------
     connectChannels: (client, target) ->
         return if client.isClosed or target.isClosed
-        
+
         if client.connections.length
             @disconnectChannels(client, client.connections[0])
-        
+
         client.connections.push target
         target.connections.push client
-        
+
         clients = @getClientChannels(client.id)
 
         WeinreClientEvents.connectionCreated(clients, client.name, target.name)
         WeinreTargetEvents.connectionCreated(target,  client.name, target.name)
-        
+
     #---------------------------------------------------------------------------
     disconnectChannels: (client, target) ->
 
@@ -106,7 +106,7 @@ utils.registerClass class ChannelManager
 
         client.connections = _.without(client.connections, target)
         target.connections = _.without(target.connections, client)
-        
+
     #---------------------------------------------------------------------------
     getChannels: (id) ->
         if id?
