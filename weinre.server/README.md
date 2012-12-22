@@ -28,7 +28,7 @@ except it's designed to work remotely, and in particular,
 to allow you debug web pages on a mobile device such as a phone.
 
 For more information on weinre:
-[http://http://incubator.apache.org/callback/](http://incubator.apache.org/callback/)
+[http://incubator.apache.org/callback/](http://incubator.apache.org/callback/)
 
 running
 -------
