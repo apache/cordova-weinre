@@ -62,7 +62,8 @@ module.exports = class ConnectorList
         newest = 0
         for connectorChannel of @connectors
             continue if connectorChannel == ignoring
-            newest = connectorChannel if connectorChannel > newest
+            intValue = parseInt(connectorChannel.replace(/[^\d]+/, ''))
+            newest = connectorChannel if intValue > newest
 
         return null if newest == 0
         newest
