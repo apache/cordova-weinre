@@ -62,7 +62,7 @@ def createIndexFile(iFileName, oFileName, moduleDir):
                 '<meta http-equiv="X-UA-Compatible" content="chrome=1">\n'
                 '<link rel="shortcut icon" href="../images/weinre-icon-64x64.png">\n',
                 '<title>weinre</title>\n',
-                '<script type="text/javascript" src="weinre/check-for-webkit.js"></script>\n',
+                '<script type="text/javascript" src="weinre/browser-support-check.js"></script>\n',
                 '<script type="text/javascript" src="weinre/hacks.js"></script>\n',
                 '<script type="text/javascript" src="../modjewel.js"></script>\n',
                 '<script type="text/javascript">modjewel.require("modjewel").warnOnRecursiveRequire(true)</script>\n',

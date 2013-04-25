@@ -55,7 +55,7 @@ WebInspector.TextPrompt.prototype = {
             // For IE  we don't need a <br> to correctly set console caret; otherwise there will be two lines (incorrect) instead of one
             if (!navigator.userAgent.match(/MSIE/i)) {
 			
-            this.element.appendChild(document.createElement("br"));
+                this.element.appendChild(document.createElement("br"));
             }
         } else
             this.element.textContent = x;

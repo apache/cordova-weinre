@@ -430,6 +430,11 @@ To update the weinre dependencies, use
             <fileset dir="${VENDOR}/webkit/WebCore/inspector/front-end"/>
         </copy>
 
+        <!-- Replaces webkit-specific 'const' keyword in inspector files with 'var' to support non-webkit browsers -->
+        <replaceregexp match="const " replace="var " flags="g" byline="true">
+            <fileset dir="${WEB}/client" includes="**/*.js"/>
+        </replaceregexp>
+
         <exec executable="python" failonerror="true" failifexecutionfails="true">
             <arg file="scripts/build-client-html.py"/>
             <arg file="${WEB}"/>

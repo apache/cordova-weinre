@@ -90,6 +90,7 @@ module.exports = class Client
         WebInspector.currentPanel = panel
 
         toolButtonsToHide = [ 'scripts' ]
+        toolButtonsToHide.push 'resources', 'network', 'timeline', 'profiles', 'audits' if navigator.userAgent.match(/MSIE/i)
         for toolButtonToHide in toolButtonsToHide
             continue unless WebInspector.panels[toolButtonToHide]
             continue unless WebInspector.panels[toolButtonToHide].toolbarItem

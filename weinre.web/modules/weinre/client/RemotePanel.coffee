@@ -30,10 +30,10 @@ WebInspector.Panel.prototype.constructor = WebInspector.Panel
 #-------------------------------------------------------------------------------
 module.exports = class RemotePanel extends WebInspector.Panel
 
-    RemotePanel::__defineGetter__("toolbarItemClass", -> "remote")
-    RemotePanel::__defineGetter__("toolbarItemLabel", -> "Remote")
-    RemotePanel::__defineGetter__("statusBarItems", -> [])
-    RemotePanel::__defineGetter__("defaultFocusedElement", -> @contentElement)
+    Object.defineProperty RemotePanel::, "toolbarItemClass", get: -> "remote"
+    Object.defineProperty RemotePanel::, "toolbarItemLabel", get: -> "Remote"
+    Object.defineProperty RemotePanel::, "statusBarItems", get: -> []
+    Object.defineProperty RemotePanel::, "defaultFocusedElement", get: -> @contentElement
 
     constructor: ->
         super "remote"

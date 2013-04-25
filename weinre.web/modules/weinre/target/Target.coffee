@@ -194,7 +194,7 @@ module.exports = class Target
 
     #---------------------------------------------------------------------------
     setDocument: () ->
-        Weinre.elementHighlighter = ElementHighlighter.create()
+        Weinre.elementHighlighter = ElementHighlighter.create() unless Weinre.elementHighlighter
 
         nodeId   = Weinre.nodeStore.getNodeId(document)
         nodeData = Weinre.nodeStore.getNodeData(nodeId, 2)
