@@ -54,16 +54,19 @@ module.exports = class CSSStore
     getMatchedCSSRules: (node) ->
         result = []
 
-        for styleSheet in document.styleSheets
-            continue unless styleSheet.cssRules
+        try 
+            for styleSheet in document.styleSheets
+                continue unless styleSheet.cssRules
 
-            for cssRule in styleSheet.cssRules
-                continue unless _elementMatchesSelector(node, cssRule.selectorText)
-                object = {}
-                object.ruleId = @_getStyleRuleId(cssRule)
-                object.selectorText = cssRule.selectorText
-                object.style = @_buildMirrorForStyle(cssRule.style, true)
-                result.push object
+                for cssRule in styleSheet.cssRules
+                    continue unless _elementMatchesSelector(node, cssRule.selectorText)
+                    object = {}
+                    object.ruleId = @_getStyleRuleId(cssRule)
+                    object.selectorText = cssRule.selectorText
+                    object.style = @_buildMirrorForStyle(cssRule.style, true)
+                    result.push object
+        catch err
+            return result
 
         result
 
