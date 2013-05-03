@@ -51,18 +51,13 @@ module.exports = class InspectorBackendImpl
         for intfName in intfNames
             proxy = Weinre.messageDispatcher.createProxy(intfName)
 
-            if window[intfName]
-                throw new Ex(arguments, "backend interface '#{intfName}' already created")
-
             intf = IDLTools.getIDL(intfName)
             unless intf
                 throw new Ex(arguments, "interface not registered: '#{intfName}'")
 
-            window[intfName] = {}
             for method in intf.methods
                 proxyMethod = InspectorBackendImpl.getProxyMethod(proxy, method)
                 InspectorBackendImpl::[method.name] = proxyMethod
-                window[intfName][method.name] = proxyMethod
 
     #---------------------------------------------------------------------------
     @getProxyMethod: (proxy, method) ->
