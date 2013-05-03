@@ -59,7 +59,10 @@ getTrace = (args) ->
               return result
 
           visitedFuncs.push func
-          func = func.caller
+          try
+              func = func.caller
+          catch err 
+              func = null
 
       result
 

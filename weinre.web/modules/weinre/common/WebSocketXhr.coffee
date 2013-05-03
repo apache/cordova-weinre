@@ -115,7 +115,7 @@ module.exports = class WebSocketXhr
     #---------------------------------------------------------------------------
     send: (data) ->
         unless typeof data == "string"
-            throw new Ex(arguments, @constructor.name + "." + @caller)
+            throw new Ex(arguments, @constructor.name + ".send")
 
         @_queuedSends.push data
         return if @_sendInProgress
