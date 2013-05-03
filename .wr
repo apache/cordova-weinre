@@ -1,0 +1,14 @@
+weinre.build/build-dev.sh
+
+weinre.build/build.properties
+weinre.build/build.xml
+weinre.build/package.json.template
+weinre.build/scripts
+
+weinre.doc
+weinre.server/interfaces
+weinre.server/lib
+weinre.server/package.json
+weinre.server/README.md
+
+weinre.web

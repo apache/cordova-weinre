@@ -18,3 +18,26 @@
  */
 
 // a place for hacks
+
+;(function(){
+
+var version = navigator.appVersion.match(/^.*Chrome\/(\d+)\..*$/)
+if (!version) return
+
+version = parseInt(version[1])
+if (version <= 26) return
+
+setTimeout(fixToolbarItem, 1000)
+
+function fixToolbarItem() {
+    var toolbarItems = document.querySelectorAll(".toolbar-item.toggleable")
+
+    for (var i=0; i<toolbarItems.length; i++) {
+        var style = toolbarItems[i].style
+        if (style.display != "none") {
+            toolbarItems[i].style.display = "inline-block"
+        }
+    }
+}
+
+})();
