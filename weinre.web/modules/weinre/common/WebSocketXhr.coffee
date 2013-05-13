@@ -195,7 +195,10 @@ module.exports = class WebSocketXhr
         if null == handler
             throw new Ex(arguments, "handler must not be null")
 
-        xhr = new XMLHttpRequest()
+        # Fix for XMLHttpRequest issue in Cordova for WP8 - Cordova overrides standard XMLHttpRequest object but
+        # overriden object causes dropping connections between target and server, so we should use Original
+        # XMLHttpRequest that is stored in XMLHttpRequest.noConflict.
+        xhr = (if XMLHttpRequest.noConflict then new XMLHttpRequest.noConflict() else new XMLHttpRequest())
         xhr.httpSocket = this
         xhr.httpSocketHandler = handler
         xhr.onreadystatechange = _xhrEventHandler

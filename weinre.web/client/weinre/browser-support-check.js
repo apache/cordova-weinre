@@ -16,7 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var iSupported = false;
 
-if (!navigator.userAgent.match(/webkit/i)) {
-    alert("This web page is only designed to work in WebKit-based browsers.  Sorry.  Best of luck.")
+if (navigator.userAgent.match(/webkit/i)) {
+    iSupported = true;
+} else if (navigator.userAgent.match(/MSIE/i)) {
+    var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+    iSupported = re.exec(navigator.userAgent) !== null && parseFloat(RegExp.$1) >= 10;
+} else if (navigator.userAgent.match(/Firefox/i)) {
+	var re = new RegExp("Firefox/([0-9]{1,}[\.0-9]{0,})");
+	iSupported = re.exec(navigator.userAgent) !== null && parseFloat(RegExp.$1) >= 18;
+}
+
+if (!iSupported) {
+    alert("It seems your browser or its version is not supported. This web page is designed to work in webkit-based browsers, latest InternetExplorer and Firefox")
 }
