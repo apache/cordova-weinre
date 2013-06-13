@@ -59,7 +59,7 @@ module.exports = class Target
         return if window.WeinreServerURL
 
         if element
-            pattern = /(http:\/\/(.*?)\/)/
+            pattern = /((https?:)?\/\/(.*?)\/)/
             match = pattern.exec(element.src)
             if match
                 window.WeinreServerURL = match[1]
