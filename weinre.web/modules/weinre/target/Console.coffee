@@ -168,7 +168,7 @@ module.exports = class Console
 
 #-------------------------------------------------------------------------------
 RemoteConsole   = new Console()
-OriginalConsole = window.console
+OriginalConsole = window.console or {}
 
 RemoteConsole.__original   = OriginalConsole
 OriginalConsole.__original = OriginalConsole
