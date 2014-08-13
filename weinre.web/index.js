@@ -23,26 +23,32 @@ var weinre_port     = location.port
 var weinre_pathname = location.pathname
 var weinre_id       = "anonymous"
 
-var hash = location.href.split("#")[1]
-if (hash) {
-    weinre_id = hash
+function doReplacements() {
+    var hash = location.href.split("#")[1]
+    if (hash) {
+        weinre_id = hash
+    }
+
+    replaceURL("url-client-ui",              buildHttpURL("client/#" + weinre_id))
+    replaceURL("url-interfaces",             buildHttpURL("interfaces/interfaces.html"))
+    replaceURL("url-target-demo",            buildHttpURL("demo/weinre-demo.html#" + weinre_id))
+    replaceURL("url-target-demo-min",        buildHttpURL("demo/weinre-demo-min.html#" + weinre_id))
+    replaceURL("url-target-script",          buildHttpURL("target/target-script-min.js#" + weinre_id))
+    replaceURL("url-target-bookmarklet",     getTargetBookmarklet(), "weinre target debug")
+    replaceURL("url-target-documentation",   buildHttpURL("doc/"))
+
+    replaceText("version-weinre",    Weinre.Versions.weinre)
+    replaceText("version-build",     Weinre.Versions.build)
+
+    replaceText("target-bookmarklet-src-pre",       getTargetBookmarklet())
+    replaceText("target-bookmarklet-src-text-area", getTargetBookmarklet())
+
+    replaceText("url-target-script-raw",  buildHttpURL("target/target-script-min.js#" + weinre_id))
 }
 
-replaceURL("url-client-ui",              buildHttpURL("client/#" + weinre_id))
-replaceURL("url-interfaces",             buildHttpURL("interfaces/interfaces.html"))
-replaceURL("url-target-demo",            buildHttpURL("demo/weinre-demo.html#" + weinre_id))
-replaceURL("url-target-demo-min",        buildHttpURL("demo/weinre-demo-min.html#" + weinre_id))
-replaceURL("url-target-script",          buildHttpURL("target/target-script-min.js#" + weinre_id))
-replaceURL("url-target-bookmarklet",     getTargetBookmarklet(), "weinre target debug")
-replaceURL("url-target-documentation",   buildHttpURL("doc/"))
+doReplacements();
 
-replaceText("version-weinre",    Weinre.Versions.weinre)
-replaceText("version-build",     Weinre.Versions.build)
-
-replaceText("target-bookmarklet-src-pre",       getTargetBookmarklet())
-replaceText("target-bookmarklet-src-text-area", getTargetBookmarklet())
-
-replaceText("url-target-script-raw",  buildHttpURL("target/target-script-min.js#" + weinre_id))
+window.onhashchange = doReplacements;
 
 //---------------------------------------------------------------------
 function buildHttpURL(uri) {
