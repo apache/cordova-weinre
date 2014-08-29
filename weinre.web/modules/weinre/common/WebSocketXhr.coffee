@@ -201,7 +201,7 @@ module.exports = class WebSocketXhr
         xhr = (if XMLHttpRequest.noConflict then new XMLHttpRequest.noConflict() else new XMLHttpRequest())
         xhr.httpSocket = this
         xhr.httpSocketHandler = handler
-        xhr.onreadystatechange = _xhrEventHandler
+        xhr.onreadystatechange = _xhrEventHandler.bind(xhr)
 
         HookLib.ignoreHooks ->
             xhr.open method, url, true
@@ -213,7 +213,7 @@ module.exports = class WebSocketXhr
 
 #-------------------------------------------------------------------------------
 _xhrEventHandler = (event) ->
-      xhr = event.target
+      xhr = this
       return unless xhr.readyState == 4
 
       xhr.httpSocketHandler.call xhr.httpSocket, xhr
