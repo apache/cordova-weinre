@@ -7,7 +7,7 @@ weinre.build/scripts
 
 weinre.doc
 weinre.server/interfaces
-weinre.server/lib
+weinre.server/lib-src
 weinre.server/package.json
 weinre.server/README.md
 

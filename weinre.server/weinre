@@ -23,13 +23,4 @@
 
 // script to run the weinre server
 
-var path = require('path')
-var fs   = require('fs')
-
-var rootPath = path.dirname(fs.realpathSync(__filename))
-
-var lib          = path.join(rootPath, 'lib')
-var node_modules = path.join(rootPath, 'node_modules')
-
-require(path.join(node_modules, 'coffee-script'))
-require(path.join(lib, '/cli')).run()
+require("./lib/cli").run()

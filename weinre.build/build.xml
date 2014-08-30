@@ -174,6 +174,7 @@ To update the weinre dependencies, use
             >git: ${git-log}
 </concat> <!-- keep this outdented, since Ant is so wonderful -->
 
+        <antcall target="build-server"/>
         <antcall target="build-web"/>
         <antcall target="build-json-idl"/>
         <antcall target="build-client"/>
@@ -199,6 +200,26 @@ To update the weinre dependencies, use
          ============================================================ -->
 
     <target name="check-personal-properties" unless="personal.properties.exists">
+    </target>
+
+    <!-- ============================================================
+         basic server resources
+         ============================================================ -->
+
+    <target name="build-server">
+        <delete dir="../${PROJECT_SERVER}/lib" />
+        <mkdir  dir="../${PROJECT_SERVER}/lib" />
+        <mkdir  dir="../${PROJECT_SERVER}/lib/service" />
+
+        <echo message="compiling CoffeeScript files in: ${PROJECT_SERVER}/lib-src"/>
+        <exec executable="node" failonerror="true" failifexecutionfails="true">
+            <arg value="../${PROJECT_SERVER}/node_modules/coffee-script/bin/coffee"/>
+            <arg value="--compile"/>
+            <arg value="--bare"/>
+            <arg value="--output"/>
+            <arg value="../${PROJECT_SERVER}/lib"/>
+            <arg value="../${PROJECT_SERVER}/lib-src"/>
+        </exec>
     </target>
 
     <!-- ============================================================
