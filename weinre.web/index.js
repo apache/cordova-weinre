@@ -67,7 +67,7 @@ function buildHttpURL(uri) {
         return weinre_protocol + "//" + weinre_host + port + pathname + uri
     }
 
-    else if (protocol == "https:") {
+    else if (weinre_protocol == "https:") {
         if (port != "") port = ":" + port
 
         return weinre_protocol + "//" + weinre_host + port + pathname + uri
