@@ -75,6 +75,8 @@ module.exports = class Console
 
     #---------------------------------------------------------------------------
     _generic: (level, messageParts) ->
+        return if !messageParts?.length
+
         message = messageParts[0].toString()
         parameters = []
 

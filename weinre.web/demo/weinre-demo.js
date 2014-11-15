@@ -68,16 +68,21 @@ function onLoad() {
 var interval
 
 function startStuff() {
+    console.log() // test for https://issues.apache.org/jira/browse/CB-8023
+
     if (window.localStorage)   window.localStorage.clear()
     if (window.sessionStorage) window.sessionStorage.clear()
 
     storageIndex = 0
 
     interval = setInterval(intervalStuff, 1000)
+
+    console.log("stuff starting")
 }
 
 function stopStuff() {
     clearInterval(interval)
+    console.log("stuff stopping")
 }
 
 //------------------------------------------------------------------------------
@@ -182,4 +187,3 @@ function output(string) {
 function logXhr(xhr) {
     console.log("xhr: readyState: " + xhr.readyState)
 }
-
