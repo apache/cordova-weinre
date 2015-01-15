@@ -145,6 +145,10 @@ tt {
     -webkit-border-radius: 0.5em;
 }
 
+.note h3 {
+    text-decoration:       underline;
+}
+
 /*-----------------------------------------------------------------*/
 pre, xmp {
     border-width:          1;
