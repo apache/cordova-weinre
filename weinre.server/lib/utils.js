@@ -173,14 +173,14 @@ Error.prepareStackTrace = function(error, structuredStackTrace) {
   }
   for (_j = 0, _len1 = structuredStackTrace.length; _j < _len1; _j++) {
     callSite = structuredStackTrace[_j];
-    func = callSite.getFunction() || {};
+    func = callSite.getFunction();
     file = callSite.getFileName();
     line = callSite.getLineNumber();
     file = path.basename(file);
     line = "" + line;
     file = utils.alignRight(file, longestFile);
     line = utils.alignLeft(line, longestLine);
-    funcName = func.displayName || func.name || callSite.getFunctionName();
+    funcName = (func && (func.displayName || func.name)) || callSite.getFunctionName();
     callSite.getMethodName();
     '???';
     if (funcName === "Module._compile") {
