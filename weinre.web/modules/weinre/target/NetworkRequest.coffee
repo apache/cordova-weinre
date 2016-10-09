@@ -98,6 +98,7 @@ module.exports = class NetworkRequest
                     stackTrace.push({functionName: frame})
 
                 xhr.__weinreNetworkRequest__ = new NetworkRequest(xhr, id, method, url, stackTrace)
+                xhr.__headers__ = xhr.__headers__ || {}
 
                 HookLib.ignoreHooks ->
                     xhr.addEventListener "readystatechange", getXhrEventHandler(xhr), false
@@ -110,8 +111,20 @@ module.exports = class NetworkRequest
                 data = args[0]
                 nr   = xhr.__weinreNetworkRequest__
                 return unless nr
+                if xhr.__headers__["Weinre-Ignore"]
+                    return
 
                 nr.handleSend(data)
+
+        #-----------------------------------------------------------------------
+        HookSites.XMLHttpRequest_setRequestHeader.addHooks
+
+            before:  (receiver, args) ->
+                xhr  = receiver
+                nr   = xhr.__weinreNetworkRequest__
+                return unless nr
+
+                xhr.__headers__[args[0]] = args[1]
 
 #-------------------------------------------------------------------------------
 getRequest = (url, method, xhr, data) ->
@@ -190,6 +203,8 @@ getXhrEventHandler = (xhr) ->
     ->
         nr = xhr.__weinreNetworkRequest__
         return unless nr
+        if xhr.__headers__["Weinre-Ignore"]
+            return
 
         try
             switch xhr.readyState

@@ -32,6 +32,7 @@ HookSites.window_addEventListener         = HookLib.addHookSite window, "addEven
 HookSites.Node_addEventListener           = HookLib.addHookSite Node.prototype, "addEventListener"
 HookSites.XMLHttpRequest_open             = HookLib.addHookSite XMLHttpRequest.prototype, "open"
 HookSites.XMLHttpRequest_send             = HookLib.addHookSite XMLHttpRequest.prototype, "send"
+HookSites.XMLHttpRequest_setRequestHeader = HookLib.addHookSite XMLHttpRequest.prototype, "setRequestHeader"
 HookSites.XMLHttpRequest_addEventListener = HookLib.addHookSite XMLHttpRequest.prototype, "addEventListener"
 
 if window.openDatabase
