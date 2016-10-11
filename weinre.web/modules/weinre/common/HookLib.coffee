@@ -75,7 +75,7 @@ class HookSite
             #In IE we should not override standard storage functions because IE does it incorrectly - all values that set as
             # storage properties (e.g. localStorage.setItem = function()[...]) are cast to String.
             # That leads to "Function expected" exception when any of overridden function is called.
-            object[property] = hookedFunction  unless navigator.userAgent.match(/MSIE/i) and (object is localStorage or object is sessionStorage)
+            object[property] = hookedFunction  unless navigator.userAgent.match(/MSIE|IEMobile/i) and (object is localStorage or object is sessionStorage)
 
     #---------------------------------------------------------------------------
     addHooks: (hooks) ->
