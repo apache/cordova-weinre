@@ -17,7 +17,7 @@
  * under the License.
 -->
 
-weinre is WEb INspector REmote.
+weinre is Web INspector REmote.
 
 Pronounced like the word "winery". Or maybe like the word "weiner".
 Who knows, really.
