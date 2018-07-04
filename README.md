@@ -16,6 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
 -->
+# cordova-weinre
+
+## Deprecation Notice
+
+This project is being deprecated. No more work will be done on this project by the Cordova development community. You can continue to use this project and it should work as-is, but issues will not be fixed by the Cordova community.
+
+weinre was built in an age when there were no remote debuggers available for mobile devices. Since then, some platforms are starting to provide remote debugger capabilities, as part of their platform tool set.
+
+1. Android:	[Get Started with Remote Debugging Android Devices](https://developers.google.com/web/tools/chrome-devtools/remote-debugging/)
+1. iOS:	[Safari Developer Tools overview](https://support.apple.com/guide/safari-developer/safari-developer-tools-overview-dev073038698/mac)
+1. Windows:	[Debug Store apps in Visual Studio](https://msdn.microsoft.com/library/hh441472.aspx)
+
+⚠ **IMPORTANT NOTE**, some of weinre dependencies have security issues. Use on your own risk.
+
+## Introduction
 
 weinre is WEb INspector REmote.
 
